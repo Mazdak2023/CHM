@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colligative Properties - Teaching Guide</title>
+    <style>
+        @page {
+            margin: 1in;
+            size: letter;
+        }
+        
+        body {
+            font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+            font-size: 11pt;
+            line-height: 1.5;
+            color: #333;
+            max-width: 8.5in;
+            margin: 0 auto;
+            padding: 0.5in;
+            background: white;
+        }
+        
+        /* TITLE PAGE */
+        .title-page {
+            text-align: center;
+            page-break-after: always;
+            padding-top: 2in;
+        }
+        
+        .title-page h1 {
+            font-size: 28pt;
+            color: #1e3c72;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .title-page .subtitle {
+            font-size: 16pt;
+            color: #2a5298;
+            margin-bottom: 30px;
+        }
+        
+        .title-page .course-info {
+            font-size: 14pt;
+            color: #555;
+            margin-top: 50px;
+        }
+        
+        .title-page .tagline {
+            font-size: 12pt;
+            color: #666;
+            font-style: italic;
+            margin-top: 20px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* SECTION HEADERS */
+        .section-header {
+            background: linear-gradient(90deg, #1e3c72, #2a5298);
+            color: white;
+            padding: 12px 20px;
+            margin: 30px 0 20px 0;
+            font-size: 16pt;
+            font-weight: bold;
+            border-radius: 0;
+        }
+        
+        .section-header .section-number {
+            font-size: 10pt;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: block;
+            margin-bottom: 3px;
+            opacity: 0.9;
+        }
+        
+        /* SUBSECTION HEADERS */
+        h2 {
+            color: #1e3c72;
+            font-size: 14pt;
+            border-bottom: 2px solid #1e3c72;
+            padding-bottom: 5px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        
+        h3 {
+            color: #2a5298;
+            font-size: 12pt;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        /* PARAGRAPHS */
+        p {
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+        
+        /* TABLES */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 10.5pt;
+        }
+        
+        th {
+            background: #1e3c72;
+            color: white;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: bold;
+            border: 1px solid #1e3c72;
+        }
+        
+        td {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background: #f5f7fa;
+        }
+        
+        /* FORMULA BOX */
+        .formula-box {
+            background: #f0f4f8;
+            border: 2px solid #1e3c72;
+            padding: 15px 20px;
+            margin: 15px 0;
+            text-align: center;
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-size: 13pt;
+        }
+        
+        .formula-box .formula-name {
+            font-size: 9pt;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            font-family: 'Calibri', sans-serif;
+        }
+        
+        /* KEY CONCEPT BOX */
+        .key-concept {
+            background: #fff9e6;
+            border-left: 4px solid #f0ad4e;
+            padding: 12px 15px;
+            margin: 15px 0;
+        }
+        
+        .key-concept strong {
+            color: #c77c00;
+        }
+        
+        /* WARNING BOX */
+        .warning-box {
+            background: #fdf2f2;
+            border-left: 4px solid #dc3545;
+            padding: 12px 15px;
+            margin: 15px 0;
+        }
+        
+        .warning-box strong {
+            color: #dc3545;
+        }
+        
+        /* TIP BOX */
+        .tip-box {
+            background: #e8f5e9;
+            border-left: 4px solid #28a745;
+            padding: 12px 15px;
+            margin: 15px 0;
+        }
+        
+        .tip-box strong {
+            color: #1e7e34;
+        }
+        
+        /* MEMORY HOOK */
+        .memory-hook {
+            background: #f3e5f5;
+            border: 2px solid #9c27b0;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .memory-hook .hook-label {
+            font-size: 9pt;
+            color: #7b1fa2;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        
+        .memory-hook .hook-text {
+            font-size: 13pt;
+            font-weight: bold;
+            color: #6a1b9a;
+            font-style: italic;
+        }
+        
+        /* NUMBERED STEPS */
+        .steps-container {
+            margin: 15px 0;
+        }
+        
+        .step {
+            display: flex;
+            margin-bottom: 12px;
+            align-items: flex-start;
+        }
+        
+        .step-number {
+            background: #1e3c72;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 11pt;
+            flex-shrink: 0;
+            margin-right: 12px;
+            margin-top: 2px;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-content strong {
+            color: #1e3c72;
+        }
+        
+        /* COMPARISON BOXES */
+        .comparison-table {
+            display: table;
+            width: 100%;
+            margin: 15px 0;
+            border-collapse: separate;
+            border-spacing: 10px 0;
+        }
+        
+        .comparison-cell {
+            display: table-cell;
+            width: 50%;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            vertical-align: top;
+        }
+        
+        .comparison-cell h4 {
+            color: #1e3c72;
+            margin: 0 0 10px 0;
+            font-size: 11pt;
+            text-align: center;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 8px;
+        }
+        
+        .comparison-cell .formula {
+            font-family: 'Cambria Math', serif;
+            text-align: center;
+            background: white;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+        }
+        
+        /* LISTS */
+        ul, ol {
+            margin: 10px 0 15px 20px;
+            padding: 0;
+        }
+        
+        li {
+            margin-bottom: 6px;
+        }
+        
+        /* PRACTICE QUESTIONS */
+        .practice-box {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .practice-box strong {
+            color: #1565c0;
+        }
+        
+        /* PAGE BREAK */
+        .page-break {
+            page-break-before: always;
+            margin-top: 0;
+        }
+        
+        /* HORIZONTAL RULE */
+        hr {
+            border: none;
+            border-top: 2px solid #1e3c72;
+            margin: 25px 0;
+        }
+        
+        /* FOOTER */
+        .footer {
+            margin-top: 40px;
+            padding-top: 15px;
+            border-top: 1px solid #ccc;
+            text-align: center;
+            font-size: 10pt;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== TITLE PAGE ==================== -->
+    <div class="title-page">
+        <h1>COLLIGATIVE PROPERTIES</h1>
+        <div class="subtitle">Complete Teaching Guide</div>
+        <div class="tagline">Understanding how dissolved particles change the physical properties of solutions</div>
+        <div class="course-info">
+            <strong>CHM-152L</strong><br>
+            General Chemistry 2<br><br>
+            Workshop 1 Preparation
+        </div>
+    </div>
+
+    <!-- ==================== TABLE OF CONTENTS ==================== -->
+    <h2>Table of Contents</h2>
+    
+    <table style="border: none;">
+        <tr style="background: none;">
+            <td style="border: none; padding: 5px 0;"><strong>Introduction:</strong> What Are Colligative Properties?</td>
+            <td style="border: none; text-align: right; padding: 5px 0;">Page 2</td>
+        </tr>
+        <tr style="background: none;">
+            <td style="border: none; padding: 5px 0;"><strong>Part 1:</strong> Concentration Units</td>
+            <td style="border: none; text-align: right; padding: 5px 0;">Page 3</td>
+        </tr>
+        <tr style="background: none;">
+            <td style="border: none; padding: 5px 0;"><strong>Part 2:</strong> Solution Preparation & Dilutions</td>
+            <td style="border: none; text-align: right; padding: 5px 0;">Page 6</td>
+        </tr>
+        <tr style="background: none;">
+            <td style="border: none; padding: 5px 0;"><strong>Part 3:</strong> Vapor Pressure & Raoult's Law</td>
+            <td style="border: none; text-align: right; padding: 5px 0;">Page 8</td>
+        </tr>
+        <tr style="background: none;">
+            <td style="border: none; padding: 5px 0;"><strong>Part 4:</strong> Osmotic Pressure</td>
+            <td style="border: none; text-align: right; padding: 5px 0;">Page 11</td>
+        </tr>
+        <tr style="background: none;">
+            <td style="border: none; padding: 5px 0;"><strong>Summary:</strong> Master Formula Reference</td>
+            <td style="border: none; text-align: right; padding: 5px 0;">Page 14</td>
+        </tr>
+    </table>
+
+    <!-- ==================== INTRODUCTION ==================== -->
+    <div class="section-header page-break">
+        <span class="section-number">Introduction</span>
+        What Are Colligative Properties?
+    </div>
+    
+    <p>Imagine you're making pasta. You add salt to the water, and suddenly, it takes longer to boil. Or think about why we put salt on icy roads in winter. These everyday phenomena are examples of <strong>colligative properties</strong> in action.</p>
+    
+    <div class="key-concept">
+        <strong>THE BIG IDEA:</strong> Colligative properties depend only on the <em>number</em> of dissolved particles, not on what those particles are. It doesn't matter if you dissolve sugar, salt, or antifreeze—what matters is <em>how many particles</em> you add to the solution.
+    </div>
+    
+    <h2>The Four Colligative Properties</h2>
+    
+    <table>
+        <tr>
+            <th style="width: 25%;">Property</th>
+            <th style="width: 35%;">What Happens</th>
+            <th style="width: 40%;">Real-World Example</th>
+        </tr>
+        <tr>
+            <td><strong>Vapor Pressure Lowering</strong></td>
+            <td>Solution has lower vapor pressure than pure solvent</td>
+            <td>Why ocean water evaporates more slowly than pure water</td>
+        </tr>
+        <tr>
+            <td><strong>Boiling Point Elevation</strong></td>
+            <td>Solution boils at a higher temperature</td>
+            <td>Salted pasta water takes longer to boil</td>
+        </tr>
+        <tr>
+            <td><strong>Freezing Point Depression</strong></td>
+            <td>Solution freezes at a lower temperature</td>
+            <td>Salt on icy roads; antifreeze in cars</td>
+        </tr>
+        <tr>
+            <td><strong>Osmotic Pressure</strong></td>
+            <td>Pressure needed to stop water flow across membrane</td>
+            <td>IV solutions must match blood osmotic pressure</td>
+        </tr>
+    </table>
+    
+    <p>Before we can work with these properties, we need to master <strong>concentration units</strong>—the language we use to describe how much solute is in a solution.</p>
+
+    <!-- ==================== PART 1: CONCENTRATION UNITS ==================== -->
+    <div class="section-header page-break">
+        <span class="section-number">Part 1</span>
+        Concentration Units: The Language of Solutions
+    </div>
+    
+    <p>Think of concentration units like different ways to give directions. You could say "2 miles north" or "a 5-minute drive"—both describe the same destination, but one might be more useful depending on the situation. In chemistry, we have several ways to express concentration, and choosing the right one matters.</p>
+    
+    <h2>The Two Most Important Units: Molarity vs. Molality</h2>
+    
+    <table>
+        <tr>
+            <th style="width: 20%;"></th>
+            <th style="width: 40%;">Molarity (M)</th>
+            <th style="width: 40%;">Molality (m)</th>
+        </tr>
+        <tr>
+            <td><strong>Formula</strong></td>
+            <td>M = mol solute / L of solution</td>
+            <td>m = mol solute / kg of solvent</td>
+        </tr>
+        <tr>
+            <td><strong>Denominator</strong></td>
+            <td>Volume of SOLUTION (solute + solvent)</td>
+            <td>Mass of SOLVENT only</td>
+        </tr>
+        <tr>
+            <td><strong>Units</strong></td>
+            <td>mol/L or M</td>
+            <td>mol/kg or m</td>
+        </tr>
+        <tr>
+            <td><strong>Temperature</strong></td>
+            <td>Changes with temperature (volume expands)</td>
+            <td>Doesn't change (mass is constant)</td>
+        </tr>
+        <tr>
+            <td><strong>Best For</strong></td>
+            <td>Lab work; measuring volumes</td>
+            <td>Colligative property calculations</td>
+        </tr>
+    </table>
+    
+    <div class="warning-box">
+        <strong>THE #1 MISTAKE STUDENTS MAKE:</strong> Confusing <em>solution</em> (solute + solvent) with <em>solvent</em> (just the dissolving liquid). Molarity uses solution volume. Molality uses solvent mass. Get this wrong, and every calculation falls apart!
+    </div>
+    
+    <div class="memory-hook">
+        <div class="hook-label">Memory Hook</div>
+        <div class="hook-text">"M is for Measuring volume, m is for Mass of solvent"</div>
+        <p style="margin-top: 8px; font-size: 10pt;">Molarity has an "r" like "liter" (volume). Molality has an "a" like "mass."</p>
+    </div>
+    
+    <h2>Other Important Concentration Units</h2>
+    
+    <h3>Mole Fraction (χ)</h3>
+    
+    <div class="formula-box">
+        <div class="formula-name">Mole Fraction</div>
+        χ<sub>A</sub> = moles of component A / total moles of all components
+    </div>
+    
+    <p><strong>Key properties:</strong></p>
+    <ul>
+        <li>Dimensionless (no units)—it's just a ratio</li>
+        <li>All mole fractions in a mixture must add up to exactly 1</li>
+        <li>Used extensively in Raoult's Law for vapor pressure calculations</li>
+    </ul>
+    
+    <div class="tip-box">
+        <strong>THINK OF IT LIKE A PIZZA PARTY:</strong> If you have 8 slices of pepperoni and 2 slices of cheese, the mole fraction of pepperoni is 8/10 = 0.80. Mole fraction tells you what <em>fraction</em> of all the particles belong to one component.
+    </div>
+    
+    <h3>Mass Percent (Mass %)</h3>
+    
+    <div class="formula-box">
+        <div class="formula-name">Mass Percent</div>
+        Mass % = (mass of solute / mass of solution) × 100%
+    </div>
+    
+    <p><strong>Key properties:</strong></p>
+    <ul>
+        <li>Expressed as a percentage</li>
+        <li>Uses mass of total solution (not just solvent)</li>
+        <li>Common on product labels (e.g., "70% isopropyl alcohol")</li>
+    </ul>
+    
+    <div class="tip-box">
+        <strong>THE 100-GRAM TRICK:</strong> When a problem gives you mass percent, assume you have <em>100 grams of solution</em>. Then the mass percent directly equals grams of solute! A 5% solution? That's 5 g solute in 100 g solution. Easy.
+    </div>
+    
+    <h2>Converting Between Concentration Units</h2>
+    
+    <p>Converting between M, m, χ, and mass % is like translating between languages. You need a common reference point and a systematic approach.</p>
+    
+    <div class="key-concept">
+        <strong>THE SECRET WEAPON—ASSUME A CONVENIENT AMOUNT:</strong><br>
+        &bull; Given mass %? Assume <strong>100 g of solution</strong><br>
+        &bull; Given molarity? Assume <strong>1 L of solution</strong><br>
+        Then calculate everything else from there!
+    </div>
+    
+    <h3>The Conversion Roadmap</h3>
+    
+    <div class="steps-container">
+        <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Start with what you know.</strong> Use the given concentration to establish your reference amount (100 g or 1 L).
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Calculate moles of solute.</strong> Use molar mass: mol = grams / MM
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Find mass of solvent.</strong> Remember: mass of solvent = mass of solution − mass of solute
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <strong>Use density as a bridge.</strong> Density connects mass and volume (d = m/V), allowing conversion between volume-based and mass-based units.
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">5</div>
+            <div class="step-content">
+                <strong>Calculate the target unit.</strong> Plug your values into the appropriate formula.
+            </div>
+        </div>
+    </div>
+    
+    <div class="warning-box">
+        <strong>CRITICAL REMINDER:</strong><br>
+        <strong>Mass of solvent = Mass of solution − Mass of solute</strong><br>
+        The solution includes everything. The solvent is just the liquid doing the dissolving. Always subtract the solute mass!
+    </div>
+    
+    <div class="practice-box">
+        <strong>THINK ABOUT IT:</strong>
+        <ul>
+            <li>If you have a very dilute aqueous solution (density ≈ 1.00 g/mL), why are molarity and molality approximately equal?</li>
+            <li>What happens to molarity when you heat a solution? What about molality? Why?</li>
+        </ul>
+    </div>
+
+    <!-- ==================== PART 2: DILUTIONS ==================== -->
+    <div class="section-header page-break">
+        <span class="section-number">Part 2</span>
+        Solution Preparation & Dilutions
+    </div>
+    
+    <p>You've made lemonade before, right? When it's too strong, you add water. The amount of lemon flavor stays the same—you're just spreading it through more liquid. This is exactly how dilutions work in chemistry.</p>
+    
+    <h2>The Dilution Equation</h2>
+    
+    <div class="formula-box">
+        <div class="formula-name">The Dilution Equation</div>
+        M₁V₁ = M₂V₂
+    </div>
+    
+    <div class="key-concept">
+        <strong>WHY THIS WORKS:</strong> M × V = moles of solute. When you dilute, the moles of solute don't change—you're only adding solvent. So moles before = moles after, which means M₁V₁ = M₂V₂.
+    </div>
+    
+    <h3>Understanding the Subscripts</h3>
+    
+    <table>
+        <tr>
+            <th>Symbol</th>
+            <th>Meaning</th>
+            <th>Also Called</th>
+        </tr>
+        <tr>
+            <td><strong>M₁</strong></td>
+            <td>Initial (stock) concentration</td>
+            <td>The concentrated solution you start with</td>
+        </tr>
+        <tr>
+            <td><strong>V₁</strong></td>
+            <td>Volume of stock solution used</td>
+            <td>What you pipette out</td>
+        </tr>
+        <tr>
+            <td><strong>M₂</strong></td>
+            <td>Final (diluted) concentration</td>
+            <td>The concentration you want to achieve</td>
+        </tr>
+        <tr>
+            <td><strong>V₂</strong></td>
+            <td>Final total volume</td>
+            <td>Total volume after adding solvent</td>
+        </tr>
+    </table>
+    
+    <div class="tip-box">
+        <strong>QUICK SANITY CHECK:</strong> When diluting, M₂ < M₁ (concentration goes DOWN) and V₂ > V₁ (volume goes UP). If your answer shows concentration increasing, you made an error!
+    </div>
+    
+    <h2>Serial Dilutions in the Lab</h2>
+    
+    <p>When creating a calibration curve (like for Beer's Law), you need multiple standards at different concentrations—all prepared from the same stock solution.</p>
+    
+    <h3>The Standard Procedure</h3>
+    
+    <div class="steps-container">
+        <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Calculate V₁ for each standard.</strong> Rearrange: V₁ = (M₂ × V₂) / M₁
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Pipette V₁ into a volumetric flask.</strong> Use an appropriately sized flask for your final volume.
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Dilute to the mark.</strong> Add solvent until you reach V₂ (the calibration line on the flask).
+            </div>
+        </div>
+    </div>
+    
+    <div class="key-concept">
+        <strong>THE DILUTION FACTOR:</strong> If you go from 0.50 M to 0.10 M, that's a 5× dilution (0.50 ÷ 0.10 = 5). Quick check: the stock volume should be 1/5 of the final volume. If V₂ = 10 mL, then V₁ = 2 mL. Does that match M₁V₁ = M₂V₂? Always verify!
+    </div>
+    
+    <h2>When Concentrations Are in Different Units</h2>
+    
+    <p>Sometimes you need a solution in g/L but your stock is in M (mol/L). You must convert first!</p>
+    
+    <div class="formula-box">
+        <div class="formula-name">Converting g/L to Molarity</div>
+        M (mol/L) = (g/L) ÷ (g/mol)
+    </div>
+    
+    <p><strong>Dimensional analysis proves it:</strong> (g/L) ÷ (g/mol) = (g/L) × (mol/g) = mol/L = M</p>
+    
+    <div class="practice-box">
+        <strong>THINK ABOUT IT:</strong>
+        <ul>
+            <li>If you calculate V₁ = 0.05 mL for a very dilute solution, is that practical to measure? What would you do instead?</li>
+            <li>Why do we use volumetric flasks instead of beakers for accurate dilutions?</li>
+        </ul>
+    </div>
+
+    <!-- ==================== PART 3: VAPOR PRESSURE ==================== -->
+    <div class="section-header page-break">
+        <span class="section-number">Part 3</span>
+        Vapor Pressure & Raoult's Law
+    </div>
+    
+    <h2>What is Vapor Pressure?</h2>
+    
+    <p>Even when water isn't boiling, some molecules at the surface have enough energy to escape into the air. This creates <strong>vapor pressure</strong>—the pressure exerted by the gaseous molecules above the liquid. At equilibrium, the rate of evaporation equals the rate of condensation.</p>
+    
+    <p>Every pure liquid has a characteristic vapor pressure at a given temperature. For example, at 25°C:</p>
+    
+    <table>
+        <tr>
+            <th>Substance</th>
+            <th>Vapor Pressure at 25°C</th>
+            <th>Relative Volatility</th>
+        </tr>
+        <tr>
+            <td>Water</td>
+            <td>23.8 mmHg</td>
+            <td>Low (evaporates slowly)</td>
+        </tr>
+        <tr>
+            <td>Methanol</td>
+            <td>94 mmHg</td>
+            <td>High (evaporates quickly)</td>
+        </tr>
+        <tr>
+            <td>Glucose</td>
+            <td>≈ 0 mmHg</td>
+            <td>Non-volatile (doesn't evaporate)</td>
+        </tr>
+    </table>
+    
+    <div class="key-concept">
+        <strong>THE KEY INSIGHT:</strong> When you dissolve a solute in water, the solute molecules take up space at the surface. Fewer water molecules can escape → lower vapor pressure. This is called <strong>vapor pressure lowering</strong>, and it's a colligative property.
+    </div>
+    
+    <div class="tip-box">
+        <strong>THE NIGHTCLUB ANALOGY:</strong> Imagine water molecules trying to leave through a door (evaporate). Now add some big, non-moving solute molecules standing near the exit. They block some water molecules from leaving! Fewer molecules escape → lower vapor pressure.
+    </div>
+    
+    <h2>Raoult's Law</h2>
+    
+    <div class="formula-box">
+        <div class="formula-name">Raoult's Law</div>
+        P<sub>solution</sub> = χ<sub>solvent</sub> × P°<sub>solvent</sub>
+    </div>
+    
+    <table>
+        <tr>
+            <th>Symbol</th>
+            <th>Meaning</th>
+            <th>Units</th>
+        </tr>
+        <tr>
+            <td>P<sub>solution</sub></td>
+            <td>Vapor pressure of the solution</td>
+            <td>mmHg (or atm, torr)</td>
+        </tr>
+        <tr>
+            <td>χ<sub>solvent</sub></td>
+            <td>Mole fraction of the solvent</td>
+            <td>No units (dimensionless)</td>
+        </tr>
+        <tr>
+            <td>P°<sub>solvent</sub></td>
+            <td>Vapor pressure of PURE solvent</td>
+            <td>mmHg (same as P<sub>solution</sub>)</td>
+        </tr>
+    </table>
+    
+    <div class="warning-box">
+        <strong>CRITICAL POINT:</strong> Raoult's Law uses the mole fraction of the <em>solvent</em> (the component that evaporates), not the solute! Since χ<sub>solvent</sub> < 1 when solute is present, P<sub>solution</sub> < P°<sub>solvent</sub>. The vapor pressure always drops.
+    </div>
+    
+    <h3>Calculating Vapor Pressure: Step by Step</h3>
+    
+    <div class="steps-container">
+        <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Find moles of each component.</strong> Convert grams to moles using molar mass (mol = g / MM).
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Calculate mole fraction of solvent.</strong> χ<sub>solvent</sub> = mol solvent / (mol solvent + mol solute)
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Apply Raoult's Law.</strong> Multiply χ<sub>solvent</sub> by P°<sub>solvent</sub> to get P<sub>solution</sub>.
+            </div>
+        </div>
+    </div>
+    
+    <h2>Two Volatile Components</h2>
+    
+    <p>What if BOTH substances in your mixture can evaporate? Glucose dissolved in water involves only one volatile component (water). But methanol mixed with water? Both are volatile—both contribute to the total vapor pressure!</p>
+    
+    <div class="key-concept">
+        <strong>FOR TWO VOLATILE COMPONENTS:</strong> Apply Raoult's Law to EACH component separately, then add the partial pressures together (Dalton's Law).
+    </div>
+    
+    <div class="formula-box">
+        <div class="formula-name">Total Vapor Pressure (Two Volatile Components)</div>
+        P<sub>total</sub> = P<sub>A</sub> + P<sub>B</sub> = (χ<sub>A</sub> × P°<sub>A</sub>) + (χ<sub>B</sub> × P°<sub>B</sub>)
+    </div>
+    
+    <table>
+        <tr>
+            <th style="width: 50%;">Non-Volatile Solute (e.g., glucose in water)</th>
+            <th style="width: 50%;">Two Volatile Components (e.g., methanol + water)</th>
+        </tr>
+        <tr>
+            <td>
+                <strong>Formula:</strong> P<sub>total</sub> = χ<sub>water</sub> × P°<sub>water</sub><br><br>
+                Only the solvent contributes to vapor pressure. The solute has negligible vapor pressure.
+            </td>
+            <td>
+                <strong>Formula:</strong> P<sub>total</sub> = P<sub>methanol</sub> + P<sub>water</sub><br><br>
+                Both components contribute. Calculate each partial pressure separately, then add them.
+            </td>
+        </tr>
+    </table>
+    
+    <div class="tip-box">
+        <strong>VOLATILITY MATTERS!</strong> A component with high P° (very volatile) will contribute more to the total vapor pressure even if its mole fraction is small. Methanol (P° = 94 mmHg) contributes way more per mole than water (P° = 23.8 mmHg).
+    </div>
+    
+    <div class="practice-box">
+        <strong>THINK ABOUT IT:</strong>
+        <ul>
+            <li>If you mix equal moles of methanol and water, which contributes more to the total vapor pressure? Why?</li>
+            <li>How can you tell from a problem whether to use the one-volatile or two-volatile approach?</li>
+        </ul>
+    </div>
+
+    <!-- ==================== PART 4: OSMOTIC PRESSURE ==================== -->
+    <div class="section-header page-break">
+        <span class="section-number">Part 4</span>
+        Osmotic Pressure
+    </div>
+    
+    <h2>What is Osmosis?</h2>
+    
+    <p>Place a cell in pure water, and water rushes in. Place it in concentrated salt water, and water rushes out. This movement of water across membranes is called <strong>osmosis</strong>, and understanding it is crucial for biology and medicine.</p>
+    
+    <div class="key-concept">
+        <strong>OSMOSIS DEFINED:</strong> Osmosis is the movement of solvent (water) across a semipermeable membrane from an area of LOW solute concentration to HIGH solute concentration. The membrane lets water through but blocks solute particles.
+    </div>
+    
+    <p><strong>Osmotic pressure (π)</strong> is the pressure required to STOP osmosis—to prevent water from moving across the membrane. The higher the solute concentration, the higher the osmotic pressure.</p>
+    
+    <div class="tip-box">
+        <strong>THE CROWD ANALOGY:</strong> Imagine two rooms connected by a door that only lets small people through. One room is packed with big people (solute). Small people (water) from the less crowded room squeeze through to equalize the "crowding." Osmotic pressure is like a bouncer at the door, pushing back to stop this flow.
+    </div>
+    
+    <h2>The Osmotic Pressure Equation</h2>
+    
+    <div class="formula-box">
+        <div class="formula-name">Osmotic Pressure</div>
+        π = iMRT
+    </div>
+    
+    <p>Notice this equation is structured like the ideal gas law (PV = nRT)!</p>
+    
+    <table>
+        <tr>
+            <th>Symbol</th>
+            <th>Meaning</th>
+            <th>Units</th>
+        </tr>
+        <tr>
+            <td><strong>π</strong></td>
+            <td>Osmotic pressure</td>
+            <td>atm</td>
+        </tr>
+        <tr>
+            <td><strong>i</strong></td>
+            <td>Van't Hoff factor (number of particles)</td>
+            <td>No units</td>
+        </tr>
+        <tr>
+            <td><strong>M</strong></td>
+            <td>Molarity of solution</td>
+            <td>mol/L</td>
+        </tr>
+        <tr>
+            <td><strong>R</strong></td>
+            <td>Gas constant</td>
+            <td>0.08206 L·atm/(mol·K)</td>
+        </tr>
+        <tr>
+            <td><strong>T</strong></td>
+            <td>Temperature</td>
+            <td>Kelvin (K = °C + 273)</td>
+        </tr>
+    </table>
+    
+    <div class="warning-box">
+        <strong>TEMPERATURE MUST BE IN KELVIN!</strong><br>
+        K = °C + 273. Using Celsius will give you completely wrong answers. This is a non-negotiable step—always convert temperature first!
+    </div>
+    
+    <h2>The Van't Hoff Factor (i)</h2>
+    
+    <p>This is where colligative properties get interesting—and where students make the most mistakes!</p>
+    
+    <div class="key-concept">
+        <strong>WHAT IS i?</strong> The van't Hoff factor tells you how many particles one formula unit creates when dissolved. Colligative properties depend on particle count, not formula units!
+    </div>
+    
+    <h3>Determining the Van't Hoff Factor</h3>
+    
+    <table>
+        <tr>
+            <th>Type of Compound</th>
+            <th>Example</th>
+            <th>Dissociation</th>
+            <th>i Value</th>
+        </tr>
+        <tr>
+            <td>Nonelectrolyte</td>
+            <td>Glucose, Urea, Sucrose</td>
+            <td>Stays intact—no dissociation</td>
+            <td style="text-align: center;"><strong>1</strong></td>
+        </tr>
+        <tr>
+            <td>Strong electrolyte (1:1)</td>
+            <td>NaCl, KBr, HCl</td>
+            <td>NaCl → Na⁺ + Cl⁻</td>
+            <td style="text-align: center;"><strong>2</strong></td>
+        </tr>
+        <tr>
+            <td>Strong electrolyte (1:2)</td>
+            <td>MgCl₂, CaCl₂</td>
+            <td>MgCl₂ → Mg²⁺ + 2Cl⁻</td>
+            <td style="text-align: center;"><strong>3</strong></td>
+        </tr>
+        <tr>
+            <td>Strong electrolyte (2:1)</td>
+            <td>Na₂SO₄, K₂CO₃</td>
+            <td>Na₂SO₄ → 2Na⁺ + SO₄²⁻</td>
+            <td style="text-align: center;"><strong>3</strong></td>
+        </tr>
+        <tr>
+            <td>Strong electrolyte (1:3)</td>
+            <td>FeCl₃, AlBr₃</td>
+            <td>FeCl₃ → Fe³⁺ + 3Cl⁻</td>
+            <td style="text-align: center;"><strong>4</strong></td>
+        </tr>
+    </table>
+    
+    <div class="memory-hook">
+        <div class="hook-label">Memory Hook</div>
+        <div class="hook-text">"i = ions in solution"</div>
+        <p style="margin-top: 8px; font-size: 10pt;">Count EVERY particle that forms when the compound dissolves.<br>MgCl₂ → Mg²⁺ + Cl⁻ + Cl⁻ = 3 particles, so i = 3</p>
+    </div>
+    
+    <div class="tip-box">
+        <strong>ALWAYS WRITE THE DISSOCIATION EQUATION:</strong><br>
+        MgCl₂ → Mg²⁺ + 2Cl⁻<br>
+        Count: 1 + 2 = 3 particles. Therefore i = 3.<br><br>
+        This systematic approach prevents errors!
+    </div>
+    
+    <h3>Why i Matters So Much</h3>
+    
+    <p>Consider two solutions, both at 1.0 M concentration:</p>
+    
+    <table>
+        <tr>
+            <th>Solution</th>
+            <th>i Value</th>
+            <th>Effective Particle Concentration</th>
+        </tr>
+        <tr>
+            <td>1.0 M glucose</td>
+            <td>1</td>
+            <td>1.0 M particles</td>
+        </tr>
+        <tr>
+            <td>1.0 M NaCl</td>
+            <td>2</td>
+            <td>2.0 M particles</td>
+        </tr>
+        <tr>
+            <td>1.0 M MgCl₂</td>
+            <td>3</td>
+            <td>3.0 M particles</td>
+        </tr>
+    </table>
+    
+    <p>The MgCl₂ solution has <strong>3× the osmotic pressure</strong> of the glucose solution because it has 3× the particles—even though both are "1.0 M"!</p>
+    
+    <h2>Clinical Connections: Why This Matters</h2>
+    
+    <p>Blood has an osmotic pressure of about <strong>7.4 atm</strong>. IV solutions must match this to avoid damaging cells:</p>
+    
+    <table>
+        <tr>
+            <th>Solution Type</th>
+            <th>Osmotic Pressure</th>
+            <th>Effect on Cells</th>
+        </tr>
+        <tr>
+            <td><strong>Hypotonic</strong></td>
+            <td>Lower than blood</td>
+            <td>Water enters cells → Cells BURST (hemolysis)</td>
+        </tr>
+        <tr>
+            <td><strong>Isotonic</strong></td>
+            <td>Equal to blood</td>
+            <td>No net water movement → Cells stay healthy</td>
+        </tr>
+        <tr>
+            <td><strong>Hypertonic</strong></td>
+            <td>Higher than blood</td>
+            <td>Water leaves cells → Cells SHRINK (crenation)</td>
+        </tr>
+    </table>
+    
+    <p>This is why normal saline (0.9% NaCl) and D5W (5% dextrose) are carefully formulated to be <strong>isotonic</strong> with blood plasma.</p>
+    
+    <h2>Step-by-Step: Calculating Osmotic Pressure</h2>
+    
+    <div class="steps-container">
+        <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Identify the solute and determine i.</strong> Is it an electrolyte? Write the dissociation equation and count particles.
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Calculate moles of solute.</strong> n = mass (g) / molar mass (g/mol)
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Calculate molarity.</strong> M = moles / volume (L). Make sure volume is in liters!
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <strong>Convert temperature to Kelvin.</strong> K = °C + 273. Don't skip this!
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">5</div>
+            <div class="step-content">
+                <strong>Plug into π = iMRT.</strong> Use R = 0.08206 L·atm/(mol·K). Units should cancel to give atm.
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">6</div>
+            <div class="step-content">
+                <strong>Convert units if needed.</strong> 1 atm = 760 mmHg = 760 torr
+            </div>
+        </div>
+    </div>
+    
+    <div class="warning-box">
+        <strong>COMMON MISTAKES TO AVOID:</strong>
+        <ul>
+            <li><strong>Forgetting i:</strong> This is the #1 error! Never leave out the van't Hoff factor for electrolytes.</li>
+            <li><strong>Using °C:</strong> Temperature must be in Kelvin for this equation.</li>
+            <li><strong>Wrong i value:</strong> Count ALL particles from dissociation (MgCl₂ = 3, not 2).</li>
+            <li><strong>Using molality:</strong> Osmotic pressure uses molarity (M), not molality (m).</li>
+        </ul>
+    </div>
+    
+    <div class="practice-box">
+        <strong>THINK ABOUT IT:</strong>
+        <ul>
+            <li>If osmotic pressure depends on particle concentration, why would 0.9% NaCl (i=2) be isotonic but 0.9% glucose (i=1) would not be?</li>
+            <li>A solution has π = 60 atm. Is this safe for IV use? How does it compare to blood (π ≈ 7.4 atm)?</li>
+        </ul>
+    </div>
+
+    <!-- ==================== SUMMARY ==================== -->
+    <div class="section-header page-break">
+        <span class="section-number">Summary</span>
+        Master Formula Reference
+    </div>
+    
+    <h2>All Key Formulas in One Place</h2>
+    
+    <table>
+        <tr>
+            <th>Concept</th>
+            <th>Formula</th>
+            <th>Key Point</th>
+        </tr>
+        <tr>
+            <td>Molarity</td>
+            <td>M = mol / L solution</td>
+            <td>Uses total solution volume</td>
+        </tr>
+        <tr>
+            <td>Molality</td>
+            <td>m = mol / kg solvent</td>
+            <td>Uses solvent mass only</td>
+        </tr>
+        <tr>
+            <td>Mole Fraction</td>
+            <td>χ = mol<sub>A</sub> / total mol</td>
+            <td>All χ values must sum to 1</td>
+        </tr>
+        <tr>
+            <td>Mass Percent</td>
+            <td>Mass % = (g solute / g solution) × 100%</td>
+            <td>Assume 100g for easy calculation</td>
+        </tr>
+        <tr>
+            <td>Dilution</td>
+            <td>M₁V₁ = M₂V₂</td>
+            <td>Moles are conserved</td>
+        </tr>
+        <tr>
+            <td>g/L to Molarity</td>
+            <td>M = (g/L) / (g/mol)</td>
+            <td>Divide by molar mass</td>
+        </tr>
+        <tr>
+            <td>Raoult's Law</td>
+            <td>P = χ × P°</td>
+            <td>Use χ of volatile component</td>
+        </tr>
+        <tr>
+            <td>Dalton's Law</td>
+            <td>P<sub>total</sub> = P<sub>A</sub> + P<sub>B</sub></td>
+            <td>Add partial pressures</td>
+        </tr>
+        <tr>
+            <td>Osmotic Pressure</td>
+            <td>π = iMRT</td>
+            <td>Don't forget i! T in Kelvin!</td>
+        </tr>
+    </table>
+    
+    <h2>Van't Hoff Factor Quick Reference</h2>
+    
+    <table>
+        <tr>
+            <th>i Value</th>
+            <th>Type</th>
+            <th>Examples</th>
+        </tr>
+        <tr>
+            <td style="text-align: center; font-size: 14pt; font-weight: bold;">1</td>
+            <td>Nonelectrolytes</td>
+            <td>Glucose, Urea, Sucrose, Ethanol</td>
+        </tr>
+        <tr>
+            <td style="text-align: center; font-size: 14pt; font-weight: bold;">2</td>
+            <td>1:1 Electrolytes</td>
+            <td>NaCl, KBr, HCl, NaOH, KNO₃</td>
+        </tr>
+        <tr>
+            <td style="text-align: center; font-size: 14pt; font-weight: bold;">3</td>
+            <td>1:2 or 2:1 Electrolytes</td>
+            <td>MgCl₂, CaCl₂, Na₂SO₄, K₂CO₃, Ba(NO₃)₂</td>
+        </tr>
+        <tr>
+            <td style="text-align: center; font-size: 14pt; font-weight: bold;">4</td>
+            <td>1:3 Electrolytes</td>
+            <td>FeCl₃, AlBr₃, Al(NO₃)₃</td>
+        </tr>
+    </table>
+    
+    <h2>Constants You Need</h2>
+    
+    <table>
+        <tr>
+            <th>Constant</th>
+            <th>Value</th>
+            <th>When to Use</th>
+        </tr>
+        <tr>
+            <td>R (gas constant)</td>
+            <td>0.08206 L·atm/(mol·K)</td>
+            <td>Osmotic pressure calculations</td>
+        </tr>
+        <tr>
+            <td>P°<sub>water</sub> at 25°C</td>
+            <td>23.8 mmHg</td>
+            <td>Vapor pressure problems</td>
+        </tr>
+        <tr>
+            <td>P°<sub>methanol</sub> at 25°C</td>
+            <td>94 mmHg</td>
+            <td>Two-volatile vapor pressure</td>
+        </tr>
+        <tr>
+            <td>Density of water</td>
+            <td>1.00 g/mL</td>
+            <td>Converting mL water to grams</td>
+        </tr>
+        <tr>
+            <td>1 atm</td>
+            <td>760 mmHg</td>
+            <td>Pressure unit conversions</td>
+        </tr>
+    </table>
+    
+    <h2>Success Strategies for Your Workshop</h2>
+    
+    <div class="steps-container">
+        <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <strong>Read the entire problem first.</strong> Identify what you're given and what you need to find. Write down the knowns and unknowns.
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <strong>Choose your starting point wisely.</strong> Mass %? Assume 100g. Molarity? Assume 1L. This makes calculations cleaner.
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <strong>Show ALL unit conversions.</strong> Partial credit comes from clear methodology. Units tell a story and help you catch errors!
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <strong>Box your final answers.</strong> Make it easy for graders to find your answers. Always include units!
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">5</div>
+            <div class="step-content">
+                <strong>Sanity check your answers.</strong> Does a vapor pressure > P° make sense? (No!) Does M ≈ m for dilute aqueous solutions? (Yes!)
+            </div>
+        </div>
+    </div>
+    
+    <hr>
+    
+    <div class="memory-hook">
+        <div class="hook-label">Final Reminder</div>
+        <div class="hook-text">Colligative properties count PARTICLES, not molecules!</div>
+        <p style="margin-top: 8px; font-size: 10pt;">Whether it's vapor pressure, freezing point, boiling point, or osmotic pressure—it's all about how many particles are in solution. Electrolytes multiply your particle count!</p>
+    </div>
+    
+    <div class="footer">
+        <p><strong>CHM-152L | Workshop 1: Colligative Properties</strong></p>
+        <p>Teaching Guide</p>
+    </div>
+
+</body>
+</html>
