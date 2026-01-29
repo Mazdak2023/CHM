@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHEM JEOPARDY! - CHM130 Midterm Review</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;700&family=Roboto:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(180deg, #0a0a2e 0%, #1a1a4e 50%, #0a0a2e 100%);
+            min-height: 100vh;
+            font-family: 'Oswald', sans-serif;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Spotlight Effects */
+        .spotlight {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .spotlight-1 { top: -100px; left: 10%; animation: pulse 4s infinite; }
+        .spotlight-2 { top: -100px; right: 10%; animation: pulse 4s infinite 2s; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Main Container */
+        .game-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .game-header {
+            text-align: center;
+            padding: 30px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 72px;
+            color: #ffd700;
+            text-shadow:
+                0 0 10px #ffd700,
+                0 0 20px #ffd700,
+                0 0 40px #ff8c00,
+                4px 4px 0 #000;
+            letter-spacing: 8px;
+            animation: titleGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            from { text-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700, 4px 4px 0 #000; }
+            to { text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700, 0 0 60px #ff8c00, 4px 4px 0 #000; }
+        }
+
+        .subtitle {
+            font-size: 24px;
+            color: #87ceeb;
+            margin-top: 10px;
+            letter-spacing: 4px;
+        }
+
+        /* Host Box */
+        .host-box {
+            background: linear-gradient(135deg, #1a1a3e 0%, #2a2a5e 100%);
+            border: 3px solid #ffd700;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+        }
+
+        .host-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            flex-shrink: 0;
+            border: 3px solid #fff;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .host-message {
+            font-size: 22px;
+            color: #ffffff;
+            line-height: 1.5;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .host-name {
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        /* Score Display */
+        .score-display {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .score-item {
+            background: linear-gradient(180deg, #2a2a6e 0%, #1a1a4e 100%);
+            border: 2px solid #4169e1;
+            border-radius: 10px;
+            padding: 15px 30px;
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .score-label {
+            font-size: 14px;
+            color: #87ceeb;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+        }
+
+        .score-value {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 36px;
+            color: #ffd700;
+        }
+
+        /* Jeopardy Board */
+        .jeopardy-board {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            background: #000033;
+            padding: 15px;
+            border-radius: 10px;
+            border: 4px solid #ffd700;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
+        }
+
+        .category-header {
+            background: linear-gradient(180deg, #0000aa 0%, #000066 100%);
+            border: 2px solid #4169e1;
+            border-radius: 5px;
+            padding: 15px 10px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .question-cell {
+            background: linear-gradient(180deg, #0000cc 0%, #000088 100%);
+            border: 2px solid #4169e1;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 32px;
+            color: #ffd700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .question-cell:hover {
+            background: linear-gradient(180deg, #0000ff 0%, #0000aa 100%);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .question-cell.used {
+            background: #1a1a3e;
+            color: #333;
+            cursor: default;
+            border-color: #333;
+        }
+
+        .question-cell.used:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Question Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .question-modal {
+            background: linear-gradient(180deg, #0000aa 0%, #000066 100%);
+            border: 6px solid #ffd700;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 0 100px rgba(255, 215, 0, 0.5);
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-category {
+            font-size: 18px;
+            color: #87ceeb;
+            margin-bottom: 10px;
+            letter-spacing: 3px;
+        }
+
+        .modal-value {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 48px;
+            color: #ffd700;
+            margin-bottom: 20px;
+        }
+
+        .modal-question {
+            font-size: 28px;
+            color: #ffffff;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        .modal-answers {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .answer-btn {
+            background: linear-gradient(180deg, #1a1a4e 0%, #0a0a2e 100%);
+            border: 3px solid #4169e1;
+            border-radius: 10px;
+            padding: 18px 20px;
+            color: #ffffff;
+            font-family: 'Roboto', sans-serif;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .answer-btn:hover {
+            background: linear-gradient(180deg, #2a2a6e 0%, #1a1a4e 100%);
+            border-color: #ffd700;
+            transform: translateX(5px);
+        }
+
+        .answer-btn.correct {
+            background: linear-gradient(180deg, #006600 0%, #004400 100%);
+            border-color: #00ff00;
+        }
+
+        .answer-btn.incorrect {
+            background: linear-gradient(180deg, #660000 0%, #440000 100%);
+            border-color: #ff0000;
+        }
+
+        .answer-btn.reveal {
+            background: linear-gradient(180deg, #006600 0%, #004400 100%);
+            border-color: #00ff00;
+        }
+
+        .answer-letter {
+            width: 35px;
+            height: 35px;
+            background: #ffd700;
+            color: #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        /* Feedback */
+        .feedback-container {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feedback-container.show {
+            display: block;
+        }
+
+        .feedback-container.correct {
+            background: linear-gradient(180deg, #004400 0%, #002200 100%);
+            border: 3px solid #00ff00;
+        }
+
+        .feedback-container.incorrect {
+            background: linear-gradient(180deg, #440000 0%, #220000 100%);
+            border: 3px solid #ff4444;
+        }
+
+        .feedback-title {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .feedback-container.correct .feedback-title { color: #00ff00; }
+        .feedback-container.incorrect .feedback-title { color: #ff4444; }
+
+        .feedback-text {
+            font-size: 18px;
+            color: #cccccc;
+            line-height: 1.6;
+        }
+
+        .key-point {
+            background: rgba(255, 215, 0, 0.1);
+            border-left: 4px solid #ffd700;
+            padding: 15px;
+            margin-top: 15px;
+            text-align: left;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .key-point-title {
+            color: #ffd700;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .continue-btn {
+            background: linear-gradient(180deg, #ffd700 0%, #ff8c00 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 15px 40px;
+            color: #000;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 24px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+        }
+
+        .continue-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+
+        /* Final Jeopardy */
+        .final-jeopardy {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .final-jeopardy.active {
+            display: block;
+        }
+
+        .final-title {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 56px;
+            color: #ffd700;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px #ffd700;
+            animation: titleGlow 1s ease-in-out infinite alternate;
+        }
+
+        /* Results Screen */
+        .results-screen {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(180deg, #0a0a2e 0%, #1a1a4e 100%);
+            border: 4px solid #ffd700;
+            border-radius: 20px;
+        }
+
+        .results-screen.active {
+            display: block;
+            animation: slideDown 0.5s ease;
+        }
+
+        .results-title {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 48px;
+            color: #ffd700;
+            margin-bottom: 30px;
+        }
+
+        .final-score {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 72px;
+            color: #00ff00;
+            margin-bottom: 20px;
+        }
+
+        .results-message {
+            font-size: 24px;
+            color: #ffffff;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .play-again-btn {
+            background: linear-gradient(180deg, #ffd700 0%, #ff8c00 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 20px 50px;
+            color: #000;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+        }
+
+        .play-again-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ffd700;
+            top: -10px;
+            animation: fall 3s linear forwards;
+            z-index: 2000;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Daily Double */
+        .daily-double-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .daily-double-overlay.active {
+            display: flex;
+        }
+
+        .daily-double-text {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 80px;
+            color: #ffd700;
+            text-shadow: 0 0 30px #ffd700, 0 0 60px #ff8c00;
+            animation: dailyDouble 0.5s ease infinite alternate;
+        }
+
+        @keyframes dailyDouble {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+
+        /* Funny Reactions */
+        .reaction-popup {
+            position: fixed;
+            font-size: 60px;
+            z-index: 1500;
+            pointer-events: none;
+            animation: popUp 1s ease forwards;
+        }
+
+        @keyframes popUp {
+            0% { transform: scale(0) rotate(-20deg); opacity: 1; }
+            50% { transform: scale(1.5) rotate(10deg); opacity: 1; }
+            100% { transform: scale(1) translateY(-50px); opacity: 0; }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 900px) {
+            .jeopardy-board {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .category-header {
+                font-size: 11px;
+                padding: 10px 5px;
+            }
+
+            .question-cell {
+                font-size: 24px;
+                padding: 15px;
+            }
+
+            .modal-answers {
+                grid-template-columns: 1fr;
+            }
+
+            .logo {
+                font-size: 48px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .jeopardy-board {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .host-box {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .score-display {
+                gap: 15px;
+            }
+
+            .score-item {
+                min-width: 120px;
+                padding: 10px 20px;
+            }
+        }
+
+        /* Sound effect visual indicator */
+        .sound-effect {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.7);
+            padding: 10px 20px;
+            border-radius: 20px;
+            color: #ffd700;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 500;
+        }
+
+        .sound-effect.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="spotlight spotlight-1"></div>
+    <div class="spotlight spotlight-2"></div>
+
+    <div class="game-container">
+        <!-- Header -->
+        <div class="game-header">
+            <div class="logo">CHEM JEOPARDY!</div>
+            <div class="subtitle">CHM130 MIDTERM CHAMPIONSHIP</div>
+        </div>
+
+        <!-- Host Box -->
+        <div class="host-box">
+            <div class="host-avatar">🧪</div>
+            <div class="host-message" id="host-message">
+                <span class="host-name">Dr. Molecule:</span> Welcome to CHEM JEOPARDY! I'm your host, Dr. Molecule! Pick a category and dollar amount to test your chemistry knowledge. Remember, in chemistry, if you're not part of the solution, you're part of the precipitate! 😄
+            </div>
+        </div>
+
+        <!-- Score Display -->
+        <div class="score-display">
+            <div class="score-item">
+                <div class="score-label">SCORE</div>
+                <div class="score-value" id="score">$0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">CORRECT</div>
+                <div class="score-value" id="correct-count">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">REMAINING</div>
+                <div class="score-value" id="remaining">30</div>
+            </div>
+        </div>
+
+        <!-- Jeopardy Board -->
+        <div class="jeopardy-board" id="jeopardy-board">
+            <!-- Generated by JavaScript -->
+        </div>
+
+        <!-- Results Screen -->
+        <div class="results-screen" id="results-screen">
+            <div class="results-title">GAME OVER!</div>
+            <div class="final-score" id="final-score">$0</div>
+            <div class="results-message" id="results-message"></div>
+            <button class="play-again-btn" onclick="restartGame()">PLAY AGAIN!</button>
+        </div>
+    </div>
+
+    <!-- Question Modal -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="question-modal">
+            <div class="modal-category" id="modal-category"></div>
+            <div class="modal-value" id="modal-value"></div>
+            <div class="modal-question" id="modal-question"></div>
+            <div class="modal-answers" id="modal-answers"></div>
+            <div class="feedback-container" id="feedback-container">
+                <div class="feedback-title" id="feedback-title"></div>
+                <div class="feedback-text" id="feedback-text"></div>
+                <div class="key-point">
+                    <div class="key-point-title">📚 STUDY TIP:</div>
+                    <div id="key-point-text"></div>
+                </div>
+            </div>
+            <button class="continue-btn" id="continue-btn" style="display: none;" onclick="closeModal()">BACK TO BOARD</button>
+        </div>
+    </div>
+
+    <!-- Daily Double Overlay -->
+    <div class="daily-double-overlay" id="daily-double-overlay">
+        <div class="daily-double-text">⭐ DAILY DOUBLE! ⭐</div>
+    </div>
+
+    <!-- Sound Effect Indicator -->
+    <div class="sound-effect" id="sound-effect">🔊 *DING!*</div>
+
+    <script>
+        // Game State
+        let gameState = {
+            score: 0,
+            correctAnswers: 0,
+            questionsAnswered: 0,
+            totalQuestions: 30,
+            usedQuestions: new Set(),
+            dailyDoubles: new Set()
+        };
+
+        // Host Messages
+        const hostMessages = {
+            correct: [
+                "Excellent! You're hotter than an exothermic reaction! 🔥",
+                "Brilliant! Your brain has more capacity than Avogadro's number! 🧠",
+                "Perfect! You're more stable than a noble gas! ✨",
+                "Outstanding! You've got great chemistry! Get it? 😄",
+                "Wonderful! You're reacting perfectly to these questions! ⚗️",
+                "Superb! Your knowledge is supersaturated! 💎",
+                "Amazing! You're bonding with this material! 🤝",
+                "Fantastic! You're in your element! Literally! 🎯",
+                "Spectacular! That answer was pure gold... Au yeah! 🥇",
+                "Marvelous! You're positively charged with knowledge! ⚡"
+            ],
+            incorrect: [
+                "Oops! Don't worry, even Marie Curie had to study! 📚",
+                "Not quite! But hey, mistakes are just experiments in learning! 🔬",
+                "Aww! That answer didn't bond well. Let's try another! 💪",
+                "Nope! But remember: if at first you don't succeed, try, try a ion! 😄",
+                "Ouch! That reaction didn't go as planned. Review time! 📖",
+                "Hmm, that answer was a bit unstable! Here's the right one! 🎓",
+                "Close but no cigar! Or should I say, no benzene ring! 🔄",
+                "Not this time! But you're still a noble element in my book! 👑",
+                "Whoops! That precipitated out of nowhere! Let's learn! 📝",
+                "Oh no! You've got potential... electric potential! Keep going! ⚡"
+            ],
+            dailyDouble: [
+                "DAILY DOUBLE! Time to catalyze your score! 🌟",
+                "DAILY DOUBLE! This is your moment to react! ⭐",
+                "DAILY DOUBLE! Get ready for an explosive opportunity! 💥"
+            ],
+            intro: [
+                "Pick a category! I promise I won't judge... much! 😏",
+                "Choose wisely! Unlike electrons, you can't be in two places at once! ⚛️",
+                "Go ahead, pick one! It's not like it's rocket science... oh wait, chemistry IS in rockets! 🚀",
+                "Select a question! May the periodic forces be with you! ✨"
+            ]
+        };
+
+        // Categories and Questions
+        const categories = [
+            {
+                name: "MATTER MADNESS",
+                icon: "🧪",
+                questions: [
+                    {
+                        value: 100,
+                        question: "This type of molecule has atoms of DIFFERENT elements, like water with hydrogen and oxygen.",
+                        answers: ["Homoatomic", "Heteroatomic", "Isotopic", "Ionic"],
+                        correct: 1,
+                        explanation: "Hetero means 'different'! Water (H₂O) has two different elements, making it heteroatomic. Homoatomic molecules like O₂ have only one type of atom.",
+                        keyPoint: "Hetero = different, Homo = same. Count atom TYPES for hetero/homo, count TOTAL atoms for di/tri/poly-atomic."
+                    },
+                    {
+                        value: 200,
+                        question: "This property stays constant whether you're on Earth, the Moon, or floating in space - it's the amount of stuff in an object.",
+                        answers: ["Weight", "Volume", "Mass", "Density"],
+                        correct: 2,
+                        explanation: "Mass is the amount of matter - it doesn't change with gravity! Weight depends on gravitational pull, so it changes based on location.",
+                        keyPoint: "Mass = amount of matter (constant everywhere). Weight = gravitational force on mass (varies with gravity)."
+                    },
+                    {
+                        value: 300,
+                        question: "When iron slowly turns orange and flaky over time, this type of property is being demonstrated.",
+                        answers: ["Physical", "Thermal", "Chemical", "Nuclear"],
+                        correct: 2,
+                        explanation: "Rusting is a CHEMICAL property because iron reacts with oxygen to form a NEW substance (iron oxide) with different properties!",
+                        keyPoint: "Chemical properties involve forming NEW substances. Physical properties can be observed WITHOUT changing composition."
+                    },
+                    {
+                        value: 400,
+                        question: "Only this state of matter has both a definite shape AND a definite volume.",
+                        answers: ["Liquid", "Gas", "Plasma", "Solid"],
+                        correct: 3,
+                        explanation: "Solids have particles locked in fixed positions, giving them definite shape and volume. Liquids flow to fit their container, gases expand to fill any space.",
+                        keyPoint: "Solid: definite shape & volume. Liquid: definite volume only. Gas: neither definite shape nor volume."
+                    },
+                    {
+                        value: 500,
+                        question: "These elements are known for being shiny, good conductors, and can be hammered into sheets or drawn into wires.",
+                        answers: ["Metalloids", "Nonmetals", "Halogens", "Metals"],
+                        correct: 3,
+                        explanation: "Metals are malleable (hammered into sheets), ductile (drawn into wires), lustrous (shiny), and excellent thermal/electrical conductors!",
+                        keyPoint: "Metals: left side of periodic table. Nonmetals: right side. Metalloids: along the staircase line (have properties of both)."
+                    }
+                ]
+            },
+            {
+                name: "ATOMIC ANTICS",
+                icon: "⚛️",
+                questions: [
+                    {
+                        value: 100,
+                        question: "In an isotope name like 'Carbon-14', this number represents the total of protons PLUS neutrons.",
+                        answers: ["Atomic number", "Mass number", "Electron count", "Group number"],
+                        correct: 1,
+                        explanation: "The mass number = protons + neutrons. For Carbon-14: 6 protons + 8 neutrons = 14. The atomic number (6) tells you protons only.",
+                        keyPoint: "Mass number = protons + neutrons. Atomic number = protons = electrons (in neutral atom). Isotopes have same protons, different neutrons."
+                    },
+                    {
+                        value: 200,
+                        question: "On the periodic table, this direction shows INCREASING atomic size - atoms get bigger as you go this way.",
+                        answers: ["Left to right", "Right to left", "Top to bottom", "Bottom to top"],
+                        correct: 2,
+                        explanation: "Going DOWN a group, atoms get larger (more electron shells). Going ACROSS a period, atoms get smaller (more protons pull electrons closer).",
+                        keyPoint: "Atomic radius: INCREASES down groups, DECREASES across periods. Largest atoms are bottom-left (like Cesium)!"
+                    },
+                    {
+                        value: 300,
+                        question: "For main group elements, this number from the periodic table tells you how many valence electrons an atom has.",
+                        answers: ["Period number", "Atomic mass", "Group number", "Electron shells"],
+                        correct: 2,
+                        explanation: "Group number = valence electrons for representative elements! Group 1 = 1 valence e⁻, Group 2 = 2, Group 17 = 7, Group 18 = 8.",
+                        keyPoint: "Valence electrons determine reactivity. Group 1 wants to LOSE 1 e⁻. Group 17 wants to GAIN 1 e⁻. Group 18 is already stable!"
+                    },
+                    {
+                        value: 400,
+                        question: "Ionization energy follows this trend across a period: it gets HIGHER as you move in this direction.",
+                        answers: ["Left to right", "Right to left", "Stays constant", "Only changes in groups"],
+                        correct: 0,
+                        explanation: "Ionization energy INCREASES left to right (more protons hold electrons tighter). It DECREASES going down (electrons farther from nucleus, easier to remove).",
+                        keyPoint: "Ionization energy trend is OPPOSITE of atomic size! Small atoms hold electrons tight = high ionization energy."
+                    },
+                    {
+                        value: 500,
+                        question: "The mass shown on the periodic table for each element represents this - a calculation accounting for all naturally occurring versions.",
+                        answers: ["Mass number of common isotope", "Total neutrons", "Weighted average of isotopes", "Sum of all isotopes"],
+                        correct: 2,
+                        explanation: "The periodic table shows the WEIGHTED AVERAGE atomic mass of all naturally occurring isotopes based on their abundance percentages!",
+                        keyPoint: "That's why Carbon is 12.01, not exactly 12! Carbon-13 exists in small amounts, slightly increasing the average."
+                    }
+                ]
+            },
+            {
+                name: "NAMING NONSENSE",
+                icon: "📝",
+                questions: [
+                    {
+                        value: 100,
+                        question: "When naming ionic compounds (metal + nonmetal), you should NEVER use these counting words like 'di' or 'tri'.",
+                        answers: ["Roman numerals", "Greek prefixes", "Element symbols", "Subscripts"],
+                        correct: 1,
+                        explanation: "Ionic compounds DON'T use Greek prefixes! Just say the metal name + nonmetal-ide. Example: NaCl = sodium chloride, NOT monosodium monochloride!",
+                        keyPoint: "Ionic naming: Metal + nonmetal-ide. ONLY use Roman numerals for transition metals with variable charges (Fe²⁺ vs Fe³⁺)."
+                    },
+                    {
+                        value: 200,
+                        question: "Covalent compounds (nonmetal + nonmetal) DO use Greek prefixes. 'Tetra' means this number.",
+                        answers: ["Two", "Three", "Four", "Five"],
+                        correct: 2,
+                        explanation: "Greek prefixes: mono(1), di(2), tri(3), TETRA(4), penta(5), hexa(6), hepta(7), octa(8), nona(9), deca(10).",
+                        keyPoint: "Covalent naming: prefix-element + prefix-element-ide. Drop 'mono' from first element. CO₂ = carbon dioxide, NOT monocarbon dioxide."
+                    },
+                    {
+                        value: 300,
+                        question: "To form an ionic compound formula, you 'criss-cross' these values from each ion to create subscripts.",
+                        answers: ["Atomic masses", "Atomic numbers", "Charges", "Group numbers"],
+                        correct: 2,
+                        explanation: "Criss-cross the charges! Ca²⁺ and Cl⁻: the 2 becomes Cl's subscript, the 1 becomes Ca's subscript = CaCl₂. Total charge must be ZERO!",
+                        keyPoint: "Ionic formulas must be neutral! Criss-cross charges, then reduce to lowest whole numbers if needed."
+                    },
+                    {
+                        value: 400,
+                        question: "Compounds made of a metal and nonmetal are held together by this type of bond, formed by electron TRANSFER.",
+                        answers: ["Covalent bond", "Ionic bond", "Metallic bond", "Hydrogen bond"],
+                        correct: 1,
+                        explanation: "Ionic bonds form when electrons TRANSFER from metal to nonmetal. Covalent bonds form when nonmetals SHARE electrons.",
+                        keyPoint: "Ionic = transfer (metal gives e⁻ to nonmetal). Covalent = sharing (both nonmetals). 'Like dissolves like' - ionic dissolves in water!"
+                    },
+                    {
+                        value: 500,
+                        question: "When oxygen gains two electrons to become stable, it forms this ion with a 2- charge.",
+                        answers: ["O⁺", "O₂", "O²⁻", "O⁸⁻"],
+                        correct: 2,
+                        explanation: "Oxygen has 6 valence electrons and needs 2 more to complete its octet. Gaining 2 electrons gives it a 2- charge: O²⁻ (oxide ion).",
+                        keyPoint: "Nonmetals GAIN electrons = negative ions (anions). The charge equals electrons gained. Group 16 gains 2, Group 17 gains 1."
+                    }
+                ]
+            },
+            {
+                name: "MOLE MAYHEM",
+                icon: "🔢",
+                questions: [
+                    {
+                        value: 100,
+                        question: "This enormous number (6.022 × 10²³) tells you how many particles are in exactly ONE mole of any substance.",
+                        answers: ["Planck's constant", "Avogadro's number", "Universal gas constant", "Boltzmann's constant"],
+                        correct: 1,
+                        explanation: "Avogadro's number = 6.022 × 10²³ particles/mol. It's like saying '1 dozen = 12' but for chemistry scale!",
+                        keyPoint: "1 mole = 6.022 × 10²³ particles. Works for atoms, molecules, ions, electrons - anything!"
+                    },
+                    {
+                        value: 200,
+                        question: "To convert MOLES to GRAMS, you multiply by this value found on the periodic table for each element.",
+                        answers: ["Atomic number", "Density", "Molar mass", "Avogadro's number"],
+                        correct: 2,
+                        explanation: "Grams = moles × molar mass. Molar mass (g/mol) is found on the periodic table. For compounds, add up all atomic masses!",
+                        keyPoint: "Mole roadmap: GRAMS ←(molar mass)→ MOLES ←(Avogadro's #)→ PARTICLES. Molar mass is the bridge to grams!"
+                    },
+                    {
+                        value: 300,
+                        question: "If you have 2 moles of H₂O, you have this many moles of hydrogen ATOMS (look at the subscript!).",
+                        answers: ["2 moles", "4 moles", "1 mole", "6 moles"],
+                        correct: 1,
+                        explanation: "Each H₂O molecule has 2 hydrogen atoms. So: 2 mol H₂O × 2 H atoms/molecule = 4 mol H atoms!",
+                        keyPoint: "Moles of atoms = moles of compound × subscript. The subscript tells you atoms per molecule!"
+                    },
+                    {
+                        value: 400,
+                        question: "To find molar mass of MgCl₂, you add Mg's mass once PLUS Cl's mass multiplied by this number.",
+                        answers: ["One", "Two", "Three", "The molar mass"],
+                        correct: 1,
+                        explanation: "MgCl₂ molar mass = 24.31(Mg) + 2×35.45(Cl) = 24.31 + 70.90 = 95.21 g/mol. The subscript tells you how many of each atom!",
+                        keyPoint: "Molar mass = Σ(atomic mass × subscript). Add up each element's contribution!"
+                    },
+                    {
+                        value: 500,
+                        question: "To convert molecules to moles, you DIVIDE by Avogadro's number. To go from moles to molecules, you do this operation.",
+                        answers: ["Divide", "Multiply", "Add", "Subtract"],
+                        correct: 1,
+                        explanation: "Moles → Molecules: MULTIPLY by 6.022 × 10²³. Molecules → Moles: DIVIDE by 6.022 × 10²³. It's like converting dozens to individual items!",
+                        keyPoint: "Going 'up' the mole roadmap (to larger units): divide. Going 'down' (to smaller units): multiply. Moles are in the MIDDLE!"
+                    }
+                ]
+            },
+            {
+                name: "REACTION RUCKUS",
+                icon: "💥",
+                questions: [
+                    {
+                        value: 100,
+                        question: "In a chemical equation, the substances on the LEFT side of the arrow are called this.",
+                        answers: ["Products", "Coefficients", "Reactants", "Catalysts"],
+                        correct: 2,
+                        explanation: "REACTANTS are what you START with (left side). PRODUCTS are what you MAKE (right side). The arrow means 'yields' or 'produces'.",
+                        keyPoint: "Reactants → Products. Reactants are consumed (used up). Products are formed (created)."
+                    },
+                    {
+                        value: 200,
+                        question: "When A + B → AB (two substances combine to form ONE product), this is called a _____ reaction.",
+                        answers: ["Decomposition", "Single replacement", "Combination/Synthesis", "Double replacement"],
+                        correct: 2,
+                        explanation: "COMBINATION (synthesis): A + B → AB. The opposite is DECOMPOSITION: AB → A + B (one thing breaks into many).",
+                        keyPoint: "Combination: many → one. Decomposition: one → many. Single replacement: A + BC → AC + B. Double replacement: AB + CD → AD + CB."
+                    },
+                    {
+                        value: 300,
+                        question: "When balancing equations, you can ONLY change these numbers in front of formulas, never the subscripts.",
+                        answers: ["Atomic numbers", "Coefficients", "Subscripts", "Superscripts"],
+                        correct: 1,
+                        explanation: "COEFFICIENTS balance equations! They multiply ALL atoms in a formula. Changing subscripts would change the IDENTITY of the substance!",
+                        keyPoint: "Law of Conservation of Mass: atoms aren't created or destroyed. Same number of each atom on both sides. Only adjust COEFFICIENTS!"
+                    },
+                    {
+                        value: 400,
+                        question: "In stoichiometry, balanced equation coefficients give you these relationships between substances.",
+                        answers: ["Mass ratios", "Mole ratios", "Volume ratios", "Density ratios"],
+                        correct: 1,
+                        explanation: "Coefficients represent MOLE RATIOS! In 2H₂ + O₂ → 2H₂O: the ratio is 2:1:2. You need 2 moles H₂ for every 1 mole O₂.",
+                        keyPoint: "Stoichiometry uses mole ratios from coefficients. Convert to moles → use ratio → convert to desired unit!"
+                    },
+                    {
+                        value: 500,
+                        question: "In redox reactions, REDUCTION is when a substance does this with electrons (remember: OIL RIG!).",
+                        answers: ["Loses electrons", "Gains electrons", "Shares electrons", "Destroys electrons"],
+                        correct: 1,
+                        explanation: "OIL RIG: Oxidation Is Loss, Reduction Is Gain (of electrons). Also: LEO GER (Lose Electrons = Oxidation, Gain Electrons = Reduction).",
+                        keyPoint: "Reduction = gain electrons = decrease in oxidation state. The species that gets reduced is the oxidizing agent!"
+                    }
+                ]
+            },
+            {
+                name: "ENERGY & GASES",
+                icon: "🔥",
+                questions: [
+                    {
+                        value: 100,
+                        question: "A reaction that RELEASES heat to the surroundings (like burning or hand warmers) is this type.",
+                        answers: ["Endothermic", "Isothermic", "Exothermic", "Athermic"],
+                        correct: 2,
+                        explanation: "EXOthermic = heat EXITS the system. Surroundings get warmer! ENDOthermic = heat ENTERS the system. Surroundings get colder!",
+                        keyPoint: "Exo = out (releases heat, -ΔH). Endo = in (absorbs heat, +ΔH). Cold packs are endothermic, hot packs are exothermic!"
+                    },
+                    {
+                        value: 200,
+                        question: "The equation PV = nRT is called this law, relating pressure, volume, moles, and temperature of gases.",
+                        answers: ["Boyle's Law", "Charles's Law", "Ideal Gas Law", "Dalton's Law"],
+                        correct: 2,
+                        explanation: "PV = nRT is the Ideal Gas Law! P = pressure (atm), V = volume (L), n = moles, R = 0.0821 L·atm/mol·K, T = temperature (KELVIN!).",
+                        keyPoint: "ALWAYS convert temperature to Kelvin! K = °C + 273. Kelvin has no negative values (absolute zero = 0 K)."
+                    },
+                    {
+                        value: 300,
+                        question: "To convert 760 mmHg to atmospheres, you'd get this value (this is standard atmospheric pressure).",
+                        answers: ["7.6 atm", "1 atm", "76 atm", "0.1 atm"],
+                        correct: 1,
+                        explanation: "1 atm = 760 mmHg = 760 torr = 101.325 kPa = 14.7 psi. These are all equivalent at standard conditions!",
+                        keyPoint: "Know your pressure conversions! 1 atm = 760 mmHg is the most common conversion you'll use."
+                    },
+                    {
+                        value: 400,
+                        question: "According to Dalton's Law, the total pressure of a gas mixture equals the SUM of these individual pressures.",
+                        answers: ["Volume pressures", "Partial pressures", "Molar pressures", "Temperature pressures"],
+                        correct: 1,
+                        explanation: "Dalton's Law: P_total = P₁ + P₂ + P₃ + ... Each gas contributes its PARTIAL pressure based on its mole fraction!",
+                        keyPoint: "Partial pressure of gas A = (moles of A / total moles) × total pressure. Each gas acts independently!"
+                    },
+                    {
+                        value: 500,
+                        question: "When you dissolve ammonium nitrate in water and the container gets cold, this type of reaction is occurring.",
+                        answers: ["Exothermic", "Combustion", "Endothermic", "Neutralization"],
+                        correct: 2,
+                        explanation: "If surroundings get COLD, heat is being ABSORBED by the reaction = ENDOTHERMIC! Cold packs use this principle.",
+                        keyPoint: "Feel the container! Getting hot = exothermic (heat released). Getting cold = endothermic (heat absorbed from surroundings)."
+                    }
+                ]
+            }
+        ];
+
+        // Initialize Daily Doubles (2 random questions)
+        function initDailyDoubles() {
+            gameState.dailyDoubles.clear();
+            while (gameState.dailyDoubles.size < 2) {
+                const catIndex = Math.floor(Math.random() * categories.length);
+                const qIndex = Math.floor(Math.random() * 5);
+                gameState.dailyDoubles.add(`${catIndex}-${qIndex}`);
+            }
+        }
+
+        // Initialize Game
+        function initGame() {
+            gameState = {
+                score: 0,
+                correctAnswers: 0,
+                questionsAnswered: 0,
+                totalQuestions: 30,
+                usedQuestions: new Set(),
+                dailyDoubles: new Set()
+            };
+            initDailyDoubles();
+            renderBoard();
+            updateDisplay();
+            updateHostMessage(hostMessages.intro[Math.floor(Math.random() * hostMessages.intro.length)]);
+        }
+
+        // Render Jeopardy Board
+        function renderBoard() {
+            const board = document.getElementById('jeopardy-board');
+            let html = '';
+
+            // Category headers
+            categories.forEach(cat => {
+                html += `<div class="category-header">${cat.icon}<br>${cat.name}</div>`;
+            });
+
+            // Question cells (5 rows)
+            for (let row = 0; row < 5; row++) {
+                categories.forEach((cat, catIndex) => {
+                    const value = cat.questions[row].value;
+                    const qId = `${catIndex}-${row}`;
+                    const isUsed = gameState.usedQuestions.has(qId);
+                    html += `
+                        <div class="question-cell ${isUsed ? 'used' : ''}"
+                             data-cat="${catIndex}"
+                             data-q="${row}"
+                             onclick="${isUsed ? '' : `selectQuestion(${catIndex}, ${row})`}">
+                            ${isUsed ? '' : '$' + value}
+                        </div>
+                    `;
+                });
+            }
+
+            board.innerHTML = html;
+        }
+
+        // Select Question
+        function selectQuestion(catIndex, qIndex) {
+            const qId = `${catIndex}-${qIndex}`;
+            if (gameState.usedQuestions.has(qId)) return;
+
+            const category = categories[catIndex];
+            const question = category.questions[qIndex];
+
+            // Check for Daily Double
+            if (gameState.dailyDoubles.has(qId)) {
+                showDailyDouble(() => {
+                    showQuestion(category, question, qId, true);
+                });
+            } else {
+                showQuestion(category, question, qId, false);
+            }
+        }
+
+        // Show Daily Double Animation
+        function showDailyDouble(callback) {
+            const overlay = document.getElementById('daily-double-overlay');
+            overlay.classList.add('active');
+            showSoundEffect("🎵 DAILY DOUBLE! 🎵");
+
+            setTimeout(() => {
+                overlay.classList.remove('active');
+                callback();
+            }, 2000);
+        }
+
+        // Show Question Modal
+        function showQuestion(category, question, qId, isDailyDouble) {
+            const modal = document.getElementById('modal-overlay');
+            const value = isDailyDouble ? question.value * 2 : question.value;
+
+            document.getElementById('modal-category').textContent = category.name;
+            document.getElementById('modal-value').textContent = isDailyDouble ? `$${value} (DAILY DOUBLE!)` : `$${question.value}`;
+            document.getElementById('modal-question').textContent = question.question;
+
+            // Shuffle answers
+            const shuffledAnswers = [...question.answers].map((ans, i) => ({ text: ans, originalIndex: i }));
+            shuffleArray(shuffledAnswers);
+
+            const answersHtml = shuffledAnswers.map((ans, i) => `
+                <button class="answer-btn" onclick="checkAnswer(${ans.originalIndex}, ${question.correct}, ${value}, '${qId.replace(/'/g, "\\'")}')">
+                    <span class="answer-letter">${String.fromCharCode(65 + i)}</span>
+                    <span>${ans.text}</span>
+                </button>
+            `).join('');
+
+            document.getElementById('modal-answers').innerHTML = answersHtml;
+            document.getElementById('feedback-container').className = 'feedback-container';
+            document.getElementById('continue-btn').style.display = 'none';
+
+            // Store current question data for feedback
+            modal.dataset.explanation = question.explanation;
+            modal.dataset.keyPoint = question.keyPoint;
+            modal.dataset.correctAnswer = question.answers[question.correct];
+
+            modal.classList.add('active');
+        }
+
+        // Check Answer
+        function checkAnswer(selectedIndex, correctIndex, value, qId) {
+            const isCorrect = selectedIndex === correctIndex;
+            const modal = document.getElementById('modal-overlay');
+            const buttons = document.querySelectorAll('.answer-btn');
+
+            // Disable all buttons
+            buttons.forEach(btn => btn.disabled = true);
+
+            // Mark answers
+            buttons.forEach(btn => {
+                const btnIndex = parseInt(btn.onclick.toString().match(/checkAnswer\((\d+)/)[1]);
+                if (btnIndex === correctIndex) {
+                    btn.classList.add('reveal');
+                }
+                if (btnIndex === selectedIndex && !isCorrect) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            // Update score and stats
+            gameState.questionsAnswered++;
+            gameState.usedQuestions.add(qId);
+
+            if (isCorrect) {
+                gameState.score += value;
+                gameState.correctAnswers++;
+                showReaction('correct');
+                showSoundEffect("🎵 CORRECT! 🎵");
+            } else {
+                gameState.score -= Math.floor(value / 2);
+                showReaction('incorrect');
+                showSoundEffect("😬 Oops!");
+            }
+
+            // Show feedback
+            const feedbackContainer = document.getElementById('feedback-container');
+            feedbackContainer.classList.add('show', isCorrect ? 'correct' : 'incorrect');
+            document.getElementById('feedback-title').textContent = isCorrect ? '✓ CORRECT!' : '✗ INCORRECT!';
+            document.getElementById('feedback-text').innerHTML = `
+                <strong>The answer was:</strong> ${modal.dataset.correctAnswer}<br><br>
+                ${modal.dataset.explanation}
+            `;
+            document.getElementById('key-point-text').textContent = modal.dataset.keyPoint;
+
+            // Update host message
+            const messages = isCorrect ? hostMessages.correct : hostMessages.incorrect;
+            updateHostMessage(messages[Math.floor(Math.random() * messages.length)]);
+
+            document.getElementById('continue-btn').style.display = 'inline-block';
+            updateDisplay();
+        }
+
+        // Close Modal
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.remove('active');
+            renderBoard();
+
+            // Check if game is over
+            if (gameState.questionsAnswered >= gameState.totalQuestions) {
+                showResults();
+            }
+        }
+
+        // Show Results
+        function showResults() {
+            document.getElementById('jeopardy-board').style.display = 'none';
+            document.getElementById('results-screen').classList.add('active');
+            document.getElementById('final-score').textContent = `$${gameState.score.toLocaleString()}`;
+
+            const accuracy = Math.round((gameState.correctAnswers / gameState.totalQuestions) * 100);
+            let message = '';
+
+            if (accuracy >= 90) {
+                message = `🏆 CHEMISTRY CHAMPION! 🏆<br>You got ${gameState.correctAnswers}/${gameState.totalQuestions} correct (${accuracy}%)!<br>You're ready to ace that midterm!`;
+                createConfetti();
+            } else if (accuracy >= 75) {
+                message = `🥈 EXCELLENT WORK! 🥈<br>You got ${gameState.correctAnswers}/${gameState.totalQuestions} correct (${accuracy}%)!<br>A little more review and you'll be golden!`;
+            } else if (accuracy >= 60) {
+                message = `👍 GOOD EFFORT! 👍<br>You got ${gameState.correctAnswers}/${gameState.totalQuestions} correct (${accuracy}%)!<br>Review the topics you missed and try again!`;
+            } else {
+                message = `📚 KEEP STUDYING! 📚<br>You got ${gameState.correctAnswers}/${gameState.totalQuestions} correct (${accuracy}%)!<br>Don't give up! Chemistry takes practice!`;
+            }
+
+            document.getElementById('results-message').innerHTML = message;
+        }
+
+        // Restart Game
+        function restartGame() {
+            document.getElementById('results-screen').classList.remove('active');
+            document.getElementById('jeopardy-board').style.display = 'grid';
+            initGame();
+        }
+
+        // Update Display
+        function updateDisplay() {
+            document.getElementById('score').textContent = `$${gameState.score.toLocaleString()}`;
+            document.getElementById('correct-count').textContent = gameState.correctAnswers;
+            document.getElementById('remaining').textContent = gameState.totalQuestions - gameState.questionsAnswered;
+        }
+
+        // Update Host Message
+        function updateHostMessage(message) {
+            document.getElementById('host-message').innerHTML = `<span class="host-name">Dr. Molecule:</span> ${message}`;
+        }
+
+        // Shuffle Array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Show Reaction Popup
+        function showReaction(type) {
+            const emojis = type === 'correct'
+                ? ['🎉', '⭐', '✨', '🔥', '💯', '🏆', '👏', '🌟']
+                : ['😅', '🤔', '💪', '📚', '🧠', '⚗️'];
+
+            const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+            const popup = document.createElement('div');
+            popup.className = 'reaction-popup';
+            popup.textContent = emoji;
+            popup.style.left = Math.random() * 60 + 20 + '%';
+            popup.style.top = Math.random() * 40 + 30 + '%';
+            document.body.appendChild(popup);
+
+            setTimeout(() => popup.remove(), 1000);
+        }
+
+        // Show Sound Effect Indicator
+        function showSoundEffect(text) {
+            const indicator = document.getElementById('sound-effect');
+            indicator.textContent = text;
+            indicator.classList.add('show');
+            setTimeout(() => indicator.classList.remove('show'), 1500);
+        }
+
+        // Create Confetti
+        function createConfetti() {
+            const colors = ['#ffd700', '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ff8c00'];
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 30);
+            }
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('modal-overlay').classList.contains('active')) {
+                const feedbackVisible = document.getElementById('feedback-container').classList.contains('show');
+                if (feedbackVisible && (e.key === 'Enter' || e.key === ' ')) {
+                    closeModal();
+                } else if (!feedbackVisible) {
+                    const keyMap = { 'a': 0, 'b': 1, 'c': 2, 'd': 3, '1': 0, '2': 1, '3': 2, '4': 3 };
+                    if (keyMap.hasOwnProperty(e.key.toLowerCase())) {
+                        const buttons = document.querySelectorAll('.answer-btn:not([disabled])');
+                        if (buttons[keyMap[e.key.toLowerCase()]]) {
+                            buttons[keyMap[e.key.toLowerCase()]].click();
+                        }
+                    }
+                }
+            }
+        });
+
+        // Initialize on load
+        window.onload = initGame;
+    </script>
+</body>
+</html>
