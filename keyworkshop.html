@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workshop 1: Colligative Properties - Complete Learning Guide</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        header .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .part-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            margin: 30px -30px 20px -30px;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+        
+        .question-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .question-card:hover {
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .question-header {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 15px 20px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .question-body {
+            padding: 20px;
+        }
+        
+        .section {
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-weight: bold;
+            color: #1e3c72;
+            margin-bottom: 8px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+        
+        .formula-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 12px 15px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .answer-box {
+            background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .answer-box h4 {
+            color: #1e5631;
+            margin-bottom: 10px;
+        }
+        
+        .calculation {
+            background: #1e3c72;
+            color: #00ff88;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin: 10px 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        
+        .concept-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .concept-list li {
+            padding: 8px 0 8px 25px;
+            position: relative;
+        }
+        
+        .concept-list li::before {
+            content: '•';
+            color: #667eea;
+            font-weight: bold;
+            position: absolute;
+            left: 8px;
+        }
+        
+        .teaching-points {
+            background: #fff3cd;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin: 15px 0;
+        }
+        
+        .teaching-points h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .teaching-point {
+            margin-bottom: 10px;
+            padding-left: 10px;
+            border-left: 3px solid #ffc107;
+        }
+        
+        .teaching-point strong {
+            color: #856404;
+        }
+        
+        .objective-box {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin: 15px 0;
+        }
+        
+        .remember-box {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin: 15px 0;
+            font-style: italic;
+        }
+        
+        .remember-box strong {
+            color: #c0392b;
+        }
+        
+        .tag {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin: 3px;
+        }
+        
+        .tags-container {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #ccc;
+        }
+        
+        .quick-reference {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+        
+        .quick-reference h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        tr:hover {
+            background: #e8f4f8;
+        }
+        
+        .warning-box {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning-box strong {
+            color: #c62828;
+        }
+        
+        .checkmark {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+            }
+            
+            .question-card {
+                break-inside: avoid;
+            }
+            
+            .part-header {
+                break-before: page;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .content {
+                padding: 15px;
+            }
+            
+            .part-header {
+                margin: 20px -15px 15px -15px;
+            }
+            
+            header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Workshop 1: Colligative Properties</h1>
+            <div class="subtitle">Complete Learning Guide | CHM-152L | General Chemistry 2</div>
+        </header>
+        
+        <div class="content">
+            <!-- PART 1 -->
+            <div class="part-header">PART 1: CONCENTRATION UNITS & CONVERSIONS</div>
+            
+            <!-- Question 1 -->
+            <div class="question-card">
+                <div class="question-header">Q1: Urea solution (0.85% by mass, d = 1.00 g/mL) - Find M, m, χ [15 pts]</div>
+                <div class="question-body">
+                    
+                    <div class="section">
+                        <div class="section-title">FORMULA(s) USED</div>
+                        <div class="formula-box">
+                            • Mass % = (mass solute / mass solution) × 100%<br>
+                            • Molarity (M) = mol solute / L solution<br>
+                            • Molality (m) = mol solute / kg solvent<br>
+                            • Mole fraction (χ) = mol component / total mol
+                        </div>
+                    </div>
+                    
+                    <div class="answer-box">
+                        <h4>✓ ANSWER</h4>
+                        <p><strong>Setup:</strong> Assume 100.0 g of solution (makes mass % easy)</p>
+                        <ul>
+                            <li>Mass urea = 0.85 g</li>
+                            <li>Mass water = 100.0 - 0.85 = 99.15 g</li>
+                        </ul>
+                        
+                        <p><strong>a) Molarity = 0.140 M</strong></p>
+                        <div class="calculation">mol urea = 0.85 g ÷ 60.62 g/mol = 0.01402 mol
+Volume = 100.0 g ÷ 1.00 g/mL = 100.0 mL = 0.100 L
+M = 0.01402 mol ÷ 0.100 L = <strong>0.140 M</strong></div>
+                        
+                        <p><strong>b) Molality = 0.141 m</strong></p>
+                        <div class="calculation">kg solvent = 99.15 g × (1 kg / 1000 g) = 0.09915 kg
+m = 0.01402 mol ÷ 0.09915 kg = <strong>0.141 m</strong></div>
+                        
+                        <p><strong>c) Mole fraction of urea (χ<sub>urea</sub>) = 0.00254</strong></p>
+                        <div class="calculation">mol water = 99.15 g ÷ 18.02 g/mol = 5.502 mol
+Total mol = 0.01402 + 5.502 = 5.516 mol
+χ_urea = 0.01402 ÷ 5.516 = <strong>0.00254</strong>
+(χ_water = 0.9975)</div>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-title">CONCEPT</div>
+                        <ul class="concept-list">
+                            <li>Molarity uses <strong>volume of solution</strong> (solute + solvent combined)</li>
+                            <li>Molality uses <strong>mass of solvent only</strong> (not solution!)</li>
+                            <li>Mole fraction is dimensionless and all components must sum to 1.000</li>
+                            <li>For dilute aqueous solutions where density ≈ 1.00 g/mL, molarity ≈ molality</li>
+                            <li>Always pick a convenient basis (100 g for mass %, 1 L for molarity)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="teaching-points">
+                        <h4>Teaching Points / Learning Points</h4>
+                        <div class="teaching-point">
+                            <strong>Molarity (M):</strong> Temperature-dependent because volume changes with temperature. Used in most lab calculations because we measure volumes easily.
+                        </div>
+                        <div class="teaching-point">
+                            <strong>Molality (m):</strong> Temperature-independent because mass doesn't change. Preferred for colligative property calculations (ΔT<sub>f</sub>, ΔT<sub>b</sub>).
+                        </div>
+                        <div class="teaching-point">
+                            <strong>Mole fraction (χ):</strong> No units! Used in Raoult's Law for vapor pressure. Think of it as "what fraction of all particles are solute?"
+                        </div>
+                        <div class="teaching-point">
+                            <strong>The 100g trick:</strong> When given mass %, assume 100 g total so the percentage directly equals grams of solute.
+                        </div>
+                    </div>
+                    
+                    <div class="objective-box">
+                        <strong>OBJECTIVE:</strong> Test ability to interconvert between concentration units using a common reference amount
+                    </div>
+                    
+                    <div class="remember-box">
+                        <strong>REMEMBER:</strong> "M is for Measuring volume, m is for Mass of solvent" — Molarity has an "r" like "liter," Molality has an "a" like "mass"
+                    </div>
+                    
+                    <div class="tags-container">
+                        <span class="tag">Concentration Units</span>
+                        <span class="tag">Molarity</span>
+                        <span class="tag">Molality</span>
+                        <span class="tag">Mole Fraction</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Question 2 -->
+            <div class="question-card">
+                <div class="question-header">Q2: HCl solution (1.00 M, d = 1.05 g/mL) - Find m, χ, mass % [15 pts]</div>
+                <div class="question-body">
+                    
+                    <div class="section">
+                        <div class="section-title">FORMULA(s) USED</div>
+                        <div class="formula-box">
+                            • Molarity (M) = mol solute / L solution<br>
+                            • Molality (m) = mol solute / kg solvent<br>
+                            • Mole fraction (χ) = mol component / total mol<br>
+                            • Mass % = (mass solute / mass solution) × 100%<br>
+                            • Density = mass / volume
+                        </div>
+                    </div>
+                    
+                    <div class="answer-box">
+                        <h4>✓ ANSWER</h4>
+                        <p><strong>Setup:</strong> Assume 1.000 L of solution (since molarity is given)</p>
+                        <div class="calculation">Mass of solution = 1000 mL × 1.05 g/mL = 1050 g
+Moles HCl = 1.00 M × 1.000 L = 1.00 mol
+Mass HCl = 1.00 mol × 36.46 g/mol = 36.46 g
+Mass water = 1050 g - 36.46 g = 1013.54 g = 1.01354 kg</div>
+                        
+                        <p><strong>a) Molality = 0.987 m</strong></p>
+                        <div class="calculation">m = 1.00 mol ÷ 1.01354 kg = <strong>0.987 m</strong></div>
+                        
+                        <p><strong>b) Mole fraction of HCl (χ<sub>HCl</sub>) = 0.0175</strong></p>
+                        <div class="calculation">mol water = 1013.54 g ÷ 18.02 g/mol = 56.24 mol
+Total mol = 1.00 + 56.24 = 57.24 mol
+χ_HCl = 1.00 ÷ 57.24 = <strong>0.0175</strong></div>
+                        
+                        <p><strong>c) Mass percent = 3.47%</strong></p>
+                        <div class="calculation">Mass % = (36.46 g ÷ 1050 g) × 100% = <strong>3.47%</strong></div>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-title">CONCEPT</div>
+                        <ul class="concept-list">
+                            <li>When starting from molarity, assume 1 L to get moles directly</li>
+                            <li>Density connects mass and volume: use it to find total mass</li>
+                            <li>Mass of solvent = Mass of solution - Mass of solute (critical step!)</li>
+                            <li>The order matters: find what you know → calculate what you need → convert units</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="teaching-points">
+                        <h4>Teaching Points / Learning Points</h4>
+                        <div class="teaching-point">
+                            <strong>Starting from M:</strong> The 1-liter assumption gives you moles immediately (M × 1L = mol)
+                        </div>
+                        <div class="teaching-point">
+                            <strong>Density is the bridge:</strong> Without density, you cannot convert between M and m because you don't know the total mass
+                        </div>
+                        <div class="teaching-point">
+                            <strong>Mass of solvent:</strong> This is the #1 error — students forget to subtract solute mass from solution mass. The solution = solute + solvent!
+                        </div>
+                        <div class="teaching-point">
+                            <strong>Why M ≈ m here:</strong> Notice 0.987 m ≈ 1.00 M. For dilute aqueous solutions, these are similar because 1 L of water ≈ 1 kg
+                        </div>
+                    </div>
+                    
+                    <div class="objective-box">
+                        <strong>OBJECTIVE:</strong> Test reverse conversion from molarity to other units using density as the connecting factor
+                    </div>
+                    
+                    <div class="remember-box">
+                        <strong>REMEMBER:</strong> "Density is the bridge from M to m" — You need density to go from volume-based (M) to mass-based (m) concentrations
+                    </div>
+                    
+                    <div class="tags-container">
+                        <span class="tag">Concentration Units</span>
+                        <span class="tag">Molarity to Molality</span>
+                        <span class="tag">Density</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PART 2 -->
+            <div class="part-header">PART 2: SOLUTION PREPARATION & DILUTIONS</div>
+            
+            <!-- Question 3 -->
+            <div class="question-card">
+                <div class="question-header">Q3: Beer's Law Standards - Dilute 0.50 M to make 10.0 mL standards [10 pts]</div>
+                <div class="question-body">
+                    
+                    <div class="section">
+                        <div class="section-title">FORMULA(s) USED</div>
+                        <div class="formula-box">
+                            • M₁V₁ = M₂V₂ (Conservation of moles during dilution)<br>
+                            • Rearranged: V₁ = (M₂ × V₂) / M₁
+                        </div>
+                    </div>
+                    
+                    <div class="answer-box">
+                        <h4>✓ ANSWER</h4>
+                        
+                        <p><strong>a) For 0.10 M standard: V₁ = 2.0 mL</strong></p>
+                        <div class="calculation">V₁ = (0.10 M × 10.0 mL) ÷ 0.50 M = <strong>2.0 mL</strong></div>
+                        
+                        <p><strong>b) For 0.20 M standard: V₁ = 4.0 mL</strong></p>
+                        <div class="calculation">V₁ = (0.20 M × 10.0 mL) ÷ 0.50 M = <strong>4.0 mL</strong></div>
+                        
+                        <p><strong>c) For 0.30 M standard: V₁ = 6.0 mL</strong></p>
+                        <div class="calculation">V₁ = (0.30 M × 10.0 mL) ÷ 0.50 M = <strong>6.0 mL</strong></div>
+                        
+                        <p><em>Lab procedure: Pipette the calculated volume into a 10.0 mL volumetric flask, then dilute to the mark with solvent.</em></p>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-title">CONCEPT</div>
+                        <ul class="concept-list">
+                            <li>M₁V₁ = M₂V₂ works because moles of solute are conserved (you're just adding solvent)</li>
+                            <li>The "1" subscript = concentrated/initial, "2" subscript = dilute/final</li>
+                            <li>You're always diluting DOWN (M₂ < M₁), so V₁ < V₂</li>
+                            <li>This is the foundation of every serial dilution in analytical chemistry</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="teaching-points">
+                        <h4>Teaching Points / Learning Points</h4>
+                        <div class="teaching-point">
+                            <strong>M₁V₁ = M₂V₂:</strong> This equation says "moles before = moles after." Dilution only adds solvent, never solute.
+                        </div>
+                        <div class="teaching-point">
+                            <strong>Pattern recognition:</strong> Notice V₁ increases linearly with M₂. At M₂ = 0.50 M, V₁ would equal 10.0 mL (no dilution needed).
+                        </div>
+                        <div class="teaching-point">
+                            <strong>Dilution factor:</strong> 0.50M → 0.10M is a 5× dilution. Quick check: 2.0 mL × 5 = 10.0 mL ✓
+                        </div>
+                        <div class="teaching-point">
+                            <strong>Lab reality:</strong> You'd use a micropipette for 2.0 mL (precise), not a graduated cylinder (imprecise).
+                        </div>
+                    </div>
+                    
+                    <div class="objective-box">
+                        <strong>OBJECTIVE:</strong> Test practical application of dilution equation for laboratory standard preparation
+                    </div>
+                    
+                    <div class="remember-box">
+                        <strong>REMEMBER:</strong> "Moles stay the same, volume goes UP, concentration goes DOWN" — Think of adding water to juice: same amount of flavor, more liquid, less intense taste
+                    </div>
+                    
+                    <div class="tags-container">
+                        <span class="tag">Dilutions</span>
+                        <span class="tag">M₁V₁ = M₂V₂</span>
+                        <span class="tag">Lab Techniques</span>
+                        <span class="tag">Beer's Law</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Question 4 -->
+            <div class="question-card">
+                <div class="question-header">Q4: Urea Assay - Convert g/L to M, then dilute [10 pts]</div>
+                <div class="question-body">
+                    
+                    <div class="section">
+                        <div class="section-title">FORMULA(s) USED</div>
+                        <div class="formula-box">
+                            • Molarity = (g/L) ÷ (g/mol)<br>
+                            • M₁V₁ = M₂V₂
+                        </div>
+                    </div>
+                    
+                    <div class="answer-box">
+                        <h4>✓ ANSWER</h4>
+                        
+                        <p><strong>Step 1: Convert 0.30 g/L to Molarity</strong></p>
+                        <div class="calculation">M₂ = (0.30 g/L) ÷ (60.62 g/mol) = 0.00495 M = 4.95 × 10⁻³ M</div>
+                        
+                        <p><strong>Step 2: Calculate volume needed using M₁V₁ = M₂V₂</strong></p>
+                        <div class="calculation">V₁ = (M₂ × V₂) ÷ M₁
+V₁ = (0.00495 M × 20.0 mL) ÷ 0.50 M
+V₁ = <strong>0.198 mL ≈ 0.20 mL (or 200 µL)</strong></div>
+                        
+                        <p><em>Procedure: Pipette 0.20 mL (200 µL) of 0.50 M urea into a container, dilute to 20.0 mL total volume.</em></p>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-title">CONCEPT</div>
+                        <ul class="concept-list">
+                            <li>g/L is a mass concentration; M is a molar concentration. They're related by molar mass.</li>
+                            <li>Conversion: g/L ÷ g/mol = mol/L = M (dimensional analysis proves it)</li>
+                            <li>This is a two-step problem: unit conversion THEN dilution calculation</li>
+                            <li>Small volumes (µL range) require micropipettes for accuracy</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="teaching-points">
+                        <h4>Teaching Points / Learning Points</h4>
+                        <div class="teaching-point">
+                            <strong>g/L → M conversion:</strong> This comes up constantly in clinical chemistry. Learn to do it reflexively: divide by molar mass.
+                        </div>
+                        <div class="teaching-point">
+                            <strong>The huge dilution factor:</strong> 0.50 M to 0.00495 M is ~100× dilution. That's why V₁ is so small.
+                        </div>
+                        <div class="teaching-point">
+                            <strong>Practical consideration:</strong> 0.20 mL is only 200 µL — you need a micropipette! This is realistic lab work.
+                        </div>
+                        <div class="teaching-point">
+                            <strong>Why the hint helps:</strong> The problem could be solved other ways, but converting to M first keeps all units consistent with M₁V₁ = M₂V₂.
+                        </div>
+                    </div>
+                    
+                    <div class="objective-box">
+                        <strong>OBJECTIVE:</strong> Test multi-step problem solving combining unit conversion with dilution calculations
+                    </div>
+                    
+                    <div class="remember-box">
+                        <strong>REMEMBER:</strong> "g/L ÷ MM = M" — Grams per liter divided by grams per mole gives moles per liter (molarity)
+                    </div>
+                    
+                    <div class="tags-container">
+                        <span class="tag">Unit Conversion</span>
+                        <span class="tag">Dilutions</span>
+                        <span class="tag">Lab Calculations</span>
+                        <span class="tag">Clinical Chemistry</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PART 3 -->
+            <div class="part-header">PART 3: VAPOR PRESSURE & RAOULT'S LAW</div>
+            
+            <!-- Question 5 -->
+            <div class="question-card">
+                <div class="question-header">Q5: Vapor Pressure with Glucose (Non-Volatile Solute) [12 pts]</div>
+                <div class="question-body">
+                    
+                    <div class="section">
+                        <div class="section-title">FORMULA(s) USED</div>
+                        <div class="formula-box">
+                            • Raoult's Law: P<sub>solution</sub> = χ<sub>solvent</sub> × P°<sub>solvent</sub><br>
+                            • Mole fraction: χ = mol component / total mol
+                        </div>
+                    </div>
+                    
+                    <div class="answer-box">
+                        <h4>✓ ANSWER</h4>
+                        
+                        <p><strong>a) Calculate moles:</strong></p>
+                        <div class="calculation">mol glucose = 25.0 g ÷ 180.16 g/mol = 0.1388 mol
+mass water = 100.0 mL × 1.00 g/mL = 100.0 g
+mol water = 100.0 g ÷ 18.02 g/mol = 5.549 mol</div>
+                        
+                        <p><strong>b) Calculate mole fraction of water:</strong></p>
+                        <div class="calculation">Total mol = 0.1388 + 5.549 = 5.688 mol
+χ_water = 5.549 ÷ 5.688 = <strong>0.9756</strong></div>
+                        
+                        <p><strong>c) Calculate vapor pressure (Raoult's Law):</strong></p>
+                        <div class="calculation">P_solution = χ_water × P°_water
+P_solution = 0.9756 × 23.8 mmHg = <strong>23.2 mmHg</strong>
+
+Vapor pressure lowering: ΔP = 23.8 - 23.2 = 0.6 mmHg</div>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-title">CONCEPT</div>
+                        <ul class="concept-list">
+                            <li>Glucose is NON-VOLATILE (doesn't evaporate) — only water contributes to vapor pressure</li>
+                            <li>Adding any solute lowers vapor pressure because fewer solvent molecules at surface can escape</li>
+                            <li>Raoult's Law: vapor pressure is proportional to mole fraction of solvent</li>
+                            <li>This is a colligative property — depends on NUMBER of particles, not their identity</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="teaching-points">
+                        <h4>Teaching Points / Learning Points</h4>
+                        <div class="teaching-point">
+                            <strong>Why vapor pressure drops:</strong> Solute molecules "block" surface spots where solvent could evaporate. Fewer solvent molecules at surface = lower vapor pressure.
+                        </div>
+                        <div class="teaching-point">
+                            <strong>Non-volatile solute:</strong> Glucose has essentially zero vapor pressure at 25°C, so it contributes nothing to total pressure. Only water evaporates.
+                        </div>
+                        <div class="teaching-point">
+                            <strong>χ<sub>solvent</sub>, not χ<sub>solute</sub>:</strong> Raoult's Law uses the mole fraction of the component that's evaporating (the solvent).
+                        </div>
+                        <div class="teaching-point">
+                            <strong>Clinical connection:</strong> This is why your sweat evaporates slower when you're dehydrated and have more dissolved solutes.
+                        </div>
+                    </div>
+                    
+                    <div class="objective-box">
+                        <strong>OBJECTIVE:</strong> Test application of Raoult's Law for a solution with one volatile component (solvent only)
+                    </div>
+                    
+                    <div class="remember-box">
+                        <strong>REMEMBER:</strong> "Solute blocks escape — fewer water molecules can leave" — Picture glucose molecules sitting at the water surface like bouncers at a club, preventing water from leaving
+                    </div>
+                    
+                    <div class="tags-container">
+                        <span class="tag">Raoult's Law</span>
+                        <span class="tag">Vapor Pressure</span>
+                        <span class="tag">Non-Volatile Solute</span>
+                        <span class="tag">Colligative Properties</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Question 6 -->
+            <div class="question-card">
+                <div class="question-header">Q6: Vapor Pressure with Methanol + Water (Two Volatile Components) [13 pts]</div>
+                <div class="question-body">
+                    
+                    <div class="section">
+                        <div class="section-title">FORMULA(s) USED</div>
+                        <div class="formula-box">
+                            • Raoult's Law for each: P<sub>A</sub> = χ<sub>A</sub> × P°<sub>A</sub><br>
+                            • Dalton's Law: P<sub>total</sub> = P<sub>A</sub> + P<sub>B</sub><br>
+                            • Mole fraction: χ<sub>A</sub> + χ<sub>B</sub> = 1
+                        </div>
+                    </div>
+                    
+                    <div class="answer-box">
+                        <h4>✓ ANSWER</h4>
+                        
+                        <p><strong>a) Calculate moles:</strong></p>
+                        <div class="calculation">mol methanol = 25.0 g ÷ 32.04 g/mol = 0.7803 mol
+mol water = 125.0 g ÷ 18.02 g/mol = 6.937 mol</div>
+                        
+                        <p><strong>b) Calculate mole fractions:</strong></p>
+                        <div class="calculation">Total mol = 0.7803 + 6.937 = 7.717 mol
+χ_methanol = 0.7803 ÷ 7.717 = <strong>0.1011</strong>
+χ_water = 6.937 ÷ 7.717 = <strong>0.8989</strong>
+Check: 0.1011 + 0.8989 = 1.000 ✓</div>
+                        
+                        <p><strong>c) Calculate partial pressures:</strong></p>
+                        <div class="calculation">P_methanol = χ_methanol × P°_methanol = 0.1011 × 94 mmHg = <strong>9.50 mmHg</strong>
+P_water = χ_water × P°_water = 0.8989 × 23.8 mmHg = <strong>21.4 mmHg</strong></div>
+                        
+                        <p><strong>d) Calculate total vapor pressure:</strong></p>
+                        <div class="calculation">P_total = P_methanol + P_water = 9.50 + 21.4 = <strong>30.9 mmHg</strong></div>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-title">CONCEPT</div>
+                        <ul class="concept-list">
+                            <li>Both methanol AND water are volatile — both contribute to vapor pressure</li>
+                            <li>Apply Raoult's Law to EACH component separately</li>
+                            <li>Total pressure = sum of partial pressures (Dalton's Law)</li>
+                            <li>Even though χ<sub>methanol</sub> is small (0.10), it contributes significantly because P°<sub>methanol</sub> is high (94 mmHg)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="teaching-points">
+                        <h4>Teaching Points / Learning Points</h4>
+                        <div class="teaching-point">
+                            <strong>Two volatile components = two Raoult's Law calculations:</strong> Each compound evaporates independently based on its own mole fraction and pure vapor pressure.
+                        </div>
+                        <div class="teaching-point">
+                            <strong>Dalton's Law of Partial Pressures:</strong> Total pressure is additive. The gases don't "know" about each other.
+                        </div>
+                        <div class="teaching-point">
+                            <strong>Vapor pressure reflects volatility:</strong> Methanol (P° = 94 mmHg) is ~4× more volatile than water (P° = 23.8 mmHg). That's why methanol evaporates faster.
+                        </div>
+                        <div class="teaching-point">
+                            <strong>Methanol punches above its weight:</strong> Despite being only 10% of the moles, methanol contributes 31% of the total vapor pressure (9.50/30.9) because of its high volatility.
+                        </div>
+                    </div>
+                    
+                    <div class="objective-box">
+                        <strong>OBJECTIVE:</strong> Test application of Raoult's Law and Dalton's Law for a two-component volatile mixture
+                    </div>
+                    
+                    <div class="remember-box">
+                        <strong>REMEMBER:</strong> "Each component evaporates on its own terms" — Apply Raoult's Law separately, then add. High P° means more volatile, more contribution to total pressure.
+                    </div>
+                    
+                    <div class="tags-container">
+                        <span class="tag">Raoult's Law</span>
+                        <span class="tag">Dalton's Law</span>
+                        <span class="tag">Two Volatile Components</span>
+                        <span class="tag">Partial Pressure</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PART 4 -->
+            <div class="part-header">PART 4: OSMOTIC PRESSURE</div>
+            
+            <!-- Question 7 -->
+            <div class="question-card">
+                <div class="question-header">Q7: Osmotic Pressure of MgCl₂ (Electrolyte) [25 pts]</div>
+                <div class="question-body">
+                    
+                    <div class="section">
+                        <div class="section-title">FORMULA(s) USED</div>
+                        <div class="formula-box">
+                            • Osmotic pressure: π = iMRT<br>
+                            • Van't Hoff factor: i = number of particles after dissociation<br>
+                            • Molarity: M = mol / L<br>
+                            • Temperature: K = °C + 273<br>
+                            • Conversion: 1 atm = 760 mmHg
+                        </div>
+                    </div>
+                    
+                    <div class="answer-box">
+                        <h4>✓ ANSWER</h4>
+                        
+                        <p><strong>a) Van't Hoff factor (i) for MgCl₂:</strong></p>
+                        <div class="calculation">MgCl₂ → Mg²⁺ + 2Cl⁻
+1 formula unit → 3 particles
+<strong>i = 3</strong></div>
+                        
+                        <p><strong>b) Moles of MgCl₂:</strong></p>
+                        <div class="calculation">mol = 35.0 g ÷ 95.21 g/mol = <strong>0.3676 mol</strong></div>
+                        
+                        <p><strong>c) Molarity:</strong></p>
+                        <div class="calculation">Volume = 450.0 mL = 0.4500 L
+M = 0.3676 mol ÷ 0.4500 L = <strong>0.817 M</strong></div>
+                        
+                        <p><strong>d) Temperature in Kelvin:</strong></p>
+                        <div class="calculation">T = 25°C + 273 = <strong>298 K</strong></div>
+                        
+                        <p><strong>e) Osmotic pressure:</strong></p>
+                        <div class="calculation">π = iMRT
+π = 3 × 0.817 mol/L × 0.08206 L·atm/(mol·K) × 298 K
+<strong>π = 60.0 atm</strong></div>
+                        
+                        <p><strong>f) Convert to mmHg:</strong></p>
+                        <div class="calculation">π = 60.0 atm × (760 mmHg / 1 atm) = <strong>45,600 mmHg</strong></div>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-title">CONCEPT</div>
+                        <ul class="concept-list">
+                            <li>Osmotic pressure depends on TOTAL particle concentration, not just formula units</li>
+                            <li>The van't Hoff factor (i) accounts for dissociation of electrolytes</li>
+                            <li>π = iMRT looks like PV = nRT (ideal gas law) — same R constant!</li>
+                            <li>Osmotic pressure can be HUGE for concentrated electrolyte solutions</li>
+                            <li>Clinical relevance: IV solutions must be isotonic (~7.4 atm, same as blood)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="teaching-points">
+                        <h4>Teaching Points / Learning Points</h4>
+                        <div class="teaching-point">
+                            <strong>Van't Hoff factor (i):</strong> This is THE critical concept for electrolytes. MgCl₂ creates 3× more particles than glucose at the same molarity.
+                        </div>
+                        <div class="teaching-point">
+                            <strong>Why i matters:</strong> Colligative properties depend on particle COUNT. 1 mol MgCl₂ = 3 mol particles. 1 mol glucose = 1 mol particles.
+                        </div>
+                        <div class="teaching-point">
+                            <strong>The osmotic pressure equation:</strong> π = iMRT is derived from ideal gas behavior. Use R = 0.08206 L·atm/(mol·K) and temperature MUST be in Kelvin.
+                        </div>
+                        <div class="teaching-point">
+                            <strong>60 atm is enormous:</strong> That's like 60 times atmospheric pressure! This is why osmotic pressure is physiologically important — cells can burst (lyse) or shrivel (crenate) in wrong solutions.
+                        </div>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <strong>Common Errors to Avoid:</strong>
+                        <ul>
+                            <li>Forgetting to multiply by i (the #1 mistake!)</li>
+                            <li>Using °C instead of Kelvin</li>
+                            <li>Confusing molarity with molality (osmotic pressure uses M, not m)</li>
+                            <li>Wrong i value (count ALL particles: MgCl₂ gives 3, not 2)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="objective-box">
+                        <strong>OBJECTIVE:</strong> Test comprehensive application of osmotic pressure equation including van't Hoff factor for strong electrolyte
+                    </div>
+                    
+                    <div class="remember-box">
+                        <strong>REMEMBER:</strong> "i = ions in solution" — Count EVERY particle: MgCl₂ → 1 Mg²⁺ + 2 Cl⁻ = 3 particles, so i = 3. For non-electrolytes (glucose, urea), i = 1.
+                    </div>
+                    
+                    <div class="tags-container">
+                        <span class="tag">Osmotic Pressure</span>
+                        <span class="tag">Van't Hoff Factor</span>
+                        <span class="tag">Electrolytes</span>
+                        <span class="tag">Colligative Properties</span>
+                        <span class="tag">Clinical Chemistry</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Reference Section -->
+            <div class="quick-reference">
+                <h2>QUICK REFERENCE: KEY FORMULAS & CONCEPTS</h2>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Formula</th>
+                            <th>Key Variable</th>
+                            <th>Watch Out For</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Molarity</td>
+                            <td>M = mol/L solution</td>
+                            <td>Volume of SOLUTION</td>
+                            <td>Temperature dependent</td>
+                        </tr>
+                        <tr>
+                            <td>Molality</td>
+                            <td>m = mol/kg solvent</td>
+                            <td>Mass of SOLVENT only</td>
+                            <td>Temperature independent</td>
+                        </tr>
+                        <tr>
+                            <td>Mole fraction</td>
+                            <td>χ = mol_A/total mol</td>
+                            <td>All components</td>
+                            <td>Must sum to 1</td>
+                        </tr>
+                        <tr>
+                            <td>Dilution</td>
+                            <td>M₁V₁ = M₂V₂</td>
+                            <td>Conservation of moles</td>
+                            <td>V₂ > V₁ always</td>
+                        </tr>
+                        <tr>
+                            <td>Raoult's Law</td>
+                            <td>P = χ × P°</td>
+                            <td>Mole fraction</td>
+                            <td>Only for volatile components</td>
+                        </tr>
+                        <tr>
+                            <td>Osmotic Pressure</td>
+                            <td>π = iMRT</td>
+                            <td>Van't Hoff factor (i)</td>
+                            <td>T in Kelvin!</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3 style="margin-top: 25px; color: #1e3c72;">Van't Hoff Factor Quick Reference</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Substance</th>
+                            <th>Dissociation</th>
+                            <th>i value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Glucose, Urea</td>
+                            <td>None (nonelectrolyte)</td>
+                            <td><strong>1</strong></td>
+                        </tr>
+                        <tr>
+                            <td>NaCl, KBr, HCl</td>
+                            <td>→ 2 ions</td>
+                            <td><strong>2</strong></td>
+                        </tr>
+                        <tr>
+                            <td>MgCl₂, CaCl₂, Na₂SO₄</td>
+                            <td>→ 3 ions</td>
+                            <td><strong>3</strong></td>
+                        </tr>
+                        <tr>
+                            <td>FeCl₃, AlCl₃</td>
+                            <td>→ 4 ions</td>
+                            <td><strong>4</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>
