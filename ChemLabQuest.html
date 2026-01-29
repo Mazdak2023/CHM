@@ -1,0 +1,1671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHEM LAB QUEST - CHM130 Midterm Study Game</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 50%, #0a1a1a 100%);
+            min-height: 100vh;
+            font-family: 'VT323', monospace;
+            color: #00ff88;
+            overflow-x: hidden;
+        }
+
+        /* CRT Screen Effect */
+        .crt-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+        }
+
+        .crt-overlay::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.3) 100%);
+            pointer-events: none;
+        }
+
+        /* Floating Molecules Animation */
+        .molecule {
+            position: fixed;
+            font-size: 24px;
+            opacity: 0.3;
+            animation: float 20s infinite linear;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+
+        /* Main Container */
+        .game-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .game-header {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(180deg, #1a0a2e 0%, #0a1a2e 100%);
+            border: 4px solid #00ff88;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3),
+                        inset 0 0 60px rgba(0, 255, 136, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(50%); }
+        }
+
+        .game-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 28px;
+            color: #00ffcc;
+            text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc, 0 0 30px #00ffcc;
+            margin-bottom: 10px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc; }
+            to { text-shadow: 0 0 20px #00ffcc, 0 0 40px #00ffcc, 0 0 60px #00ffcc; }
+        }
+
+        .game-subtitle {
+            font-size: 24px;
+            color: #88ffaa;
+            margin-top: 10px;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: linear-gradient(180deg, #1a2a1a 0%, #0a1a0a 100%);
+            border: 2px solid #00ff88;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #88aa88;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 18px;
+            color: #00ff88;
+        }
+
+        /* Lab Bench Bar */
+        .lab-bench-bar {
+            background: linear-gradient(90deg, #2a1a0a 0%, #3a2a1a 50%, #2a1a0a 100%);
+            border: 3px solid #8b4513;
+            border-radius: 8px;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .bench-label {
+            color: #daa520;
+            font-size: 18px;
+        }
+
+        .safety-meter {
+            flex: 1;
+            height: 25px;
+            background: #1a0a0a;
+            border: 2px solid #ff4444;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .safety-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff4444, #ffaa00, #00ff44);
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        /* Lab Stations Grid */
+        .lab-stations {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .lab-station {
+            background: linear-gradient(180deg, #0a1a2a 0%, #0a0a1a 100%);
+            border: 3px solid #4488ff;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lab-station:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(68, 136, 255, 0.4);
+            border-color: #66aaff;
+        }
+
+        .lab-station.completed {
+            border-color: #00ff88;
+            background: linear-gradient(180deg, #0a2a1a 0%, #0a1a0a 100%);
+        }
+
+        .lab-station.completed::after {
+            content: 'COMPLETED';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #00ff88;
+            color: #0a0a0a;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        .station-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .station-name {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            color: #66aaff;
+            margin-bottom: 8px;
+        }
+
+        .station-desc {
+            font-size: 16px;
+            color: #aaaaaa;
+            line-height: 1.4;
+        }
+
+        .station-progress {
+            margin-top: 10px;
+            height: 8px;
+            background: #1a1a2a;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .station-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4488ff, #00ffcc);
+            transition: width 0.3s ease;
+        }
+
+        /* Experiment Screen */
+        .experiment-screen {
+            display: none;
+            background: linear-gradient(180deg, #0a0a1a 0%, #1a0a2e 100%);
+            border: 4px solid #ff00ff;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 40px rgba(255, 0, 255, 0.3);
+        }
+
+        .experiment-screen.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .experiment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ff00ff;
+        }
+
+        .experiment-station-name {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 14px;
+            color: #ff00ff;
+        }
+
+        .experiment-counter {
+            font-size: 18px;
+            color: #ffaa00;
+        }
+
+        .scenario-box {
+            background: linear-gradient(180deg, #1a1a3a 0%, #0a0a2a 100%);
+            border: 2px solid #8844ff;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .scenario-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 11px;
+            color: #ff8844;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .scenario-text {
+            font-size: 20px;
+            color: #ffffff;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .scenario-question {
+            font-size: 22px;
+            color: #ffcc00;
+            font-weight: bold;
+            padding: 15px;
+            background: rgba(255, 204, 0, 0.1);
+            border-left: 4px solid #ffcc00;
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* Answer Options */
+        .answer-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .answer-btn {
+            background: linear-gradient(180deg, #2a2a4a 0%, #1a1a3a 100%);
+            border: 2px solid #6666aa;
+            border-radius: 8px;
+            padding: 15px 20px;
+            color: #ffffff;
+            font-family: 'VT323', monospace;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .answer-btn:hover {
+            background: linear-gradient(180deg, #3a3a5a 0%, #2a2a4a 100%);
+            border-color: #8888cc;
+            transform: translateX(10px);
+        }
+
+        .answer-btn.correct {
+            background: linear-gradient(180deg, #0a4a0a 0%, #0a2a0a 100%);
+            border-color: #00ff88;
+            animation: correctPulse 0.5s ease;
+        }
+
+        .answer-btn.incorrect {
+            background: linear-gradient(180deg, #4a0a0a 0%, #2a0a0a 100%);
+            border-color: #ff4444;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .answer-key {
+            width: 35px;
+            height: 35px;
+            background: #4a4a6a;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            color: #ffcc00;
+        }
+
+        /* Feedback Box */
+        .feedback-box {
+            display: none;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .feedback-box.correct {
+            display: block;
+            background: linear-gradient(180deg, #0a3a0a 0%, #0a2a0a 100%);
+            border: 2px solid #00ff88;
+        }
+
+        .feedback-box.incorrect {
+            display: block;
+            background: linear-gradient(180deg, #3a0a0a 0%, #2a0a0a 100%);
+            border: 2px solid #ff4444;
+        }
+
+        .feedback-header {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .feedback-box.correct .feedback-header {
+            color: #00ff88;
+        }
+
+        .feedback-box.incorrect .feedback-header {
+            color: #ff4444;
+        }
+
+        .feedback-text {
+            font-size: 18px;
+            color: #cccccc;
+            line-height: 1.6;
+        }
+
+        .key-concept {
+            background: rgba(255, 204, 0, 0.1);
+            border-left: 3px solid #ffcc00;
+            padding: 10px 15px;
+            margin-top: 15px;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .key-concept-title {
+            color: #ffcc00;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .key-concept-text {
+            color: #ffffff;
+            font-size: 16px;
+        }
+
+        /* Next Button */
+        .next-btn {
+            display: none;
+            background: linear-gradient(180deg, #ff00ff 0%, #aa00aa 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 15px 40px;
+            color: #ffffff;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .next-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+        }
+
+        .back-btn {
+            background: linear-gradient(180deg, #444444 0%, #222222 100%);
+            border: 2px solid #666666;
+            border-radius: 8px;
+            padding: 12px 25px;
+            color: #ffffff;
+            font-family: 'VT323', monospace;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(180deg, #555555 0%, #333333 100%);
+        }
+
+        /* Results Screen */
+        .results-screen {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(180deg, #0a1a2a 0%, #0a0a1a 100%);
+            border: 4px solid #ffcc00;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .results-screen.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        .results-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 24px;
+            color: #ffcc00;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px #ffcc00;
+        }
+
+        .results-score {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 48px;
+            color: #00ff88;
+            margin-bottom: 20px;
+        }
+
+        .results-grade {
+            font-size: 28px;
+            color: #ffffff;
+            margin-bottom: 30px;
+        }
+
+        .topic-breakdown {
+            text-align: left;
+            background: #0a0a1a;
+            border: 2px solid #4488ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .topic-breakdown h3 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            color: #4488ff;
+            margin-bottom: 15px;
+        }
+
+        .topic-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #2a2a4a;
+        }
+
+        .topic-name {
+            color: #aaaaaa;
+            font-size: 16px;
+        }
+
+        .topic-score {
+            color: #00ff88;
+            font-size: 16px;
+        }
+
+        /* Instructions */
+        .instructions {
+            background: linear-gradient(180deg, #1a1a0a 0%, #0a0a0a 100%);
+            border: 2px solid #aaaa00;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .instructions h3 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            color: #ffff00;
+            margin-bottom: 15px;
+        }
+
+        .instructions p {
+            font-size: 18px;
+            color: #cccc88;
+            line-height: 1.6;
+        }
+
+        .instructions ul {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        .instructions li {
+            font-size: 16px;
+            color: #aaaa88;
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .instructions li::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            color: #ffff00;
+        }
+
+        /* Footer */
+        .game-footer {
+            text-align: center;
+            padding: 20px;
+            color: #666666;
+            font-size: 14px;
+            border-top: 1px solid #333333;
+            margin-top: 30px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .game-title {
+                font-size: 18px;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .lab-stations {
+                grid-template-columns: 1fr;
+            }
+
+            .scenario-text {
+                font-size: 18px;
+            }
+
+            .answer-btn {
+                font-size: 18px;
+                padding: 12px 15px;
+            }
+        }
+
+        /* Periodic Table Easter Egg */
+        .periodic-hint {
+            display: inline-block;
+            background: #2a2a4a;
+            border: 1px solid #6666aa;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            color: #ffcc00;
+            margin: 0 2px;
+        }
+
+        /* Formula styling */
+        .formula {
+            font-family: 'Times New Roman', serif;
+            font-size: 1.1em;
+            color: #00ffcc;
+            background: rgba(0, 255, 204, 0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        sub, sup {
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <div class="crt-overlay"></div>
+
+    <!-- Floating Molecules -->
+    <div class="molecule" style="left: 5%; animation-delay: 0s;">H2O</div>
+    <div class="molecule" style="left: 15%; animation-delay: 3s;">NaCl</div>
+    <div class="molecule" style="left: 25%; animation-delay: 6s;">CO2</div>
+    <div class="molecule" style="left: 35%; animation-delay: 9s;">CH4</div>
+    <div class="molecule" style="left: 45%; animation-delay: 12s;">O2</div>
+    <div class="molecule" style="left: 55%; animation-delay: 2s;">HCl</div>
+    <div class="molecule" style="left: 65%; animation-delay: 5s;">NH3</div>
+    <div class="molecule" style="left: 75%; animation-delay: 8s;">H2SO4</div>
+    <div class="molecule" style="left: 85%; animation-delay: 11s;">C6H12O6</div>
+    <div class="molecule" style="left: 95%; animation-delay: 14s;">Fe</div>
+
+    <div class="game-container">
+        <!-- Header -->
+        <div class="game-header">
+            <div class="game-title">CHEM LAB QUEST</div>
+            <div class="game-subtitle">CHM130 Midterm Study Simulator</div>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-box">
+                <div class="stat-label">EXPERIMENTS</div>
+                <div class="stat-value" id="experiments-completed">0/50</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">SCORE</div>
+                <div class="stat-value" id="total-score">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">STREAK</div>
+                <div class="stat-value" id="streak">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">ACCURACY</div>
+                <div class="stat-value" id="accuracy">0%</div>
+            </div>
+        </div>
+
+        <!-- Safety Meter -->
+        <div class="lab-bench-bar">
+            <span class="bench-label">LAB SAFETY:</span>
+            <div class="safety-meter">
+                <div class="safety-fill" id="safety-fill" style="width: 100%;"></div>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="instructions" id="instructions">
+            <h3>WELCOME TO THE CHEMISTRY LAB</h3>
+            <p>You're a lab technician at Chem Central Hospital. Complete experiments at each station to master chemistry concepts!</p>
+            <ul>
+                <li>Select a lab station to begin experiments</li>
+                <li>Each correct answer earns points and maintains lab safety</li>
+                <li>Build streaks for bonus points</li>
+                <li>Complete all stations to become a Master Chemist!</li>
+            </ul>
+        </div>
+
+        <!-- Lab Stations -->
+        <div class="lab-stations" id="lab-stations">
+            <!-- Stations will be generated by JavaScript -->
+        </div>
+
+        <!-- Experiment Screen -->
+        <div class="experiment-screen" id="experiment-screen">
+            <div class="experiment-header">
+                <div class="experiment-station-name" id="current-station-name"></div>
+                <div class="experiment-counter" id="experiment-counter"></div>
+            </div>
+
+            <div class="scenario-box">
+                <div class="scenario-title" id="scenario-title"></div>
+                <div class="scenario-text" id="scenario-text"></div>
+                <div class="scenario-question" id="scenario-question"></div>
+            </div>
+
+            <div class="answer-options" id="answer-options">
+                <!-- Answers generated by JavaScript -->
+            </div>
+
+            <div class="feedback-box" id="feedback-box">
+                <div class="feedback-header" id="feedback-header"></div>
+                <div class="feedback-text" id="feedback-text"></div>
+                <div class="key-concept" id="key-concept">
+                    <div class="key-concept-title">KEY LEARNING:</div>
+                    <div class="key-concept-text" id="key-concept-text"></div>
+                </div>
+            </div>
+
+            <button class="next-btn" id="next-btn" onclick="nextExperiment()">NEXT EXPERIMENT >></button>
+            <button class="back-btn" onclick="backToStations()">< BACK TO LAB</button>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="results-screen" id="results-screen">
+            <div class="results-title">LAB SESSION COMPLETE!</div>
+            <div class="results-score" id="final-score"></div>
+            <div class="results-grade" id="final-grade"></div>
+            <div class="topic-breakdown" id="topic-breakdown">
+                <h3>TOPIC BREAKDOWN</h3>
+                <!-- Generated by JavaScript -->
+            </div>
+            <button class="next-btn" style="display: inline-block;" onclick="restartGame()">NEW LAB SESSION</button>
+        </div>
+
+        <!-- Footer -->
+        <div class="game-footer">
+            CHEM LAB QUEST v1.0 | Study Tool for CHM130 | Good luck on your midterm!
+        </div>
+    </div>
+
+    <script>
+        // Game State
+        let gameState = {
+            currentStation: null,
+            currentExperiment: 0,
+            score: 0,
+            streak: 0,
+            maxStreak: 0,
+            totalAnswered: 0,
+            correctAnswers: 0,
+            safetyLevel: 100,
+            stationProgress: {},
+            topicScores: {}
+        };
+
+        // Lab Stations Data
+        const labStations = [
+            {
+                id: 'measurements',
+                name: 'MEASUREMENTS LAB',
+                icon: '&#x1F4CF;',
+                description: 'Master significant figures, scientific notation, density, and unit conversions',
+                topics: ['Significant Figures', 'Density', 'Temperature Conversions']
+            },
+            {
+                id: 'matter',
+                name: 'MATTER & CLASSIFICATION',
+                icon: '&#x1F9EA;',
+                description: 'Classify matter, molecules, and understand physical vs chemical properties',
+                topics: ['Classification', 'Physical/Chemical Properties', 'States of Matter']
+            },
+            {
+                id: 'atomic',
+                name: 'ATOMIC STRUCTURE',
+                icon: '&#x269B;',
+                description: 'Explore atoms, isotopes, periodic trends, and subatomic particles',
+                topics: ['Atomic Structure', 'Periodic Trends', 'Isotopes']
+            },
+            {
+                id: 'compounds',
+                name: 'COMPOUNDS & NAMING',
+                icon: '&#x1F9EC;',
+                description: 'Name ionic and covalent compounds, understand bonding and formulas',
+                topics: ['Ionic Compounds', 'Covalent Compounds', 'Naming Rules']
+            },
+            {
+                id: 'moles',
+                name: 'MOLE CALCULATIONS',
+                icon: '&#x1F9EE;',
+                description: 'Convert between moles, grams, and particles using molar mass',
+                topics: ['Mole Concept', 'Molar Mass', 'Avogadro Number']
+            },
+            {
+                id: 'reactions',
+                name: 'CHEMICAL REACTIONS',
+                icon: '&#x1F4A5;',
+                description: 'Identify reaction types, balance equations, and understand stoichiometry',
+                topics: ['Reaction Types', 'Balancing Equations', 'Stoichiometry']
+            },
+            {
+                id: 'energy',
+                name: 'ENERGY & REACTIONS',
+                icon: '&#x1F525;',
+                description: 'Explore exothermic/endothermic reactions and energy transfer',
+                topics: ['Exothermic', 'Endothermic', 'Energy Changes']
+            },
+            {
+                id: 'gases',
+                name: 'GAS LAWS LAB',
+                icon: '&#x1F4A8;',
+                description: 'Apply ideal gas law, partial pressures, and pressure conversions',
+                topics: ['Ideal Gas Law', 'Partial Pressures', 'Pressure Units']
+            },
+            {
+                id: 'solutions',
+                name: 'SOLUTIONS LAB',
+                icon: '&#x1F9CB;',
+                description: 'Calculate molarity, dilutions, and understand solubility concepts',
+                topics: ['Molarity', 'Dilutions', 'Solubility']
+            },
+            {
+                id: 'acidbase',
+                name: 'ACID-BASE LAB',
+                icon: '&#x1F9FF;',
+                description: 'Master pH calculations, conjugate pairs, and buffer systems',
+                topics: ['pH Calculations', 'Acids & Bases', 'Buffers']
+            }
+        ];
+
+        // Experiments Database
+        const experiments = {
+            measurements: [
+                {
+                    title: "PRECISION CHALLENGE",
+                    scenario: "A pharmacy technician is measuring medication doses. They need to record 1.7500 grams of a compound.",
+                    question: "How many significant figures are in this measurement?",
+                    answers: ["3 sig figs", "4 sig figs", "5 sig figs", "2 sig figs"],
+                    correct: 2,
+                    explanation: "Trailing zeros AFTER a decimal point ARE significant! In 1.7500, we count: 1, 7, 5, 0, 0 = 5 significant figures. The trailing zeros show precision of measurement.",
+                    keyConcept: "Rules for significant figures: All non-zero digits are significant. Zeros between non-zero digits are significant. Trailing zeros after a decimal ARE significant. Leading zeros are NEVER significant."
+                },
+                {
+                    title: "DENSITY CALCULATION",
+                    scenario: "A lab needs 75.5 grams of ethanol for a reaction. Ethanol has a density of 0.789 g/mL at 25 degrees C.",
+                    question: "What formula would you use to find the volume needed?",
+                    answers: ["Volume = Mass x Density", "Volume = Mass / Density", "Volume = Density / Mass", "Volume = Mass + Density"],
+                    correct: 1,
+                    explanation: "Density = Mass/Volume, so rearranging: Volume = Mass/Density. Plugging in: V = 75.5 g / 0.789 g/mL = 95.7 mL",
+                    keyConcept: "Density formula: D = m/V. To find volume: V = m/D. To find mass: m = D x V. Units must match!"
+                },
+                {
+                    title: "TEMPERATURE CONVERSION",
+                    scenario: "A patient's temperature reads 98.9 degrees F on a Fahrenheit thermometer. The doctor needs it in Kelvin.",
+                    question: "What is the conversion pathway from Fahrenheit to Kelvin?",
+                    answers: ["F to K directly: K = F + 273", "F to C first, then C to K", "K = F x 1.8 + 32", "Subtract 273 from F"],
+                    correct: 1,
+                    explanation: "First convert F to C: C = (F - 32)/1.8 = (98.9 - 32)/1.8 = 37.2 C. Then add 273.15: K = 37.2 + 273 = 310 K",
+                    keyConcept: "Temperature conversions: C = (F - 32)/1.8, F = 1.8C + 32, K = C + 273.15. Kelvin scale has no negative values!"
+                },
+                {
+                    title: "SIG FIG ZEROS",
+                    scenario: "A student measures 0.00620 grams of a sample and records it in their lab notebook.",
+                    question: "What is true about the zeros in this number?",
+                    answers: ["All zeros are significant", "Leading zeros are NOT significant, trailing zero IS", "All zeros are NOT significant", "Only the middle zeros count"],
+                    correct: 1,
+                    explanation: "In 0.00620: The leading zeros (0.00) just locate the decimal - NOT significant. The trailing zero (0) after 62 shows precision - IS significant. Total: 3 sig figs (6, 2, 0).",
+                    keyConcept: "Leading zeros = placeholders only. Trailing zeros after decimal = significant. Captive zeros (between digits) = significant."
+                },
+                {
+                    title: "SCIENTIFIC NOTATION",
+                    scenario: "A researcher needs to express 0.0000045 meters in scientific notation for a publication.",
+                    question: "How is this number correctly written in scientific notation?",
+                    answers: ["45 x 10^-7", "4.5 x 10^-6", "4.5 x 10^6", "0.45 x 10^-5"],
+                    correct: 1,
+                    explanation: "Scientific notation requires one digit before the decimal. Move decimal 6 places right: 4.5 x 10^-6. The negative exponent indicates a number less than 1.",
+                    keyConcept: "Scientific notation: coefficient x 10^exponent. Coefficient must be 1-9.999... Negative exponent = small number. Positive exponent = large number."
+                }
+            ],
+            matter: [
+                {
+                    title: "MOLECULAR CLASSIFICATION",
+                    scenario: "A student is asked to classify water (H2O) for their chemistry homework.",
+                    question: "What terms correctly describe H2O?",
+                    answers: ["Homoatomic and Diatomic", "Heteroatomic and Triatomic", "Homoatomic and Triatomic", "Heteroatomic and Diatomic"],
+                    correct: 1,
+                    explanation: "H2O has TWO different types of atoms (H and O) = HETEROATOMIC. It has THREE total atoms (H-H-O) = TRIATOMIC.",
+                    keyConcept: "Homoatomic = same type of atoms (O2, N2). Heteroatomic = different types of atoms. Diatomic = 2 atoms total. Triatomic = 3 atoms total."
+                },
+                {
+                    title: "MASS VS WEIGHT",
+                    scenario: "An astronaut weighs 180 lbs on Earth but would weigh only 30 lbs on the Moon.",
+                    question: "What property stays the same regardless of location?",
+                    answers: ["Weight", "Mass", "Gravitational force", "Volume"],
+                    correct: 1,
+                    explanation: "Mass is the amount of matter in an object - it stays constant. Weight depends on gravity and changes with location. The astronaut's mass is the same everywhere!",
+                    keyConcept: "Mass = amount of matter (constant). Weight = gravitational force on mass (varies with gravity). On Earth, they're often used interchangeably but are NOT the same!"
+                },
+                {
+                    title: "CHEMICAL VS PHYSICAL",
+                    scenario: "You leave your bike outside and notice orange rust forming on the metal frame over time.",
+                    question: "Is rusting a physical or chemical property?",
+                    answers: ["Physical - it's just a color change", "Chemical - iron combines with oxygen to form a new substance", "Physical - the metal is still there", "Neither - it's thermal"],
+                    correct: 1,
+                    explanation: "Rusting is a CHEMICAL property because iron (Fe) reacts with oxygen (O2) and water to form iron oxide (rust) - a completely new substance with different properties!",
+                    keyConcept: "Physical properties: observed without changing composition (color, density, melting point). Chemical properties: observed through chemical change (flammability, reactivity, rusting)."
+                },
+                {
+                    title: "STATES OF MATTER",
+                    scenario: "You're examining ice, water, and steam - all forms of H2O.",
+                    question: "Which state of matter has a definite shape?",
+                    answers: ["Liquid", "Gas", "Solid", "All of the above"],
+                    correct: 2,
+                    explanation: "Only SOLIDS have definite shape and definite volume. Liquids have definite volume but take the shape of their container. Gases have neither definite shape nor volume.",
+                    keyConcept: "Solid: definite shape, definite volume. Liquid: indefinite shape, definite volume. Gas: indefinite shape, indefinite volume."
+                },
+                {
+                    title: "METAL PROPERTIES",
+                    scenario: "An engineer is selecting a material that needs to conduct electricity, be hammered into sheets, and be drawn into wires.",
+                    question: "Which category of elements would best meet these requirements?",
+                    answers: ["Nonmetals", "Metalloids", "Metals", "Noble gases"],
+                    correct: 2,
+                    explanation: "METALS have high electrical and thermal conductivity, are malleable (hammered into sheets), and ductile (drawn into wires). These are characteristic metallic properties!",
+                    keyConcept: "Metals: conductive, malleable, ductile, lustrous. Nonmetals: poor conductors, brittle. Metalloids: properties of both (semiconductors)."
+                }
+            ],
+            atomic: [
+                {
+                    title: "ISOTOPE IDENTIFICATION",
+                    scenario: "You're given information about Neon-21, an isotope of neon. Neon (Ne) has atomic number 10.",
+                    question: "What does the '21' in Neon-21 represent?",
+                    answers: ["Number of protons", "Number of electrons", "Mass number (protons + neutrons)", "Number of neutrons only"],
+                    correct: 2,
+                    explanation: "The number after the element name is the MASS NUMBER = protons + neutrons. Neon-21 has 10 protons (atomic number) and 11 neutrons (21 - 10 = 11).",
+                    keyConcept: "Mass number = protons + neutrons. Atomic number = protons = electrons (in neutral atom). Isotopes have same protons but different neutrons."
+                },
+                {
+                    title: "PERIODIC TABLE LOCATION",
+                    scenario: "You need to find the element located in Period 3 and Group 17 of the periodic table.",
+                    question: "How do you navigate the periodic table to find this element?",
+                    answers: ["Period = column, Group = row", "Period = row, Group = column", "Both refer to rows", "Both refer to columns"],
+                    correct: 1,
+                    explanation: "PERIOD = horizontal row (Period 3 is the third row down). GROUP = vertical column (Group 17 is the halogens, second to last column). The element at Period 3, Group 17 is Chlorine (Cl).",
+                    keyConcept: "Periods go left to right (rows). Groups go top to bottom (columns). Elements in same group have similar properties."
+                },
+                {
+                    title: "ATOMIC SIZE TREND",
+                    scenario: "Compare the atomic sizes of Cesium (Cs), Phosphorus (P), Tin (Sn), and Strontium (Sr).",
+                    question: "What is the trend for atomic size on the periodic table?",
+                    answers: ["Increases left to right, decreases top to bottom", "Decreases left to right, increases top to bottom", "Increases in all directions", "Size is constant for all elements"],
+                    correct: 1,
+                    explanation: "Atomic size INCREASES going DOWN a group (more electron shells) and DECREASES going ACROSS a period (more protons pull electrons closer). Cesium (bottom left) is the largest!",
+                    keyConcept: "Atomic radius: increases down groups, decreases across periods. Largest atoms are in bottom-left of periodic table."
+                },
+                {
+                    title: "IONIZATION ENERGY",
+                    scenario: "A student claims ionization energy decreases from left to right across a period.",
+                    question: "Is this statement correct?",
+                    answers: ["True - it gets easier to remove electrons", "False - ionization energy INCREASES across a period", "True - electrons are farther from nucleus", "False - it stays constant"],
+                    correct: 1,
+                    explanation: "FALSE! Ionization energy INCREASES across a period (more protons hold electrons tighter) and DECREASES down a group (electrons farther from nucleus, easier to remove).",
+                    keyConcept: "Ionization energy: energy needed to remove an electron. Increases across period, decreases down group. Opposite trend of atomic size!"
+                },
+                {
+                    title: "AVERAGE ATOMIC MASS",
+                    scenario: "Looking at the periodic table, you see Carbon has a mass of 12.01 amu, not exactly 12.",
+                    question: "What does the periodic table show for atomic mass?",
+                    answers: ["Mass of the most common isotope", "Average mass of all isotopes weighted by abundance", "Total mass of all isotopes", "Mass number of the element"],
+                    correct: 1,
+                    explanation: "The periodic table shows the WEIGHTED AVERAGE of all naturally occurring isotopes. Carbon-12 is most abundant, but Carbon-13 exists too, making the average 12.01.",
+                    keyConcept: "Atomic mass on periodic table = weighted average of all isotopes. Mass number (protons + neutrons) is for specific isotopes only."
+                }
+            ],
+            compounds: [
+                {
+                    title: "IONIC VS COVALENT",
+                    scenario: "You're sorting compounds: NaCl, CO, NO3, and CF4 into ionic and covalent categories.",
+                    question: "How do you identify an ionic compound?",
+                    answers: ["Contains only nonmetals", "Contains a metal and nonmetal", "Contains only metals", "Has a molecular formula"],
+                    correct: 1,
+                    explanation: "Ionic compounds form between METALS and NONMETALS. NaCl (sodium + chlorine) is ionic. CO, NO3, and CF4 contain only nonmetals = covalent compounds.",
+                    keyConcept: "Ionic: metal + nonmetal (electron transfer). Covalent: nonmetal + nonmetal (electron sharing). Polyatomic ions follow ionic naming rules."
+                },
+                {
+                    title: "IONIC NAMING",
+                    scenario: "You need to name the compound Mg3N2 for your lab report.",
+                    question: "What is the correct naming convention for ionic compounds?",
+                    answers: ["Use Greek prefixes for both elements", "Metal name + nonmetal root + '-ide'", "Use prefixes only for the nonmetal", "Always add Roman numerals"],
+                    correct: 1,
+                    explanation: "For ionic compounds: say the metal name, then the nonmetal with '-ide' ending. Mg3N2 = Magnesium nitride. NO Greek prefixes for ionic compounds (those are for covalent)!",
+                    keyConcept: "Ionic naming: Metal name + nonmetal-ide. No prefixes! Only use Roman numerals for transition metals with multiple charges."
+                },
+                {
+                    title: "COVALENT NAMING",
+                    scenario: "A sample is labeled P2O4 and you need to determine its proper name.",
+                    question: "What naming system do covalent compounds use?",
+                    answers: ["Metal + nonmetal-ide", "Greek prefixes for both elements + nonmetal-ide", "Just element names", "Roman numerals for oxidation states"],
+                    correct: 1,
+                    explanation: "Covalent compounds use GREEK PREFIXES! P2O4 = di (2) phosphorus + tetr (4) oxide = Diphosphorus tetroxide. Prefixes: mono, di, tri, tetra, penta, hexa, hepta, octa, nona, deca.",
+                    keyConcept: "Covalent naming: prefix + first element + prefix + second element-ide. Drop 'mono-' from first element. Drop 'a' or 'o' before oxide."
+                },
+                {
+                    title: "IONIC FORMULA",
+                    scenario: "You need to write the formula for a compound formed between magnesium (Mg) and oxygen (O).",
+                    question: "How do you determine the correct ionic formula?",
+                    answers: ["Just combine the symbols", "Criss-cross the charges to get subscripts", "Always use 1:1 ratio", "Add charges together"],
+                    correct: 1,
+                    explanation: "Use the criss-cross method: Mg is +2, O is -2. Criss-cross: Mg2O2 simplifies to MgO. The charges must balance to make a neutral compound!",
+                    keyConcept: "Ionic formula: Charges must balance to zero. Use criss-cross method. Reduce to lowest whole numbers. Example: Ca2+ and Cl- = CaCl2"
+                },
+                {
+                    title: "VALENCE ELECTRONS",
+                    scenario: "Sodium (Na) is in Group 1 of the periodic table. You need to determine its valence electrons.",
+                    question: "How can you find valence electrons using the periodic table?",
+                    answers: ["Count the period number", "Look at the group number", "Add up all electrons", "Subtract atomic number from mass"],
+                    correct: 1,
+                    explanation: "For representative elements, the GROUP NUMBER equals the number of valence electrons! Sodium is in Group 1 = 1 valence electron. Oxygen (Group 16) has 6 valence electrons.",
+                    keyConcept: "Valence electrons = group number (for main group elements). Group 1 = 1, Group 2 = 2, Groups 13-18 = 3-8 valence electrons."
+                }
+            ],
+            moles: [
+                {
+                    title: "MOLES IN COMPOUNDS",
+                    scenario: "A student has 2 moles of fructose (C6H12O6) and needs to know the moles of hydrogen atoms present.",
+                    question: "How do you find moles of atoms in a compound?",
+                    answers: ["Divide by the subscript", "Multiply moles of compound by the subscript", "Moles are always 1:1", "Use Avogadro's number directly"],
+                    correct: 1,
+                    explanation: "Multiply moles of compound by the subscript! 2 mol C6H12O6 x 12 H atoms per molecule = 24 mol H. Each molecule contains 12 hydrogen atoms.",
+                    keyConcept: "Moles of atoms = moles of compound x subscript. The subscript tells you how many of each atom per molecule."
+                },
+                {
+                    title: "MOLAR MASS CALCULATION",
+                    scenario: "You need to find the molar mass of magnesium chloride (MgCl2) to prepare a solution.",
+                    question: "How do you calculate molar mass of a compound?",
+                    answers: ["Add atomic masses of each element once", "Add atomic masses accounting for subscripts", "Use only the largest element's mass", "Multiply all atomic masses together"],
+                    correct: 1,
+                    explanation: "Add up atomic masses, multiplying by subscripts! MgCl2 = 24.31 (Mg) + 2 x 35.45 (Cl) = 24.31 + 70.90 = 95.21 g/mol",
+                    keyConcept: "Molar mass = sum of (atomic mass x subscript) for each element. Units are g/mol. Found on periodic table."
+                },
+                {
+                    title: "MOLES TO GRAMS",
+                    scenario: "A student needs 0.70 moles of hydrogen peroxide (H2O2) for an experiment. Molar mass of H2O2 = 34.02 g/mol.",
+                    question: "What conversion do you use to convert moles to grams?",
+                    answers: ["Divide by molar mass", "Multiply by molar mass", "Multiply by Avogadro's number", "Divide by Avogadro's number"],
+                    correct: 1,
+                    explanation: "Grams = moles x molar mass. 0.70 mol x 34.02 g/mol = 23.8 g of H2O2 needed.",
+                    keyConcept: "Mole conversions: grams = moles x molar mass. Moles = grams / molar mass. Molar mass is the bridge between moles and grams!"
+                },
+                {
+                    title: "MOLECULES TO MOLES",
+                    scenario: "A sample contains 2.4 x 10^24 molecules of methane (CH4). Convert to moles.",
+                    question: "What number do you use to convert between molecules and moles?",
+                    answers: ["Molar mass", "Avogadro's number (6.022 x 10^23)", "Atomic number", "Universal gas constant"],
+                    correct: 1,
+                    explanation: "Use Avogadro's number! Moles = molecules / (6.022 x 10^23). 2.4 x 10^24 / 6.022 x 10^23 = 4.0 mol CH4",
+                    keyConcept: "Avogadro's number = 6.022 x 10^23 particles/mol. Converts between counting particles and measuring moles. 1 mole = 6.022 x 10^23 of anything!"
+                },
+                {
+                    title: "MOLE ROADMAP",
+                    scenario: "You need to convert 50.0 grams of NaCl to number of formula units.",
+                    question: "What is the correct conversion pathway?",
+                    answers: ["Grams -> particles directly", "Grams -> moles -> particles", "Particles -> grams directly", "Use density"],
+                    correct: 1,
+                    explanation: "The mole roadmap: Grams <-> Moles <-> Particles. First convert grams to moles (using molar mass), then moles to particles (using Avogadro's number).",
+                    keyConcept: "Mole roadmap: GRAMS - (molar mass) - MOLES - (Avogadro's #) - PARTICLES. You CANNOT skip the middle step!"
+                }
+            ],
+            reactions: [
+                {
+                    title: "COMBINATION REACTION",
+                    scenario: "Review this reaction: SO2 + H2O -> H2SO3",
+                    question: "What type of reaction has two or more reactants combining to form ONE product?",
+                    answers: ["Decomposition", "Single replacement", "Combination (Synthesis)", "Double replacement"],
+                    correct: 2,
+                    explanation: "COMBINATION (synthesis) reactions: A + B -> AB. Two or more substances combine to form ONE product. SO2 + H2O -> H2SO3 is combination!",
+                    keyConcept: "Combination: A + B -> AB. Decomposition: AB -> A + B. Single replacement: A + BC -> AC + B. Double replacement: AB + CD -> AD + CB."
+                },
+                {
+                    title: "BALANCING EQUATIONS",
+                    scenario: "Balance this equation: S2 + O2 -> SO2",
+                    question: "What must be equal on both sides of a balanced equation?",
+                    answers: ["Number of molecules", "Number of each type of atom", "Total mass only", "Coefficients"],
+                    correct: 1,
+                    explanation: "Each type of atom must be equal on both sides! S2 + 2O2 -> 2SO2. Count: 2 S and 4 O on each side. Coefficients are 1, 2, 2.",
+                    keyConcept: "Law of Conservation of Mass: atoms are not created or destroyed. Balance by adding COEFFICIENTS only, never change subscripts!"
+                },
+                {
+                    title: "REACTANTS VS PRODUCTS",
+                    scenario: "In the equation C6H12O6 + 6O2 -> 6CO2 + 6H2O, identify the components.",
+                    question: "What are the substances on the RIGHT side of the arrow called?",
+                    answers: ["Reactants", "Products", "Coefficients", "Catalysts"],
+                    correct: 1,
+                    explanation: "PRODUCTS are on the right side (what's formed). REACTANTS are on the left side (what you start with). Arrow points from reactants to products.",
+                    keyConcept: "Reactants -> Products. Reactants are consumed, products are formed. Coefficients show ratio (6O2 means 6 molecules of oxygen)."
+                },
+                {
+                    title: "REDUCTION DEFINITION",
+                    scenario: "In a redox reaction, electrons are being transferred between species.",
+                    question: "What characterizes REDUCTION in a chemical reaction?",
+                    answers: ["Loss of electrons", "Gain of electrons", "Loss of oxygen", "Increase in oxidation state"],
+                    correct: 1,
+                    explanation: "REDUCTION = GAIN of electrons (decrease in oxidation state). Remember: 'OIL RIG' - Oxidation Is Loss, Reduction Is Gain (of electrons).",
+                    keyConcept: "OIL RIG: Oxidation Is Loss, Reduction Is Gain. LEO GER: Lose Electrons = Oxidation, Gain Electrons = Reduction."
+                },
+                {
+                    title: "STOICHIOMETRY BASICS",
+                    scenario: "Given: 3CH4 -> C3H8 + 2H2. If 0.75 mol C3H8 is produced, find mol of H2.",
+                    question: "What does stoichiometry use to relate amounts of substances?",
+                    answers: ["Masses directly", "Mole ratios from coefficients", "Volume ratios", "Density"],
+                    correct: 1,
+                    explanation: "Use MOLE RATIOS from balanced equation coefficients! Ratio of C3H8 to H2 is 1:2. So 0.75 mol C3H8 x (2 mol H2/1 mol C3H8) = 1.5 mol H2",
+                    keyConcept: "Stoichiometry uses mole ratios from balanced equation coefficients. Always convert to moles, use ratio, then convert to desired unit."
+                }
+            ],
+            energy: [
+                {
+                    title: "EXOTHERMIC REACTION",
+                    scenario: "Heat is released during cellular respiration when your body breaks down glucose.",
+                    question: "What type of reaction RELEASES heat to the surroundings?",
+                    answers: ["Endothermic", "Exothermic", "Isothermic", "Neutralization only"],
+                    correct: 1,
+                    explanation: "EXOTHERMIC reactions RELEASE heat (exit = out). The surroundings get warmer. Examples: combustion, respiration, hand warmers.",
+                    keyConcept: "Exothermic: releases heat, ΔH is negative. Endothermic: absorbs heat, ΔH is positive. 'Exo' = exit = heat leaves system."
+                },
+                {
+                    title: "ENDOTHERMIC REACTION",
+                    scenario: "When you add glucose to water and stir, the glass becomes cold to the touch.",
+                    question: "What type of reaction ABSORBS heat from the surroundings?",
+                    answers: ["Exothermic", "Endothermic", "Thermodynamic", "Combination"],
+                    correct: 1,
+                    explanation: "ENDOTHERMIC reactions ABSORB heat (enter = in). The surroundings get colder. Examples: cold packs, photosynthesis, dissolving some salts.",
+                    keyConcept: "Endothermic: surroundings cool down as system absorbs heat. Products have MORE energy than reactants. Think: 'endo' = energy enters."
+                },
+                {
+                    title: "IDENTIFYING REACTION ENERGY",
+                    scenario: "You light a match and it produces heat and light as it burns.",
+                    question: "Is combustion endothermic or exothermic?",
+                    answers: ["Endothermic - needs initial heat", "Exothermic - releases more heat than absorbed", "Neither", "Both"],
+                    correct: 1,
+                    explanation: "Combustion is EXOTHERMIC! While it needs activation energy (the spark), it releases much MORE energy than it absorbs. Net energy is released.",
+                    keyConcept: "Activation energy is needed to START reactions (both types). The NET energy change determines endo/exothermic, not the initial input."
+                },
+                {
+                    title: "ENERGY IN BREAKING/FORMING",
+                    scenario: "During a reaction, bonds in reactants break and new bonds form in products.",
+                    question: "Which process releases energy?",
+                    answers: ["Breaking bonds", "Forming bonds", "Both release energy", "Neither releases energy"],
+                    correct: 1,
+                    explanation: "FORMING bonds releases energy. BREAKING bonds requires (absorbs) energy. Exothermic reactions form stronger bonds than they break!",
+                    keyConcept: "Breaking bonds = absorbs energy. Forming bonds = releases energy. If energy released > energy absorbed = exothermic overall."
+                },
+                {
+                    title: "REAL WORLD ENERGY",
+                    scenario: "A hot pack for sore muscles gets warm when you activate it.",
+                    question: "What type of reaction is occurring in the hot pack?",
+                    answers: ["Endothermic", "Exothermic", "No reaction", "Decomposition"],
+                    correct: 1,
+                    explanation: "Hot packs are EXOTHERMIC - they release heat. Cold packs are endothermic - they absorb heat from your body, making them feel cold.",
+                    keyConcept: "Hot pack = exothermic (crystallization releases heat). Cold pack = endothermic (dissolving absorbs heat). Application of chemistry!"
+                }
+            ],
+            gases: [
+                {
+                    title: "PRESSURE CONVERSION",
+                    scenario: "A patient's blood pressure is 100 mmHg. The doctor needs this in atmospheres.",
+                    question: "What is the conversion factor between mmHg and atm?",
+                    answers: ["1 atm = 100 mmHg", "1 atm = 760 mmHg", "1 atm = 1000 mmHg", "1 atm = 14.7 mmHg"],
+                    correct: 1,
+                    explanation: "1 atm = 760 mmHg. So 100 mmHg x (1 atm/760 mmHg) = 0.132 atm. This is also standard atmospheric pressure at sea level!",
+                    keyConcept: "Pressure conversions: 1 atm = 760 mmHg = 760 torr = 101.325 kPa = 14.7 psi. These are all equivalent!"
+                },
+                {
+                    title: "IDEAL GAS LAW",
+                    scenario: "A 2.67 mol gas sample is in a 5.00 L tank at 25.0 degrees C. Find the pressure.",
+                    question: "What equation relates pressure, volume, moles, and temperature?",
+                    answers: ["PV = nRT", "P = DRT", "P1V1 = P2V2", "PV = constant"],
+                    correct: 0,
+                    explanation: "PV = nRT is the Ideal Gas Law! P = nRT/V. Don't forget: T must be in KELVIN (25 + 273 = 298 K). R = 0.0821 L·atm/mol·K",
+                    keyConcept: "Ideal Gas Law: PV = nRT. P in atm, V in L, n in mol, T in Kelvin, R = 0.0821 L·atm/mol·K. ALWAYS convert T to Kelvin!"
+                },
+                {
+                    title: "DALTON'S PARTIAL PRESSURES",
+                    scenario: "A gas mixture has total pressure 0.900 atm. Neon contributes 0.799 atm.",
+                    question: "How do you find the partial pressure of the other gas (argon)?",
+                    answers: ["Multiply the pressures", "Subtract neon pressure from total", "Divide total by neon", "Add 0.799 to total"],
+                    correct: 1,
+                    explanation: "Dalton's Law: P_total = P_1 + P_2 + ... P_Ar = P_total - P_Ne = 0.900 - 0.799 = 0.101 atm",
+                    keyConcept: "Dalton's Law of Partial Pressures: Total pressure = sum of all partial pressures. Each gas contributes proportionally to its mole fraction."
+                },
+                {
+                    title: "TEMPERATURE-KELVIN",
+                    scenario: "You're using the ideal gas law but your temperature is in Celsius.",
+                    question: "Why must temperature be in Kelvin for gas law calculations?",
+                    answers: ["Kelvin is more accurate", "Gas laws require absolute temperature (no negative values)", "It's just convention", "Celsius doesn't work with R"],
+                    correct: 1,
+                    explanation: "Gas laws need ABSOLUTE temperature (Kelvin) because gas behavior relates to molecular motion, which is zero at absolute zero (0 K). No negative T allowed!",
+                    keyConcept: "Kelvin = Celsius + 273.15. Kelvin is absolute scale: 0 K = absolute zero (no molecular motion). Gas laws ONLY work with Kelvin!"
+                },
+                {
+                    title: "GAS LAW RELATIONSHIPS",
+                    scenario: "You compress a gas to half its volume while keeping temperature constant.",
+                    question: "What happens to the pressure?",
+                    answers: ["Halves", "Doubles", "Stays same", "Quadruples"],
+                    correct: 1,
+                    explanation: "Boyle's Law: P1V1 = P2V2 (at constant T). If V is halved, P doubles. Inverse relationship! More particles hitting smaller area = higher pressure.",
+                    keyConcept: "Boyle's Law: P inversely proportional to V. Charles's Law: V directly proportional to T. Gay-Lussac's: P directly proportional to T."
+                }
+            ],
+            solutions: [
+                {
+                    title: "SOLUTE VS SOLVENT",
+                    scenario: "A nursing student dissolves NaCl in water to make saline solution.",
+                    question: "In this solution, what is the NaCl called?",
+                    answers: ["Solvent", "Solute", "Solution", "Precipitate"],
+                    correct: 1,
+                    explanation: "SOLUTE = substance being dissolved (NaCl). SOLVENT = substance doing the dissolving (water). Solution = solute + solvent mixed.",
+                    keyConcept: "Solute: dissolved substance (usually smaller amount). Solvent: dissolving medium (usually larger amount). 'Like dissolves like' - polar dissolves polar."
+                },
+                {
+                    title: "MOLARITY CALCULATION",
+                    scenario: "Normal saline for IV contains 0.90 g NaCl per 0.10 L solution. Calculate molarity. (NaCl molar mass = 58.44 g/mol)",
+                    question: "What is the formula for molarity?",
+                    answers: ["Molarity = grams / volume", "Molarity = moles / liters of solution", "Molarity = moles / kg solvent", "Molarity = particles / volume"],
+                    correct: 1,
+                    explanation: "Molarity (M) = moles solute / liters solution. First: 0.90 g / 58.44 g/mol = 0.0154 mol. Then: 0.0154 mol / 0.10 L = 0.15 M",
+                    keyConcept: "Molarity (M) = mol solute / L solution. Units are mol/L or M. Most common concentration unit in chemistry!"
+                },
+                {
+                    title: "DILUTION EQUATION",
+                    scenario: "A student dilutes 26.3 mL of 11.5 M HNO3 to 200.0 mL total volume.",
+                    question: "What equation is used for dilution calculations?",
+                    answers: ["M = mol/L", "M1V1 = M2V2", "PV = nRT", "C = m/V"],
+                    correct: 1,
+                    explanation: "M1V1 = M2V2 for dilutions! (11.5 M)(26.3 mL) = (M2)(200.0 mL). M2 = 302.45/200 = 1.51 M. Moles of solute stay constant!",
+                    keyConcept: "Dilution equation: M1V1 = M2V2. Moles of solute don't change during dilution - only concentration changes when volume increases."
+                },
+                {
+                    title: "MISCIBILITY",
+                    scenario: "Alcohol dissolves completely in water to make rubbing alcohol - they mix in all proportions.",
+                    question: "What term describes liquids that dissolve completely in each other?",
+                    answers: ["Immiscible", "Miscible", "Insoluble", "Supersaturated"],
+                    correct: 1,
+                    explanation: "MISCIBLE = liquids that dissolve completely in each other (alcohol + water). IMMISCIBLE = liquids that don't mix (oil + water).",
+                    keyConcept: "Miscible: liquids mix completely (polar + polar, like alcohol + water). Immiscible: liquids don't mix (polar + nonpolar, like oil + water)."
+                },
+                {
+                    title: "PERCENT CONCENTRATION",
+                    scenario: "Calculate %(w/v) for 6.78 g NaCl dissolved in enough water to make 50.0 mL solution.",
+                    question: "What does %(w/v) represent?",
+                    answers: ["Grams per gram x 100%", "Grams solute per 100 mL solution x 100%", "mL per mL x 100%", "Moles per liter"],
+                    correct: 1,
+                    explanation: "%(w/v) = (g solute / mL solution) x 100. (6.78 g / 50.0 mL) x 100 = 13.56% ≈ 14%. Weight per volume percent!",
+                    keyConcept: "%(w/v) = (g/mL) x 100. %(w/w) = (g/g) x 100. %(v/v) = (mL/mL) x 100. Match the unit to the type of concentration!"
+                }
+            ],
+            acidbase: [
+                {
+                    title: "BRONSTED ACID-BASE",
+                    scenario: "In the reaction CH3COOH + H2O -> H3O+ + CH3COO-, identify the Bronsted base.",
+                    question: "According to Bronsted-Lowry theory, what defines a base?",
+                    answers: ["Donates a proton (H+)", "Accepts a proton (H+)", "Donates electrons", "Releases OH-"],
+                    correct: 1,
+                    explanation: "Bronsted BASE = proton (H+) ACCEPTOR. Water accepts H+ from acetic acid, becoming H3O+. Water is the base here!",
+                    keyConcept: "Bronsted-Lowry: Acid = H+ donor. Base = H+ acceptor. Conjugate pairs differ by one H+. Every acid has a conjugate base!"
+                },
+                {
+                    title: "CONJUGATE BASE",
+                    scenario: "Find the conjugate base of nitrous acid (HNO2).",
+                    question: "How do you find a conjugate base?",
+                    answers: ["Add H+ to the acid", "Remove H+ from the acid", "Add OH- to the acid", "Remove electrons"],
+                    correct: 1,
+                    explanation: "Conjugate base = acid minus one H+. HNO2 minus H+ = NO2- (nitrite ion). The conjugate base has one less proton!",
+                    keyConcept: "Conjugate acid-base pairs: differ by ONE H+. Acid -> conjugate base + H+. Base + H+ -> conjugate acid. Example: HCl/Cl-, NH3/NH4+"
+                },
+                {
+                    title: "pH SCALE",
+                    scenario: "A solution has a pH of 12. Classify this solution.",
+                    question: "What does a pH of 12 indicate?",
+                    answers: ["Acidic", "Neutral", "Basic", "Cannot determine"],
+                    correct: 2,
+                    explanation: "pH < 7 = acidic, pH = 7 = neutral, pH > 7 = basic (alkaline). pH 12 is strongly BASIC! pH scale typically runs 0-14.",
+                    keyConcept: "pH scale: 0-6.99 = acidic, 7 = neutral, 7.01-14 = basic. Each pH unit = 10x difference in H+ concentration."
+                },
+                {
+                    title: "pH CALCULATION",
+                    scenario: "A patient's blood plasma has [H3O+] = 2.63 x 10^-8 M. Find the pH.",
+                    question: "What is the formula for calculating pH?",
+                    answers: ["pH = [H3O+]", "pH = -log[H3O+]", "pH = log[H3O+]", "pH = 10^-[H3O+]"],
+                    correct: 1,
+                    explanation: "pH = -log[H3O+] = -log(2.63 x 10^-8) = 7.58. Normal blood pH is 7.35-7.45, so this patient is slightly alkalotic.",
+                    keyConcept: "pH = -log[H3O+]. pOH = -log[OH-]. pH + pOH = 14. [H3O+] x [OH-] = 10^-14 (at 25°C)"
+                },
+                {
+                    title: "H+ AND OH- RELATIONSHIP",
+                    scenario: "A solution has [H3O+] = 1 x 10^-2 M. Find [OH-].",
+                    question: "What is the relationship between [H3O+] and [OH-]?",
+                    answers: ["They're always equal", "[H3O+] x [OH-] = 10^-14", "[H3O+] + [OH-] = 14", "[H3O+] / [OH-] = 7"],
+                    correct: 1,
+                    explanation: "[H3O+] x [OH-] = 10^-14 (Kw, ion product of water). If [H3O+] = 10^-2, then [OH-] = 10^-14 / 10^-2 = 10^-12 M",
+                    keyConcept: "Water equilibrium: [H3O+][OH-] = 10^-14. As one increases, other decreases. In pure water both = 10^-7 M."
+                },
+                {
+                    title: "BUFFER SYSTEMS",
+                    scenario: "Blood maintains pH near 7.4 even when acids or bases are added to the body.",
+                    question: "What is a buffer?",
+                    answers: ["A strong acid", "A solution that resists pH changes", "Pure water", "A concentrated base"],
+                    correct: 1,
+                    explanation: "BUFFER = solution that resists pH changes when small amounts of acid or base are added. Made of weak acid + its conjugate base (or weak base + conjugate acid).",
+                    keyConcept: "Buffer = weak acid + conjugate base OR weak base + conjugate acid. Examples: H2CO3/HCO3- (blood), CH3COOH/CH3COO- (acetate buffer)."
+                },
+                {
+                    title: "LOW pH MEANING",
+                    scenario: "A solution has pH = 3. Analyze its ion concentrations.",
+                    question: "What does a pH of 3 indicate about [H3O+]?",
+                    answers: ["Low [H3O+]", "High [H3O+]", "Neutral [H3O+]", "Cannot determine"],
+                    correct: 1,
+                    explanation: "pH 3 means [H3O+] = 10^-3 = 0.001 M. LOW pH = HIGH [H3O+] = acidic! The pH scale is inverse to hydrogen ion concentration.",
+                    keyConcept: "Low pH = high [H3O+] = acidic. High pH = low [H3O+] = basic. pH 3 has 10,000x more H+ than pH 7!"
+                }
+            ]
+        };
+
+        // Initialize game
+        function initGame() {
+            // Initialize station progress
+            labStations.forEach(station => {
+                gameState.stationProgress[station.id] = {
+                    completed: 0,
+                    total: experiments[station.id].length
+                };
+            });
+
+            // Initialize topic scores
+            labStations.forEach(station => {
+                station.topics.forEach(topic => {
+                    gameState.topicScores[topic] = { correct: 0, total: 0 };
+                });
+            });
+
+            renderStations();
+            updateStats();
+        }
+
+        // Render lab stations
+        function renderStations() {
+            const container = document.getElementById('lab-stations');
+            container.innerHTML = labStations.map(station => {
+                const progress = gameState.stationProgress[station.id];
+                const progressPercent = (progress.completed / progress.total) * 100;
+                const isCompleted = progress.completed === progress.total;
+
+                return `
+                    <div class="lab-station ${isCompleted ? 'completed' : ''}" onclick="startStation('${station.id}')">
+                        <div class="station-icon">${station.icon}</div>
+                        <div class="station-name">${station.name}</div>
+                        <div class="station-desc">${station.description}</div>
+                        <div class="station-progress">
+                            <div class="station-progress-fill" style="width: ${progressPercent}%"></div>
+                        </div>
+                        <div style="font-size: 14px; color: #888; margin-top: 8px;">${progress.completed}/${progress.total} experiments</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Start a station
+        function startStation(stationId) {
+            gameState.currentStation = stationId;
+            gameState.currentExperiment = 0;
+
+            document.getElementById('lab-stations').style.display = 'none';
+            document.getElementById('instructions').style.display = 'none';
+            document.getElementById('experiment-screen').classList.add('active');
+
+            showExperiment();
+        }
+
+        // Show current experiment
+        function showExperiment() {
+            const station = labStations.find(s => s.id === gameState.currentStation);
+            const experimentList = experiments[gameState.currentStation];
+            const exp = experimentList[gameState.currentExperiment];
+
+            document.getElementById('current-station-name').textContent = station.name;
+            document.getElementById('experiment-counter').textContent =
+                `Experiment ${gameState.currentExperiment + 1} of ${experimentList.length}`;
+
+            document.getElementById('scenario-title').innerHTML = `<span style="margin-right: 10px;">${station.icon}</span>${exp.title}`;
+            document.getElementById('scenario-text').textContent = exp.scenario;
+            document.getElementById('scenario-question').textContent = exp.question;
+
+            const optionsContainer = document.getElementById('answer-options');
+            const keys = ['A', 'B', 'C', 'D'];
+            optionsContainer.innerHTML = exp.answers.map((answer, index) => `
+                <button class="answer-btn" onclick="selectAnswer(${index})" data-index="${index}">
+                    <span class="answer-key">${keys[index]}</span>
+                    <span>${answer}</span>
+                </button>
+            `).join('');
+
+            document.getElementById('feedback-box').className = 'feedback-box';
+            document.getElementById('next-btn').style.display = 'none';
+
+            // Re-enable all buttons
+            document.querySelectorAll('.answer-btn').forEach(btn => {
+                btn.disabled = false;
+                btn.classList.remove('correct', 'incorrect');
+            });
+        }
+
+        // Select an answer
+        function selectAnswer(index) {
+            const exp = experiments[gameState.currentStation][gameState.currentExperiment];
+            const buttons = document.querySelectorAll('.answer-btn');
+            const feedbackBox = document.getElementById('feedback-box');
+
+            // Disable all buttons
+            buttons.forEach(btn => btn.disabled = true);
+
+            const isCorrect = index === exp.correct;
+
+            // Mark selected button
+            buttons[index].classList.add(isCorrect ? 'correct' : 'incorrect');
+
+            // If wrong, show correct answer
+            if (!isCorrect) {
+                buttons[exp.correct].classList.add('correct');
+            }
+
+            // Update stats
+            gameState.totalAnswered++;
+            if (isCorrect) {
+                gameState.correctAnswers++;
+                gameState.streak++;
+                if (gameState.streak > gameState.maxStreak) {
+                    gameState.maxStreak = gameState.streak;
+                }
+                const points = 100 + (gameState.streak - 1) * 25;
+                gameState.score += points;
+            } else {
+                gameState.streak = 0;
+                gameState.safetyLevel = Math.max(0, gameState.safetyLevel - 10);
+            }
+
+            // Update topic scores
+            const station = labStations.find(s => s.id === gameState.currentStation);
+            const topic = station.topics[gameState.currentExperiment % station.topics.length];
+            if (gameState.topicScores[topic]) {
+                gameState.topicScores[topic].total++;
+                if (isCorrect) {
+                    gameState.topicScores[topic].correct++;
+                }
+            }
+
+            // Show feedback
+            feedbackBox.classList.add(isCorrect ? 'correct' : 'incorrect');
+            document.getElementById('feedback-header').textContent = isCorrect ?
+                'EXCELLENT WORK!' : 'LAB SAFETY VIOLATION!';
+            document.getElementById('feedback-text').textContent = exp.explanation;
+            document.getElementById('key-concept-text').textContent = exp.keyConcept;
+
+            document.getElementById('next-btn').style.display = 'inline-block';
+
+            updateStats();
+        }
+
+        // Next experiment
+        function nextExperiment() {
+            const experimentList = experiments[gameState.currentStation];
+
+            // Update station progress
+            gameState.stationProgress[gameState.currentStation].completed++;
+
+            gameState.currentExperiment++;
+
+            if (gameState.currentExperiment >= experimentList.length) {
+                // Station complete
+                backToStations();
+                checkGameComplete();
+            } else {
+                showExperiment();
+            }
+        }
+
+        // Back to stations
+        function backToStations() {
+            document.getElementById('experiment-screen').classList.remove('active');
+            document.getElementById('lab-stations').style.display = 'grid';
+            document.getElementById('instructions').style.display = 'block';
+
+            gameState.currentStation = null;
+            gameState.currentExperiment = 0;
+
+            renderStations();
+        }
+
+        // Check if game is complete
+        function checkGameComplete() {
+            let totalCompleted = 0;
+            let totalExperiments = 0;
+
+            Object.keys(gameState.stationProgress).forEach(stationId => {
+                totalCompleted += gameState.stationProgress[stationId].completed;
+                totalExperiments += gameState.stationProgress[stationId].total;
+            });
+
+            if (totalCompleted === totalExperiments) {
+                showResults();
+            }
+        }
+
+        // Show results
+        function showResults() {
+            document.getElementById('lab-stations').style.display = 'none';
+            document.getElementById('instructions').style.display = 'none';
+            document.getElementById('results-screen').classList.add('active');
+
+            const accuracy = Math.round((gameState.correctAnswers / gameState.totalAnswered) * 100);
+            document.getElementById('final-score').textContent = gameState.score.toLocaleString();
+
+            let grade = '';
+            if (accuracy >= 90) grade = 'MASTER CHEMIST! You\'re ready for the exam!';
+            else if (accuracy >= 80) grade = 'Lab Expert! Great understanding of concepts!';
+            else if (accuracy >= 70) grade = 'Lab Technician - Review weak areas before exam';
+            else if (accuracy >= 60) grade = 'Lab Assistant - More practice recommended';
+            else grade = 'Lab Trainee - Review all modules thoroughly';
+
+            document.getElementById('final-grade').innerHTML = `Accuracy: ${accuracy}%<br>${grade}`;
+
+            // Topic breakdown
+            const breakdownContainer = document.getElementById('topic-breakdown');
+            let topicHTML = '<h3>TOPIC BREAKDOWN</h3>';
+
+            Object.keys(gameState.topicScores).forEach(topic => {
+                const scores = gameState.topicScores[topic];
+                if (scores.total > 0) {
+                    const topicAcc = Math.round((scores.correct / scores.total) * 100);
+                    const color = topicAcc >= 80 ? '#00ff88' : topicAcc >= 60 ? '#ffaa00' : '#ff4444';
+                    topicHTML += `
+                        <div class="topic-row">
+                            <span class="topic-name">${topic}</span>
+                            <span class="topic-score" style="color: ${color}">${scores.correct}/${scores.total} (${topicAcc}%)</span>
+                        </div>
+                    `;
+                }
+            });
+
+            breakdownContainer.innerHTML = topicHTML;
+        }
+
+        // Restart game
+        function restartGame() {
+            gameState = {
+                currentStation: null,
+                currentExperiment: 0,
+                score: 0,
+                streak: 0,
+                maxStreak: 0,
+                totalAnswered: 0,
+                correctAnswers: 0,
+                safetyLevel: 100,
+                stationProgress: {},
+                topicScores: {}
+            };
+
+            document.getElementById('results-screen').classList.remove('active');
+            document.getElementById('lab-stations').style.display = 'grid';
+            document.getElementById('instructions').style.display = 'block';
+
+            initGame();
+        }
+
+        // Update stats display
+        function updateStats() {
+            let totalCompleted = 0;
+            let totalExperiments = 0;
+
+            Object.keys(gameState.stationProgress).forEach(stationId => {
+                totalCompleted += gameState.stationProgress[stationId].completed;
+                totalExperiments += gameState.stationProgress[stationId].total;
+            });
+
+            document.getElementById('experiments-completed').textContent = `${totalCompleted}/${totalExperiments}`;
+            document.getElementById('total-score').textContent = gameState.score.toLocaleString();
+            document.getElementById('streak').textContent = gameState.streak;
+
+            const accuracy = gameState.totalAnswered > 0
+                ? Math.round((gameState.correctAnswers / gameState.totalAnswered) * 100)
+                : 0;
+            document.getElementById('accuracy').textContent = `${accuracy}%`;
+
+            document.getElementById('safety-fill').style.width = `${gameState.safetyLevel}%`;
+        }
+
+        // Initialize on load
+        window.onload = initGame;
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (document.getElementById('experiment-screen').classList.contains('active')) {
+                const feedbackVisible = document.getElementById('feedback-box').classList.contains('correct') ||
+                                       document.getElementById('feedback-box').classList.contains('incorrect');
+
+                if (!feedbackVisible) {
+                    const keyMap = { 'a': 0, 'b': 1, 'c': 2, 'd': 3, '1': 0, '2': 1, '3': 2, '4': 3 };
+                    const key = e.key.toLowerCase();
+                    if (keyMap.hasOwnProperty(key)) {
+                        selectAnswer(keyMap[key]);
+                    }
+                } else if (e.key === 'Enter' || e.key === ' ') {
+                    nextExperiment();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
