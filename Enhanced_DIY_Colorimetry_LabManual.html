@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIY Spectroscopy - Enhanced Lab Manual</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #f3f4f6;
+            padding: 20px;
+        }
+
+        .lab-manual {
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px 50px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 4px solid #7c3aed;
+            padding-bottom: 25px;
+            margin-bottom: 30px;
+        }
+
+        .header-badge {
+            display: inline-block;
+            background: #7c3aed;
+            color: white;
+            padding: 5px 20px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: #1e3a5f;
+            font-size: 2.4em;
+            margin: 10px 0;
+        }
+
+        .subtitle {
+            color: #7c3aed;
+            font-style: italic;
+            font-size: 1.15em;
+        }
+
+        .student-info {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            border: 2px solid #7c3aed;
+            padding: 20px 25px;
+            margin: 25px 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            border-radius: 8px;
+        }
+
+        .student-info label {
+            font-weight: 600;
+            color: #5b21b6;
+        }
+
+        .student-info .field {
+            border-bottom: 2px solid #7c3aed;
+            min-width: 180px;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        h2 {
+            color: #1e3a5f;
+            font-size: 1.4em;
+            margin: 35px 0 18px;
+            padding: 12px 18px;
+            background: linear-gradient(90deg, #7c3aed 0%, #7c3aed 6px, #f5f3ff 6px);
+            border-radius: 0 8px 8px 0;
+        }
+
+        h3 {
+            color: #7c3aed;
+            font-size: 1.15em;
+            margin: 22px 0 12px;
+            padding-bottom: 5px;
+            border-bottom: 2px dashed #c4b5fd;
+        }
+
+        p {
+            margin-bottom: 12px;
+        }
+
+        .objectives-box {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border: 2px solid #10b981;
+            border-radius: 10px;
+            padding: 22px;
+            margin: 22px 0;
+        }
+
+        .objectives-box h3 {
+            color: #065f46;
+            border: none;
+            margin-top: 0;
+        }
+
+        .objectives-box ul {
+            margin-left: 22px;
+        }
+
+        .objectives-box li {
+            margin: 10px 0;
+            color: #064e3b;
+        }
+
+        .materials-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+            margin: 22px 0;
+        }
+
+        .materials-box {
+            background: #fffbeb;
+            border: 2px solid #f59e0b;
+            border-radius: 10px;
+            padding: 18px;
+        }
+
+        .materials-box h4 {
+            color: #b45309;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px dashed #fcd34d;
+        }
+
+        .materials-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .materials-box li {
+            padding: 6px 0 6px 28px;
+            position: relative;
+        }
+
+        .materials-box li::before {
+            content: '□';
+            position: absolute;
+            left: 0;
+            color: #f59e0b;
+            font-size: 1.2em;
+        }
+
+        .safety-box {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border: 3px solid #ef4444;
+            border-radius: 10px;
+            padding: 22px;
+            margin: 22px 0;
+        }
+
+        .safety-box h3 {
+            color: #dc2626;
+            border: none;
+            margin-top: 0;
+        }
+
+        .safety-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .safety-box li {
+            padding: 8px 0 8px 30px;
+            position: relative;
+        }
+
+        .safety-box li::before {
+            content: '⚠';
+            position: absolute;
+            left: 0;
+            color: #dc2626;
+        }
+
+        /* Enhanced Procedure Steps */
+        .procedure-section {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .procedure-step {
+            background: white;
+            border-left: 5px solid #7c3aed;
+            padding: 18px 22px;
+            margin: 18px 0;
+            position: relative;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .step-number {
+            position: absolute;
+            left: -22px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            box-shadow: 0 3px 10px rgba(124, 58, 237, 0.3);
+        }
+
+        .procedure-step .content {
+            margin-left: 25px;
+        }
+
+        .procedure-step strong {
+            color: #5b21b6;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 22px 0;
+            font-size: 0.95em;
+        }
+
+        th, td {
+            border: 2px solid #374151;
+            padding: 12px 10px;
+            text-align: center;
+        }
+
+        th {
+            background: linear-gradient(180deg, #1e3a5f 0%, #0f172a 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        .dilution-table th {
+            background: linear-gradient(180deg, #7c3aed 0%, #5b21b6 100%);
+        }
+
+        .data-table td {
+            height: 45px;
+        }
+
+        .input-field {
+            border: none;
+            border-bottom: 2px dashed #7c3aed;
+            background: transparent;
+            width: 85%;
+            text-align: center;
+            font-size: 1em;
+            padding: 5px;
+            color: #1f2937;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-bottom-color: #5b21b6;
+            background: #f5f3ff;
+        }
+
+        /* Calculation Boxes */
+        .calculation-box {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            border: 2px solid #7c3aed;
+            border-radius: 10px;
+            padding: 22px;
+            margin: 22px 0;
+        }
+
+        .calculation-box h3 {
+            color: #5b21b6;
+            border: none;
+            margin-top: 0;
+        }
+
+        .formula {
+            background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%);
+            color: #fbbf24;
+            padding: 18px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 1.25em;
+            border-radius: 8px;
+            margin: 18px 0;
+            box-shadow: 0 4px 15px rgba(30, 58, 95, 0.3);
+        }
+
+        .work-space {
+            border: 2px dashed #c4b5fd;
+            min-height: 140px;
+            margin: 18px 0;
+            padding: 18px;
+            background: #fafafa;
+            border-radius: 8px;
+        }
+
+        .fill-blank {
+            display: inline-block;
+            min-width: 90px;
+            border-bottom: 2px solid #5b21b6;
+            margin: 0 6px;
+            text-align: center;
+        }
+
+        /* Question Boxes */
+        .question-box {
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+            border: 2px solid #f97316;
+            border-radius: 10px;
+            padding: 22px;
+            margin: 22px 0;
+        }
+
+        .question-box h3 {
+            color: #c2410c;
+            border: none;
+            margin-top: 0;
+        }
+
+        .question {
+            margin: 22px 0;
+            padding: 18px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #f97316;
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: #c2410c;
+            font-size: 1.05em;
+        }
+
+        .answer-lines {
+            margin-top: 12px;
+        }
+
+        .answer-line {
+            border-bottom: 1px solid #9ca3af;
+            height: 32px;
+            margin: 6px 0;
+        }
+
+        /* Graph Area */
+        .graph-container {
+            margin: 25px 0;
+        }
+
+        .graph-area {
+            border: 3px solid #374151;
+            height: 420px;
+            background: white;
+            background-image:
+                linear-gradient(to right, #e5e7eb 1px, transparent 1px),
+                linear-gradient(to bottom, #e5e7eb 1px, transparent 1px);
+            background-size: 25px 25px;
+            position: relative;
+            margin: 0 40px 10px 60px;
+        }
+
+        .graph-label-y {
+            position: absolute;
+            left: 5px;
+            top: 50%;
+            transform: rotate(-90deg) translateX(-50%);
+            font-weight: bold;
+            color: #374151;
+            white-space: nowrap;
+        }
+
+        .graph-label-x {
+            text-align: center;
+            font-weight: bold;
+            color: #374151;
+            margin-left: 60px;
+        }
+
+        /* Tip Boxes */
+        .tip-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-left: 5px solid #3b82f6;
+            padding: 15px 20px;
+            margin: 18px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .tip-box strong {
+            color: #1d4ed8;
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin: 18px 0;
+        }
+
+        .warning-box strong {
+            color: #b45309;
+        }
+
+        /* Conclusion Box */
+        .conclusion-box {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border: 3px solid #10b981;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .conclusion-box h3 {
+            color: #065f46;
+            margin: 0 0 15px 0;
+            border: none;
+        }
+
+        .final-answer {
+            font-size: 1.3em;
+            color: #064e3b;
+        }
+
+        /* Checklist */
+        .checklist-section {
+            background: #f8fafc;
+            padding: 22px;
+            border-radius: 10px;
+            margin: 25px 0;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+        }
+
+        .checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #7c3aed;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        /* Diagram Space */
+        .diagram-space {
+            border: 2px solid #9ca3af;
+            min-height: 220px;
+            margin: 18px 0;
+            padding: 18px;
+            background: #fafafa;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .diagram-space p {
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        /* Color Guide */
+        .color-guide {
+            display: flex;
+            justify-content: space-between;
+            background: white;
+            padding: 15px;
+            border: 2px solid #7c3aed;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .color-swatch {
+            text-align: center;
+            flex: 1;
+        }
+
+        .color-swatch .circle {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            margin: 0 auto 8px;
+            border: 2px solid #374151;
+        }
+
+        .color-swatch span {
+            font-size: 0.85em;
+            color: #4b5563;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .lab-manual {
+                box-shadow: none;
+                padding: 20px;
+            }
+            .procedure-step, table, .question {
+                break-inside: avoid;
+            }
+            .input-field {
+                border-bottom: 1px solid #000;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="lab-manual">
+        <div class="header">
+            <span class="header-badge">LIFE CHEMISTRY 101</span>
+            <h1>DIY Spectroscopy</h1>
+            <p class="subtitle">Quantitative Analysis Using Smartphone Colorimetry — Enhanced Edition</p>
+        </div>
+
+        <div class="student-info">
+            <div>
+                <label>Student Name:</label>
+                <span class="field"></span>
+            </div>
+            <div>
+                <label>Lab Partner(s):</label>
+                <span class="field"></span>
+            </div>
+            <div>
+                <label>Date:</label>
+                <span class="field"></span>
+            </div>
+            <div>
+                <label>Section/Instructor:</label>
+                <span class="field"></span>
+            </div>
+        </div>
+
+        <!-- OBJECTIVES -->
+        <div class="objectives-box">
+            <h3>Learning Objectives</h3>
+            <ul>
+                <li>Construct a simple sample box (DIY colorimeter) to measure light transmission through colored solutions</li>
+                <li>Prepare standard solutions via serial dilution (100%, 80%, 60%, 40%, 20%, 0%)</li>
+                <li>Apply Beer's Law (A = εlc) by plotting absorbance against concentration</li>
+                <li>Calculate transmittance (T = I/I₀) and absorbance (A = –log₁₀T) from measured data</li>
+                <li>Determine an unknown concentration from a calibration curve</li>
+                <li>Understand the relationship between color, light absorption, and concentration</li>
+            </ul>
+        </div>
+
+        <!-- PRE-LAB QUESTIONS -->
+        <h2>Part A: Pre-Lab Questions (Complete Before Lab)</h2>
+
+        <div class="question-box">
+            <h3>Answer these questions using your pre-lab reading:</h3>
+
+            <div class="question">
+                <p><span class="question-number">1.</span> Write Beer's Law equation and define each variable:</p>
+                <div class="answer-lines">
+                    <div class="answer-line"></div>
+                    <div class="answer-line"></div>
+                    <div class="answer-line"></div>
+                </div>
+            </div>
+
+            <div class="question">
+                <p><span class="question-number">2.</span> If light intensity through a blank (I₀) is 200 and through a sample (I) is 100, calculate:</p>
+                <p style="margin-left: 20px;">a) Transmittance (T = I/I₀): <span class="fill-blank"></span></p>
+                <p style="margin-left: 20px;">b) Absorbance (A = –log₁₀T): <span class="fill-blank"></span></p>
+                <div class="work-space" style="min-height: 100px;">
+                    <p><em>Show your calculations:</em></p>
+                </div>
+            </div>
+
+            <div class="question">
+                <p><span class="question-number">3.</span> Grape juice appears purple/violet. Based on the color wheel, what color light does it primarily absorb? Why are we using green construction paper as our background?</p>
+                <div class="answer-lines">
+                    <div class="answer-line"></div>
+                    <div class="answer-line"></div>
+                    <div class="answer-line"></div>
+                </div>
+            </div>
+
+            <div class="question">
+                <p><span class="question-number">4.</span> Which RGB channel (Red, Green, or Blue) should show the greatest change in intensity as grape juice concentration increases? Explain your reasoning.</p>
+                <div class="answer-lines">
+                    <div class="answer-line"></div>
+                    <div class="answer-line"></div>
+                </div>
+            </div>
+
+            <div class="question">
+                <p><span class="question-number">5.</span> Name TWO real-world applications where colorimetry/spectroscopy is used:</p>
+                <p style="margin-left: 20px;">1. <span class="fill-blank" style="min-width: 300px;"></span></p>
+                <p style="margin-left: 20px;">2. <span class="fill-blank" style="min-width: 300px;"></span></p>
+            </div>
+        </div>
+
+        <!-- MATERIALS -->
+        <h2>Part B: Materials & Equipment</h2>
+
+        <div class="materials-grid">
+            <div class="materials-box">
+                <h4>Provided by Lab</h4>
+                <ul>
+                    <li>Grape juice (stock solution, 100%)</li>
+                    <li>Unknown grape juice sample</li>
+                    <li>Distilled water</li>
+                    <li>Clear plastic cuvettes or test tubes (7)</li>
+                    <li>Graduated cylinders (10 mL)</li>
+                    <li>Pipettes (various sizes)</li>
+                    <li>Test tube rack</li>
+                    <li>Green construction paper</li>
+                    <li>Labels/marker</li>
+                </ul>
+            </div>
+            <div class="materials-box">
+                <h4>Student Provided / At Station</h4>
+                <ul>
+                    <li>Smartphone with RGB color app</li>
+                    <li>Cardboard box (shoebox size)</li>
+                    <li>Scissors</li>
+                    <li>Tape (masking or clear)</li>
+                    <li>Calculator</li>
+                    <li>Book (for elevation if needed)</li>
+                    <li>Ruler (optional)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="safety-box">
+            <h3>⚠️ Safety Precautions</h3>
+            <ul>
+                <li><strong>Grape juice stains fabric permanently!</strong> Wear a lab coat or old clothes; clean spills immediately</li>
+                <li><strong>No eating or drinking</strong> — lab solutions are not for consumption</li>
+                <li><strong>Handle glassware carefully</strong> — report any broken glass to your instructor</li>
+                <li><strong>Keep electronics dry</strong> — water damage to phones is your responsibility</li>
+                <li><strong>Scissors safety</strong> — always cut away from your body when constructing the box</li>
+                <li><strong>Clean your workspace</strong> thoroughly at the end of the experiment</li>
+            </ul>
+        </div>
+
+        <!-- PROCEDURE PART A: BUILDING THE BOX -->
+        <h2>Part C: Building Your DIY Colorimeter Box</h2>
+
+        <div class="procedure-section">
+            <div class="procedure-step">
+                <span class="step-number">1</span>
+                <div class="content">
+                    <strong>Select your box:</strong> Choose a cardboard box that can fit your cuvette or test tube standing upright inside. The box should be approximately 15-20 cm long.
+                </div>
+            </div>
+
+            <div class="procedure-step">
+                <span class="step-number">2</span>
+                <div class="content">
+                    <strong>Cut the front viewing hole:</strong> On the front panel (where your phone camera will be positioned), cut a rectangular opening approximately 5-8 cm wide and 5-8 cm tall, centered on the panel. This is where your phone camera will "see" through to the sample.
+                </div>
+            </div>
+
+            <div class="procedure-step">
+                <span class="step-number">3</span>
+                <div class="content">
+                    <strong>Remove the back panel:</strong> Cut out the ENTIRE back panel of the box. This allows ambient light to illuminate the colored construction paper that will serve as your light source background.
+                </div>
+            </div>
+
+            <div class="procedure-step">
+                <span class="step-number">4</span>
+                <div class="content">
+                    <strong>Position the construction paper:</strong> Tape a sheet of <strong>GREEN construction paper</strong> flat behind the open back of the box. The paper should be fully visible through the front viewing hole when you look through the sample position. Keep it flat and wrinkle-free.
+                </div>
+            </div>
+
+            <div class="procedure-step">
+                <span class="step-number">5</span>
+                <div class="content">
+                    <strong>Secure and stabilize:</strong> Place the box on a stable surface (use a book for elevation if needed so the viewing hole is at phone-camera height). <strong>Tape the box down securely</strong> — nothing should move between measurements!
+                </div>
+            </div>
+
+            <div class="procedure-step">
+                <span class="step-number">6</span>
+                <div class="content">
+                    <strong>Check your lighting:</strong> Use steady room light (dim overhead lights if too bright). <strong>Avoid direct sunlight</strong> as it causes fluctuating readings. The light path is: room light → reflects off green paper → passes through sample → exits front hole → enters phone camera.
+                </div>
+            </div>
+
+            <div class="procedure-step">
+                <span class="step-number">7</span>
+                <div class="content">
+                    <strong>Test your RGB app:</strong> Open your color analyzer app and place your phone camera flush against the front viewing hole. If your app allows, <strong>lock the exposure and focus</strong> (tap-and-hold usually works). Place a blank (water) in the sample position — the green paper should appear bright in the green channel.
+                </div>
+            </div>
+        </div>
+
+        <div class="tip-box">
+            <strong>Pro Tip:</strong> Consistency is everything! Mark the exact position where you place the cuvette/tube. Every sample must go in the SAME spot with the SAME orientation.
+        </div>
+
+        <h3>Colorimeter Box Diagram</h3>
+        <div class="diagram-space">
+            <p><em>In the space below, sketch your colorimeter setup. Label the following components:</em></p>
+            <p><em>• Front viewing hole • Sample/cuvette position • Green construction paper • Phone placement • Light path (arrows)</em></p>
+        </div>
+
+        <!-- PROCEDURE PART B: SERIAL DILUTIONS -->
+        <h2>Part D: Preparing Standard Solutions (Serial Dilutions)</h2>
+
+        <p>You will prepare 6 standard solutions by diluting the grape juice stock (100%) with distilled water. Each solution should have a <strong>total volume of 10 mL</strong>.</p>
+
+        <table class="dilution-table">
+            <thead>
+                <tr>
+                    <th>Standard</th>
+                    <th>Grape Juice Concentration (%)</th>
+                    <th>Volume of Stock Grape Juice (mL)</th>
+                    <th>Volume of Distilled Water (mL)</th>
+                    <th>Total Volume (mL)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Blank</td>
+                    <td>0%</td>
+                    <td>0</td>
+                    <td>10</td>
+                    <td>10</td>
+                </tr>
+                <tr>
+                    <td>Std 1</td>
+                    <td>20%</td>
+                    <td>2</td>
+                    <td>8</td>
+                    <td>10</td>
+                </tr>
+                <tr>
+                    <td>Std 2</td>
+                    <td>40%</td>
+                    <td>4</td>
+                    <td>6</td>
+                    <td>10</td>
+                </tr>
+                <tr>
+                    <td>Std 3</td>
+                    <td>60%</td>
+                    <td>6</td>
+                    <td>4</td>
+                    <td>10</td>
+                </tr>
+                <tr>
+                    <td>Std 4</td>
+                    <td>80%</td>
+                    <td>8</td>
+                    <td>2</td>
+                    <td>10</td>
+                </tr>
+                <tr>
+                    <td>Std 5</td>
+                    <td>100%</td>
+                    <td>10</td>
+                    <td>0</td>
+                    <td>10</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="calculation-box">
+            <h3>Fill in the Blanks: Verify Your Dilutions</h3>
+            <p>Using the dilution formula <strong>C₁V₁ = C₂V₂</strong>, verify Standard 2 (40% grape juice):</p>
+            <p style="margin: 15px 0;">
+                C₁ (stock concentration) = <span class="fill-blank"></span> %
+            </p>
+            <p style="margin: 15px 0;">
+                V₁ (volume of stock) = <span class="fill-blank"></span> mL
+            </p>
+            <p style="margin: 15px 0;">
+                C₂ (desired concentration) = <span class="fill-blank"></span> %
+            </p>
+            <p style="margin: 15px 0;">
+                V₂ (total final volume) = <span class="fill-blank"></span> mL
+            </p>
+            <p style="margin: 15px 0;">
+                Verification: <span class="fill-blank"></span> × <span class="fill-blank"></span> = <span class="fill-blank"></span> × <span class="fill-blank"></span>
+            </p>
+        </div>
+
+        <h3>Expected Color Gradient</h3>
+        <div class="color-guide">
+            <div class="color-swatch">
+                <div class="circle" style="background: transparent; border: 2px dashed #9ca3af;"></div>
+                <span>0%</span>
+            </div>
+            <div class="color-swatch">
+                <div class="circle" style="background: #e9d5ff;"></div>
+                <span>20%</span>
+            </div>
+            <div class="color-swatch">
+                <div class="circle" style="background: #d8b4fe;"></div>
+                <span>40%</span>
+            </div>
+            <div class="color-swatch">
+                <div class="circle" style="background: #c084fc;"></div>
+                <span>60%</span>
+            </div>
+            <div class="color-swatch">
+                <div class="circle" style="background: #a855f7;"></div>
+                <span>80%</span>
+            </div>
+            <div class="color-swatch">
+                <div class="circle" style="background: #7c3aed;"></div>
+                <span>100%</span>
+            </div>
+        </div>
+
+        <!-- PROCEDURE PART C: DATA COLLECTION -->
+        <h2>Part E: Data Collection</h2>
+
+        <div class="procedure-section">
+            <div class="procedure-step">
+                <span class="step-number">1</span>
+                <div class="content">
+                    <strong>Select your measurement channel:</strong> Test with your blank (water) and concentrated standard (100%). Determine which RGB channel shows the LARGEST drop in intensity from blank to concentrated. For grape juice with green paper, the <strong>GREEN channel</strong> should drop most significantly.
+                    <p style="margin-top: 10px;">Channel selected: <span class="fill-blank" style="min-width: 80px;"></span></p>
+                </div>
+            </div>
+
+            <div class="procedure-step">
+                <span class="step-number">2</span>
+                <div class="content">
+                    <strong>Measure the blank (I₀):</strong> Place your blank solution (0% grape juice = water) in the colorimeter box at the marked sample position. Close any light gaps, wait for stable reading, and record the intensity for your chosen channel. <strong>This is your I₀ value.</strong>
+                </div>
+            </div>
+
+            <div class="procedure-step">
+                <span class="step-number">3</span>
+                <div class="content">
+                    <strong>Measure standards from LOW to HIGH:</strong> Starting with 20%, measure each standard solution. Insert the cuvette in the same position/orientation every time, wait for stable reading, and record the intensity (I). <strong>Take 2-3 readings and calculate the average.</strong>
+                </div>
+            </div>
+
+            <div class="procedure-step">
+                <span class="step-number">4</span>
+                <div class="content">
+                    <strong>Calculate T and A:</strong> For each measurement, immediately calculate the transmittance and absorbance and record in your data table.
+                </div>
+            </div>
+
+            <div class="procedure-step">
+                <span class="step-number">5</span>
+                <div class="content">
+                    <strong>Measure the unknown:</strong> Following the same procedure, measure your unknown sample and record all values.
+                </div>
+            </div>
+        </div>
+
+        <div class="formula">
+            Transmittance: T = I / I₀ &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Absorbance: A = –log₁₀(T)
+        </div>
+
+        <div class="warning-box">
+            <strong>⚠️ Critical:</strong> Do NOT change the lighting, box position, or camera settings between measurements. Consistency is essential for accurate results!
+        </div>
+
+        <!-- DATA TABLE -->
+        <h3>Data Table: Quantitative Colorimetric Measurements</h3>
+
+        <p><strong>I₀ (Blank Intensity for <span class="fill-blank" style="min-width: 70px;"></span> channel) = <span class="fill-blank" style="min-width: 80px;"></span></strong></p>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Sample</th>
+                    <th>Concentration (%)</th>
+                    <th>Intensity I<br>(Reading 1)</th>
+                    <th>Intensity I<br>(Reading 2)</th>
+                    <th>I (Average)</th>
+                    <th>T = I/I₀</th>
+                    <th>A = –log₁₀(T)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Blank</td>
+                    <td>0</td>
+                    <td colspan="3">I₀ = ___________</td>
+                    <td>1.00</td>
+                    <td>0.00</td>
+                </tr>
+                <tr>
+                    <td>Std 1</td>
+                    <td>20</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                </tr>
+                <tr>
+                    <td>Std 2</td>
+                    <td>40</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                </tr>
+                <tr>
+                    <td>Std 3</td>
+                    <td>60</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                </tr>
+                <tr>
+                    <td>Std 4</td>
+                    <td>80</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                </tr>
+                <tr>
+                    <td>Std 5</td>
+                    <td>100</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                </tr>
+                <tr style="background: #fef3c7;">
+                    <td><strong>Unknown</strong></td>
+                    <td><strong>?</strong></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- SAMPLE CALCULATIONS -->
+        <h2>Part F: Sample Calculations</h2>
+
+        <div class="calculation-box">
+            <h3>Show your complete calculations for Standard 3 (60% grape juice):</h3>
+            <p><strong>Given values:</strong> I₀ = _______ &nbsp;&nbsp;&nbsp; I = _______</p>
+
+            <div class="work-space">
+                <p><strong>Calculate Transmittance (T):</strong></p>
+                <p>T = I / I₀ =</p>
+                <br><br>
+                <p><strong>Calculate Absorbance (A):</strong></p>
+                <p>A = –log₁₀(T) = –log₁₀(         ) =</p>
+            </div>
+        </div>
+
+        <!-- GRAPHING -->
+        <h2>Part G: Calibration Curve</h2>
+
+        <p>Plot <strong>Absorbance (A)</strong> on the y-axis versus <strong>Concentration (%)</strong> on the x-axis. Draw the best-fit straight line through (or near) the origin (0,0).</p>
+
+        <div class="graph-container">
+            <span class="graph-label-y">Absorbance (A)</span>
+            <div class="graph-area"></div>
+            <p class="graph-label-x">Concentration (% grape juice)</p>
+        </div>
+
+        <div class="calculation-box">
+            <h3>Determine the Unknown Concentration</h3>
+
+            <p><strong>Method 1: Graphical Method</strong></p>
+            <ol style="margin-left: 20px; margin-bottom: 15px;">
+                <li>Locate the absorbance of your unknown on the y-axis: A = <span class="fill-blank"></span></li>
+                <li>Draw a horizontal line from this point to intersect your calibration curve</li>
+                <li>From the intersection, draw a vertical line down to the x-axis</li>
+                <li>Read the concentration: <span class="fill-blank"></span> %</li>
+            </ol>
+
+            <p><strong>Method 2: Mathematical Method</strong></p>
+            <p>Determine the equation of your best-fit line: A = m × C + b</p>
+            <p style="margin-left: 20px;">Slope (m) = ΔA / ΔC = (<span class="fill-blank"></span> – <span class="fill-blank"></span>) / (<span class="fill-blank"></span> – <span class="fill-blank"></span>) = <span class="fill-blank"></span></p>
+            <p style="margin-left: 20px;">Y-intercept (b) = <span class="fill-blank"></span> (should be approximately 0)</p>
+            <p style="margin-left: 20px;">Line equation: A = <span class="fill-blank"></span> × C + <span class="fill-blank"></span></p>
+            <br>
+            <p style="margin-left: 20px;">For unknown, A = <span class="fill-blank"></span></p>
+            <p style="margin-left: 20px;">Solving: C = (A – b) / m = (<span class="fill-blank"></span> – <span class="fill-blank"></span>) / <span class="fill-blank"></span> = <span class="fill-blank"></span> %</p>
+        </div>
+
+        <div class="conclusion-box">
+            <h3>Final Result</h3>
+            <p class="final-answer">
+                <strong>Unknown Grape Juice Concentration = <span class="fill-blank" style="min-width: 100px;"></span> %</strong>
+            </p>
+        </div>
+
+        <!-- POST-LAB QUESTIONS -->
+        <h2>Part H: Post-Lab Questions</h2>
+
+        <div class="question-box">
+            <h3>Answer the following questions based on your experimental results:</h3>
+
+            <div class="question">
+                <p><span class="question-number">1.</span> Discuss TWO potential sources of error in this experiment (besides auto-exposure on your phone camera). For each error, explain how it could impact your calibration curve's linearity or accuracy.</p>
+                <p><strong>Error 1:</strong></p>
+                <div class="answer-lines">
+                    <div class="answer-line"></div>
+                    <div class="answer-line"></div>
+                    <div class="answer-line"></div>
+                </div>
+                <p><strong>Error 2:</strong></p>
+                <div class="answer-lines">
+                    <div class="answer-line"></div>
+                    <div class="answer-line"></div>
+                    <div class="answer-line"></div>
+                </div>
+            </div>
+
+            <div class="question">
+                <p><span class="question-number">2.</span> <strong>Clinical Application:</strong> In a hospital, Beer's Law is used in pulse oximetry to measure blood oxygen saturation. If a patient has jaundice (high bilirubin, which absorbs blue light), how might this interfere with the oximeter's red/infrared readings? What could clinicians do to address this interference?</p>
+                <div class="answer-lines">
+                    <div class="answer-line"></div>
+                    <div class="answer-line"></div>
+                    <div class="answer-line"></div>
+                    <div class="answer-line"></div>
+                </div>
+            </div>
+
+            <div class="question">
+                <p><span class="question-number">3.</span> Your calibration curve should ideally pass through the origin (0,0). Did yours? If it had a y-intercept significantly different from zero, what might have caused this?</p>
+                <div class="answer-lines">
+                    <div class="answer-line"></div>
+                    <div class="answer-line"></div>
+                    <div class="answer-line"></div>
+                </div>
+            </div>
+
+            <div class="question">
+                <p><span class="question-number">4.</span> Beer's Law states that absorbance is directly proportional to concentration. What would you expect to happen to this linear relationship if you tested very high concentrations (beyond 100% of what we used)? Explain why Beer's Law might "fail" at high concentrations.</p>
+                <div class="answer-lines">
+                    <div class="answer-line"></div>
+                    <div class="answer-line"></div>
+                    <div class="answer-line"></div>
+                </div>
+            </div>
+
+            <div class="question">
+                <p><span class="question-number">5.</span> If you wanted to measure the concentration of a YELLOW solution instead of grape juice:</p>
+                <p style="margin-left: 20px;">a) What color construction paper would you use as a background? <span class="fill-blank"></span></p>
+                <p style="margin-left: 20px;">b) Which RGB channel would you measure? <span class="fill-blank"></span></p>
+                <p style="margin-left: 20px;">c) Explain your reasoning:</p>
+                <div class="answer-lines">
+                    <div class="answer-line"></div>
+                    <div class="answer-line"></div>
+                </div>
+            </div>
+
+            <div class="question">
+                <p><span class="question-number">6.</span> A classmate got a negative absorbance value for one of their samples. What likely went wrong, and how should they troubleshoot this issue?</p>
+                <div class="answer-lines">
+                    <div class="answer-line"></div>
+                    <div class="answer-line"></div>
+                    <div class="answer-line"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LAB CHECKLIST -->
+        <h2>Lab Completion Checklist</h2>
+
+        <div class="checklist-section">
+            <div class="checkbox-item"><span class="checkbox"></span> Pre-lab questions (Part A) completed before lab</div>
+            <div class="checkbox-item"><span class="checkbox"></span> DIY colorimeter box constructed and tested</div>
+            <div class="checkbox-item"><span class="checkbox"></span> Box diagram sketched with labels</div>
+            <div class="checkbox-item"><span class="checkbox"></span> All 6 standard dilutions prepared correctly</div>
+            <div class="checkbox-item"><span class="checkbox"></span> Dilution verification calculation completed</div>
+            <div class="checkbox-item"><span class="checkbox"></span> RGB channel selected and justified</div>
+            <div class="checkbox-item"><span class="checkbox"></span> Data table completely filled (all I, T, and A values)</div>
+            <div class="checkbox-item"><span class="checkbox"></span> Sample calculation for Standard 3 shown</div>
+            <div class="checkbox-item"><span class="checkbox"></span> Calibration curve plotted with labeled axes</div>
+            <div class="checkbox-item"><span class="checkbox"></span> Best-fit line drawn through/near origin</div>
+            <div class="checkbox-item"><span class="checkbox"></span> Unknown concentration determined (graphically and/or mathematically)</div>
+            <div class="checkbox-item"><span class="checkbox"></span> All 6 post-lab questions answered completely</div>
+            <div class="checkbox-item"><span class="checkbox"></span> Workspace cleaned, solutions disposed properly</div>
+            <div class="checkbox-item"><span class="checkbox"></span> Equipment returned</div>
+        </div>
+
+        <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #e5e7eb; text-align: center; color: #6b7280;">
+            <p><strong>Life Chemistry 101</strong> | DIY Spectroscopy Lab — Enhanced Edition</p>
+            <p><em>"Light reveals what the eye cannot see alone."</em></p>
+        </div>
+    </div>
+</body>
+</html>
