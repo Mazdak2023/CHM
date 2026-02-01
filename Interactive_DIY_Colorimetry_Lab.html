@@ -1,0 +1,2136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIY Colorimetry Lab - Interactive</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #e74c3c;
+            --accent: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --light: #ecf0f1;
+            --dark: #1a1a2e;
+            --grape: #6b2d5c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(90deg, var(--grape) 0%, #4a1942 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        /* Student Info Bar */
+        .student-info-bar {
+            background: var(--light);
+            padding: 15px 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 3px solid var(--accent);
+        }
+
+        .student-info-bar label {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .student-info-bar input {
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .student-info-bar input:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: #2c3e50;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 12px;
+            background: #34495e;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), #2ecc71);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        .progress-text {
+            color: white;
+            font-weight: 600;
+            min-width: 60px;
+        }
+
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            background: var(--primary);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 15px 25px;
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .tab-btn.active {
+            background: var(--accent);
+        }
+
+        .tab-btn.completed::after {
+            content: '✓';
+            background: var(--success);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .tab-icon {
+            font-size: 1.2em;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Section Styling */
+        .section-title {
+            color: var(--grape);
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--grape);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #e8f4fd 0%, #d4e9f7 100%);
+            border-left: 5px solid var(--accent);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fef3e2 0%, #fde5c3 100%);
+            border-left: 5px solid var(--warning);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .safety-box {
+            background: linear-gradient(135deg, #fde8e8 0%, #f9d4d4 100%);
+            border-left: 5px solid var(--secondary);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        /* Questions */
+        .question-block {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .question-block h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .question-number {
+            background: var(--grape);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+        }
+
+        .question-block textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        .question-block textarea:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        .points-badge {
+            background: var(--success);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-left: auto;
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+
+        .data-table th {
+            background: var(--grape);
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .data-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .data-table input {
+            width: 80px;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1em;
+        }
+
+        .data-table input:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        .data-table input.calculated {
+            background: #e8f5e9;
+            border-color: var(--success);
+        }
+
+        /* Graph Container */
+        .graph-container {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .graph-container h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        #calibrationChart {
+            max-height: 400px;
+        }
+
+        .equation-display {
+            text-align: center;
+            font-size: 1.3em;
+            margin: 15px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, #e8f4fd 0%, #d4e9f7 100%);
+            border-radius: 10px;
+        }
+
+        .equation-display .equation {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+            color: var(--primary);
+        }
+
+        .r-squared {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        /* Procedure Steps */
+        .procedure-step {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background: var(--grape);
+            color: white;
+            min-width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .step-content {
+            flex: 1;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid var(--grape);
+        }
+
+        .step-checkbox {
+            margin-top: 10px;
+        }
+
+        .step-checkbox input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        /* Calculation Box */
+        .calc-box {
+            background: #f0f0f0;
+            border: 2px dashed var(--primary);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .calc-box h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .calc-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+
+        .calc-row input {
+            width: 100px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .calc-row input:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        /* Unknown Result */
+        .unknown-result {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .unknown-result h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .unknown-result .result-value {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+
+        .nav-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn.prev {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .nav-btn.next {
+            background: var(--accent);
+            color: white;
+        }
+
+        .nav-btn.submit {
+            background: var(--success);
+            color: white;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Download Section */
+        .download-section {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            color: white;
+            margin: 20px 0;
+        }
+
+        .download-section h3 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .download-btn {
+            padding: 15px 40px;
+            font-size: 1.2em;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 10px;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        /* Formula Display */
+        .formula {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+            font-size: 1.2em;
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        /* Materials List */
+        .materials-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .material-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .material-icon {
+            font-size: 1.5em;
+        }
+
+        /* Auto-save indicator */
+        .autosave-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+
+        .autosave-indicator.show {
+            opacity: 1;
+        }
+
+        /* Print Styles */
+        @media print {
+            .tab-nav, .nav-buttons, .download-section, .autosave-indicator, .progress-container {
+                display: none !important;
+            }
+            .tab-content {
+                display: block !important;
+                page-break-after: always;
+            }
+            body {
+                background: white;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+            .tab-btn {
+                padding: 10px 15px;
+                font-size: 0.85em;
+            }
+            .main-content {
+                padding: 10px;
+            }
+            .tab-content {
+                padding: 15px;
+            }
+            .student-info-bar {
+                flex-direction: column;
+            }
+            .data-table {
+                font-size: 0.85em;
+            }
+            .data-table input {
+                width: 60px;
+                padding: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>🍇 DIY Colorimetry Lab</h1>
+        <p>Exploring Beer's Law with Grape Juice and Smartphone Technology</p>
+    </div>
+
+    <!-- Student Info -->
+    <div class="student-info-bar">
+        <label>Student Name:</label>
+        <input type="text" id="studentName" placeholder="Enter your name" onchange="saveProgress()">
+        <label>Lab Partner:</label>
+        <input type="text" id="labPartner" placeholder="Partner's name" onchange="saveProgress()">
+        <label>Date:</label>
+        <input type="date" id="labDate" onchange="saveProgress()">
+        <label>Section:</label>
+        <input type="text" id="labSection" placeholder="e.g., 101" onchange="saveProgress()">
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <span style="color: white;">Progress:</span>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <span class="progress-text" id="progressText">0%</span>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="tab-nav">
+        <button class="tab-btn active" data-tab="prelab" onclick="showTab('prelab')">
+            <span class="tab-icon">📚</span> Pre-Lab
+        </button>
+        <button class="tab-btn" data-tab="materials" onclick="showTab('materials')">
+            <span class="tab-icon">🧪</span> Materials
+        </button>
+        <button class="tab-btn" data-tab="procedure" onclick="showTab('procedure')">
+            <span class="tab-icon">📋</span> Procedure
+        </button>
+        <button class="tab-btn" data-tab="data" onclick="showTab('data')">
+            <span class="tab-icon">📊</span> Data Collection
+        </button>
+        <button class="tab-btn" data-tab="analysis" onclick="showTab('analysis')">
+            <span class="tab-icon">📈</span> Analysis
+        </button>
+        <button class="tab-btn" data-tab="postlab" onclick="showTab('postlab')">
+            <span class="tab-icon">✍️</span> Post-Lab
+        </button>
+        <button class="tab-btn" data-tab="submit" onclick="showTab('submit')">
+            <span class="tab-icon">📥</span> Submit
+        </button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+        <!-- PRE-LAB TAB -->
+        <div class="tab-content active" id="prelab">
+            <h2 class="section-title">📚 Pre-Lab Reading & Questions</h2>
+
+            <div class="info-box">
+                <h3>Introduction to Colorimetry</h3>
+                <p>Colorimetry is the science of measuring and analyzing color. In this lab, you'll use a DIY colorimeter made from a cardboard box and your smartphone to study how light interacts with colored solutions. This technique is widely used in chemistry, biology, medicine, and environmental science.</p>
+            </div>
+
+            <h3 style="margin: 20px 0 15px; color: var(--primary);">Beer-Lambert Law</h3>
+            <p>The Beer-Lambert Law describes the relationship between absorbance and concentration:</p>
+
+            <div class="formula">
+                <strong>A = ε × l × c</strong>
+            </div>
+
+            <p>Where:</p>
+            <ul style="margin: 10px 0 10px 30px;">
+                <li><strong>A</strong> = Absorbance (no units)</li>
+                <li><strong>ε</strong> = Molar absorptivity (L/mol·cm)</li>
+                <li><strong>l</strong> = Path length (cm)</li>
+                <li><strong>c</strong> = Concentration (mol/L)</li>
+            </ul>
+
+            <div class="info-box">
+                <h4>🌈 Why Green Light for Purple Solutions?</h4>
+                <p>Grape juice appears purple because it <strong>absorbs green light</strong> and reflects red and blue light. To get the strongest absorbance reading, we measure the light that is most absorbed – which is green! This is why you'll use green paper as your light filter.</p>
+            </div>
+
+            <div class="warning-box">
+                <h4>📱 Understanding RGB Values</h4>
+                <p>Your smartphone app measures RGB (Red, Green, Blue) values from 0-255. We'll convert these to transmittance and absorbance:</p>
+                <div class="formula">
+                    Transmittance (T) = Sample RGB Value / Reference RGB Value<br>
+                    Absorbance (A) = -log₁₀(T)
+                </div>
+            </div>
+
+            <div class="safety-box">
+                <h4>⚠️ Safety Reminders</h4>
+                <ul style="margin-left: 20px;">
+                    <li>Grape juice can stain clothes – wear appropriate attire</li>
+                    <li>Clean up spills immediately</li>
+                    <li>Do not consume lab materials</li>
+                    <li>Wash hands after handling solutions</li>
+                </ul>
+            </div>
+
+            <h3 style="margin: 30px 0 15px; color: var(--grape);">Pre-Lab Questions</h3>
+
+            <div class="question-block">
+                <h4>
+                    <span class="question-number">1</span>
+                    According to Beer's Law, if you double the concentration of a solution, what happens to the absorbance?
+                    <span class="points-badge">4 pts</span>
+                </h4>
+                <textarea id="prelab-q1" placeholder="Type your answer here..." onchange="saveProgress(); updateProgress();"></textarea>
+            </div>
+
+            <div class="question-block">
+                <h4>
+                    <span class="question-number">2</span>
+                    Why do we use green light (green paper) to measure the absorbance of purple grape juice?
+                    <span class="points-badge">4 pts</span>
+                </h4>
+                <textarea id="prelab-q2" placeholder="Type your answer here..." onchange="saveProgress(); updateProgress();"></textarea>
+            </div>
+
+            <div class="question-block">
+                <h4>
+                    <span class="question-number">3</span>
+                    If a solution has 80% transmittance, calculate its absorbance. Show your work.
+                    <span class="points-badge">5 pts</span>
+                </h4>
+                <textarea id="prelab-q3" placeholder="Type your answer here..." onchange="saveProgress(); updateProgress();"></textarea>
+            </div>
+
+            <div class="question-block">
+                <h4>
+                    <span class="question-number">4</span>
+                    What is the purpose of creating a calibration curve in this experiment?
+                    <span class="points-badge">4 pts</span>
+                </h4>
+                <textarea id="prelab-q4" placeholder="Type your answer here..." onchange="saveProgress(); updateProgress();"></textarea>
+            </div>
+
+            <div class="question-block">
+                <h4>
+                    <span class="question-number">5</span>
+                    Why is it important to measure a blank (water) reference before measuring your samples?
+                    <span class="points-badge">3 pts</span>
+                </h4>
+                <textarea id="prelab-q5" placeholder="Type your answer here..." onchange="saveProgress(); updateProgress();"></textarea>
+            </div>
+
+            <div class="nav-buttons">
+                <div></div>
+                <button class="nav-btn next" onclick="showTab('materials')">Next: Materials →</button>
+            </div>
+        </div>
+
+        <!-- MATERIALS TAB -->
+        <div class="tab-content" id="materials">
+            <h2 class="section-title">🧪 Materials & Setup</h2>
+
+            <h3 style="margin-bottom: 15px;">Materials Checklist</h3>
+            <p>Check off each item as you gather your materials:</p>
+
+            <div class="materials-list">
+                <div class="material-item">
+                    <input type="checkbox" id="mat1" onchange="saveProgress(); updateProgress();">
+                    <span class="material-icon">📦</span>
+                    <span>DIY Colorimeter Box</span>
+                </div>
+                <div class="material-item">
+                    <input type="checkbox" id="mat2" onchange="saveProgress(); updateProgress();">
+                    <span class="material-icon">📱</span>
+                    <span>Smartphone with RGB app</span>
+                </div>
+                <div class="material-item">
+                    <input type="checkbox" id="mat3" onchange="saveProgress(); updateProgress();">
+                    <span class="material-icon">🍇</span>
+                    <span>100% Grape Juice</span>
+                </div>
+                <div class="material-item">
+                    <input type="checkbox" id="mat4" onchange="saveProgress(); updateProgress();">
+                    <span class="material-icon">💧</span>
+                    <span>Distilled Water</span>
+                </div>
+                <div class="material-item">
+                    <input type="checkbox" id="mat5" onchange="saveProgress(); updateProgress();">
+                    <span class="material-icon">🧪</span>
+                    <span>Cuvettes (6+)</span>
+                </div>
+                <div class="material-item">
+                    <input type="checkbox" id="mat6" onchange="saveProgress(); updateProgress();">
+                    <span class="material-icon">📏</span>
+                    <span>Graduated Cylinder (10 mL)</span>
+                </div>
+                <div class="material-item">
+                    <input type="checkbox" id="mat7" onchange="saveProgress(); updateProgress();">
+                    <span class="material-icon">💉</span>
+                    <span>Pipettes or Droppers</span>
+                </div>
+                <div class="material-item">
+                    <input type="checkbox" id="mat8" onchange="saveProgress(); updateProgress();">
+                    <span class="material-icon">🟢</span>
+                    <span>Green Colored Paper</span>
+                </div>
+                <div class="material-item">
+                    <input type="checkbox" id="mat9" onchange="saveProgress(); updateProgress();">
+                    <span class="material-icon">🔦</span>
+                    <span>LED Flashlight</span>
+                </div>
+                <div class="material-item">
+                    <input type="checkbox" id="mat10" onchange="saveProgress(); updateProgress();">
+                    <span class="material-icon">🏷️</span>
+                    <span>Labels/Marker</span>
+                </div>
+                <div class="material-item">
+                    <input type="checkbox" id="mat11" onchange="saveProgress(); updateProgress();">
+                    <span class="material-icon">🧻</span>
+                    <span>Paper Towels</span>
+                </div>
+                <div class="material-item">
+                    <input type="checkbox" id="mat12" onchange="saveProgress(); updateProgress();">
+                    <span class="material-icon">❓</span>
+                    <span>Unknown Solution</span>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h4>📱 Recommended Apps</h4>
+                <ul style="margin-left: 20px;">
+                    <li><strong>iOS:</strong> "Color Grab" or "ColorMeter"</li>
+                    <li><strong>Android:</strong> "Color Grab" or "RGB Color Detector"</li>
+                </ul>
+                <p style="margin-top: 10px;">Make sure your app can display numerical RGB values (0-255).</p>
+            </div>
+
+            <h3 style="margin: 25px 0 15px;">Colorimeter Box Assembly</h3>
+            <div class="procedure-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <p>Fold the cardboard template along all scored lines to form a box shape.</p>
+                </div>
+            </div>
+            <div class="procedure-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <p>Place the green paper over the light source opening to act as a color filter.</p>
+                </div>
+            </div>
+            <div class="procedure-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <p>Position your smartphone camera at the designated viewing port.</p>
+                </div>
+            </div>
+            <div class="procedure-step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <p>Ensure the cuvette holder is centered between the light source and camera.</p>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="showTab('prelab')">← Back: Pre-Lab</button>
+                <button class="nav-btn next" onclick="showTab('procedure')">Next: Procedure →</button>
+            </div>
+        </div>
+
+        <!-- PROCEDURE TAB -->
+        <div class="tab-content" id="procedure">
+            <h2 class="section-title">📋 Experimental Procedure</h2>
+
+            <h3 style="margin-bottom: 15px;">Part A: Preparing Standard Solutions</h3>
+            <p>You will prepare 5 standard solutions by diluting 100% grape juice with water.</p>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Solution</th>
+                        <th>% Grape Juice</th>
+                        <th>Volume Grape Juice (mL)</th>
+                        <th>Volume Water (mL)</th>
+                        <th>Total Volume (mL)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Blank</td>
+                        <td>0%</td>
+                        <td>0.0</td>
+                        <td>10.0</td>
+                        <td>10.0</td>
+                    </tr>
+                    <tr>
+                        <td>Standard 1</td>
+                        <td>20%</td>
+                        <td>2.0</td>
+                        <td>8.0</td>
+                        <td>10.0</td>
+                    </tr>
+                    <tr>
+                        <td>Standard 2</td>
+                        <td>40%</td>
+                        <td>4.0</td>
+                        <td>6.0</td>
+                        <td>10.0</td>
+                    </tr>
+                    <tr>
+                        <td>Standard 3</td>
+                        <td>60%</td>
+                        <td>6.0</td>
+                        <td>4.0</td>
+                        <td>10.0</td>
+                    </tr>
+                    <tr>
+                        <td>Standard 4</td>
+                        <td>80%</td>
+                        <td>8.0</td>
+                        <td>2.0</td>
+                        <td>10.0</td>
+                    </tr>
+                    <tr>
+                        <td>Standard 5</td>
+                        <td>100%</td>
+                        <td>10.0</td>
+                        <td>0.0</td>
+                        <td>10.0</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin: 25px 0 15px;">Part B: Taking Measurements</h3>
+
+            <div class="procedure-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <p><strong>Set up your colorimeter:</strong> Position the LED flashlight behind the green paper filter. Open your RGB app and position your phone camera at the viewing port.</p>
+                    <div class="step-checkbox">
+                        <input type="checkbox" id="step1" onchange="saveProgress(); updateProgress();">
+                        <label for="step1">Completed</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="procedure-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <p><strong>Measure the blank:</strong> Fill a clean cuvette with distilled water (blank). Place it in the colorimeter and record the Green RGB value. This is your reference (I₀).</p>
+                    <div class="step-checkbox">
+                        <input type="checkbox" id="step2" onchange="saveProgress(); updateProgress();">
+                        <label for="step2">Completed</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="procedure-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <p><strong>Measure standards:</strong> For each standard solution (20% through 100%), rinse the cuvette, fill with solution, place in colorimeter, and record the Green RGB value.</p>
+                    <div class="step-checkbox">
+                        <input type="checkbox" id="step3" onchange="saveProgress(); updateProgress();">
+                        <label for="step3">Completed</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="procedure-step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <p><strong>Take replicate measurements:</strong> Repeat each measurement 2-3 times and record all values. You'll calculate averages in the data section.</p>
+                    <div class="step-checkbox">
+                        <input type="checkbox" id="step4" onchange="saveProgress(); updateProgress();">
+                        <label for="step4">Completed</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="procedure-step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <p><strong>Measure the unknown:</strong> Obtain an unknown solution from your instructor. Measure its Green RGB value using the same procedure.</p>
+                    <div class="step-checkbox">
+                        <input type="checkbox" id="step5" onchange="saveProgress(); updateProgress();">
+                        <label for="step5">Completed</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <h4>💡 Tips for Best Results</h4>
+                <ul style="margin-left: 20px;">
+                    <li>Keep the flashlight at the same brightness for all measurements</li>
+                    <li>Wipe the outside of cuvettes to remove fingerprints</li>
+                    <li>Always orient the cuvette the same way</li>
+                    <li>Ensure the box is completely closed during measurements</li>
+                </ul>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="showTab('materials')">← Back: Materials</button>
+                <button class="nav-btn next" onclick="showTab('data')">Next: Data Collection →</button>
+            </div>
+        </div>
+
+        <!-- DATA COLLECTION TAB -->
+        <div class="tab-content" id="data">
+            <h2 class="section-title">📊 Data Collection</h2>
+
+            <div class="info-box">
+                <p><strong>Instructions:</strong> Enter your measured Green RGB values in the table below. The transmittance and absorbance will be calculated automatically once you enter the blank reference value.</p>
+            </div>
+
+            <h3 style="margin: 20px 0 15px;">Reference Measurement (Blank)</h3>
+            <div class="calc-box">
+                <div class="calc-row">
+                    <label><strong>Blank (Water) Green RGB Value (I₀):</strong></label>
+                    <input type="number" id="blankRGB" placeholder="e.g., 180" oninput="calculateAll(); saveProgress();">
+                </div>
+            </div>
+
+            <h3 style="margin: 20px 0 15px;">Standard Solutions Data</h3>
+            <table class="data-table" id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Solution</th>
+                        <th>% Concentration</th>
+                        <th>Green RGB Trial 1</th>
+                        <th>Green RGB Trial 2</th>
+                        <th>Green RGB Trial 3</th>
+                        <th>Average RGB</th>
+                        <th>Transmittance (T)</th>
+                        <th>Absorbance (A)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Standard 1</td>
+                        <td>20%</td>
+                        <td><input type="number" id="s1t1" oninput="calculateAll(); saveProgress();"></td>
+                        <td><input type="number" id="s1t2" oninput="calculateAll(); saveProgress();"></td>
+                        <td><input type="number" id="s1t3" oninput="calculateAll(); saveProgress();"></td>
+                        <td><span id="s1avg" class="calculated">-</span></td>
+                        <td><span id="s1t" class="calculated">-</span></td>
+                        <td><span id="s1a" class="calculated">-</span></td>
+                    </tr>
+                    <tr>
+                        <td>Standard 2</td>
+                        <td>40%</td>
+                        <td><input type="number" id="s2t1" oninput="calculateAll(); saveProgress();"></td>
+                        <td><input type="number" id="s2t2" oninput="calculateAll(); saveProgress();"></td>
+                        <td><input type="number" id="s2t3" oninput="calculateAll(); saveProgress();"></td>
+                        <td><span id="s2avg" class="calculated">-</span></td>
+                        <td><span id="s2t" class="calculated">-</span></td>
+                        <td><span id="s2a" class="calculated">-</span></td>
+                    </tr>
+                    <tr>
+                        <td>Standard 3</td>
+                        <td>60%</td>
+                        <td><input type="number" id="s3t1" oninput="calculateAll(); saveProgress();"></td>
+                        <td><input type="number" id="s3t2" oninput="calculateAll(); saveProgress();"></td>
+                        <td><input type="number" id="s3t3" oninput="calculateAll(); saveProgress();"></td>
+                        <td><span id="s3avg" class="calculated">-</span></td>
+                        <td><span id="s3t" class="calculated">-</span></td>
+                        <td><span id="s3a" class="calculated">-</span></td>
+                    </tr>
+                    <tr>
+                        <td>Standard 4</td>
+                        <td>80%</td>
+                        <td><input type="number" id="s4t1" oninput="calculateAll(); saveProgress();"></td>
+                        <td><input type="number" id="s4t2" oninput="calculateAll(); saveProgress();"></td>
+                        <td><input type="number" id="s4t3" oninput="calculateAll(); saveProgress();"></td>
+                        <td><span id="s4avg" class="calculated">-</span></td>
+                        <td><span id="s4t" class="calculated">-</span></td>
+                        <td><span id="s4a" class="calculated">-</span></td>
+                    </tr>
+                    <tr>
+                        <td>Standard 5</td>
+                        <td>100%</td>
+                        <td><input type="number" id="s5t1" oninput="calculateAll(); saveProgress();"></td>
+                        <td><input type="number" id="s5t2" oninput="calculateAll(); saveProgress();"></td>
+                        <td><input type="number" id="s5t3" oninput="calculateAll(); saveProgress();"></td>
+                        <td><span id="s5avg" class="calculated">-</span></td>
+                        <td><span id="s5t" class="calculated">-</span></td>
+                        <td><span id="s5a" class="calculated">-</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin: 25px 0 15px;">Unknown Solution Data</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Solution</th>
+                        <th>Unknown ID</th>
+                        <th>Green RGB Trial 1</th>
+                        <th>Green RGB Trial 2</th>
+                        <th>Green RGB Trial 3</th>
+                        <th>Average RGB</th>
+                        <th>Transmittance (T)</th>
+                        <th>Absorbance (A)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Unknown</td>
+                        <td><input type="text" id="unknownID" style="width: 60px;" placeholder="A, B..." oninput="saveProgress();"></td>
+                        <td><input type="number" id="ut1" oninput="calculateAll(); saveProgress();"></td>
+                        <td><input type="number" id="ut2" oninput="calculateAll(); saveProgress();"></td>
+                        <td><input type="number" id="ut3" oninput="calculateAll(); saveProgress();"></td>
+                        <td><span id="uavg" class="calculated">-</span></td>
+                        <td><span id="ut" class="calculated">-</span></td>
+                        <td><span id="ua" class="calculated">-</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="showTab('procedure')">← Back: Procedure</button>
+                <button class="nav-btn next" onclick="showTab('analysis')">Next: Analysis →</button>
+            </div>
+        </div>
+
+        <!-- ANALYSIS TAB -->
+        <div class="tab-content" id="analysis">
+            <h2 class="section-title">📈 Data Analysis</h2>
+
+            <div class="graph-container">
+                <h3>Calibration Curve: Absorbance vs. Concentration</h3>
+                <canvas id="calibrationChart"></canvas>
+                <div class="equation-display" id="equationDisplay">
+                    <p>Enter your data to generate the calibration curve</p>
+                </div>
+            </div>
+
+            <h3 style="margin: 25px 0 15px;">Determining Unknown Concentration</h3>
+
+            <div class="calc-box">
+                <h4>📐 Using Your Calibration Curve</h4>
+                <p style="margin: 10px 0;">Use the equation of your line (y = mx + b) to calculate the unknown concentration.</p>
+                <p style="margin: 10px 0;"><strong>Your line equation:</strong> A = <span id="slopeDisplay">m</span> × C + <span id="interceptDisplay">b</span></p>
+
+                <div class="calc-row" style="margin-top: 15px;">
+                    <label>Unknown Absorbance (A):</label>
+                    <input type="number" id="unknownAbsorbance" step="0.001" readonly>
+                </div>
+
+                <div class="calc-row">
+                    <label>Solve for C:</label>
+                    <span>C = (A - b) / m = (<span id="calcA">A</span> - <span id="calcB">b</span>) / <span id="calcM">m</span></span>
+                </div>
+            </div>
+
+            <div class="unknown-result" id="unknownResult" style="display: none;">
+                <h3>Unknown Concentration Result</h3>
+                <div class="result-value" id="resultValue">--%</div>
+                <p id="resultInterpretation"></p>
+            </div>
+
+            <h3 style="margin: 25px 0 15px;">Sample Calculations</h3>
+
+            <div class="question-block">
+                <h4>
+                    <span class="question-number">1</span>
+                    Show your calculation for the transmittance of Standard 3 (60%):
+                    <span class="points-badge">5 pts</span>
+                </h4>
+                <p style="margin: 10px 0; font-style: italic;">Formula: T = Sample RGB / Blank RGB</p>
+                <textarea id="calc-q1" placeholder="Show your work here..." onchange="saveProgress(); updateProgress();"></textarea>
+            </div>
+
+            <div class="question-block">
+                <h4>
+                    <span class="question-number">2</span>
+                    Show your calculation for the absorbance of Standard 3:
+                    <span class="points-badge">5 pts</span>
+                </h4>
+                <p style="margin: 10px 0; font-style: italic;">Formula: A = -log₁₀(T)</p>
+                <textarea id="calc-q2" placeholder="Show your work here..." onchange="saveProgress(); updateProgress();"></textarea>
+            </div>
+
+            <div class="question-block">
+                <h4>
+                    <span class="question-number">3</span>
+                    Show how you used the calibration curve equation to determine the unknown concentration:
+                    <span class="points-badge">6 pts</span>
+                </h4>
+                <textarea id="calc-q3" placeholder="Show your complete calculation here..." onchange="saveProgress(); updateProgress();"></textarea>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="showTab('data')">← Back: Data</button>
+                <button class="nav-btn next" onclick="showTab('postlab')">Next: Post-Lab →</button>
+            </div>
+        </div>
+
+        <!-- POST-LAB TAB -->
+        <div class="tab-content" id="postlab">
+            <h2 class="section-title">✍️ Post-Lab Questions</h2>
+
+            <div class="question-block">
+                <h4>
+                    <span class="question-number">1</span>
+                    Did your calibration curve show a linear relationship between absorbance and concentration? What was your R² value, and what does it indicate about the quality of your data?
+                    <span class="points-badge">6 pts</span>
+                </h4>
+                <textarea id="postlab-q1" placeholder="Type your answer here..." onchange="saveProgress(); updateProgress();"></textarea>
+            </div>
+
+            <div class="question-block">
+                <h4>
+                    <span class="question-number">2</span>
+                    A classmate suggests using red paper instead of green paper for measuring grape juice. Would this be a good choice? Explain why or why not.
+                    <span class="points-badge">6 pts</span>
+                </h4>
+                <textarea id="postlab-q2" placeholder="Type your answer here..." onchange="saveProgress(); updateProgress();"></textarea>
+            </div>
+
+            <div class="question-block">
+                <h4>
+                    <span class="question-number">3</span>
+                    List three possible sources of experimental error in this lab and explain how each could affect your results.
+                    <span class="points-badge">9 pts</span>
+                </h4>
+                <textarea id="postlab-q3" placeholder="Type your answer here..." onchange="saveProgress(); updateProgress();"></textarea>
+            </div>
+
+            <div class="question-block">
+                <h4>
+                    <span class="question-number">4</span>
+                    If you were measuring orange juice instead of grape juice, what color paper would you use as a filter? Explain your reasoning.
+                    <span class="points-badge">5 pts</span>
+                </h4>
+                <textarea id="postlab-q4" placeholder="Type your answer here..." onchange="saveProgress(); updateProgress();"></textarea>
+            </div>
+
+            <div class="question-block">
+                <h4>
+                    <span class="question-number">5</span>
+                    How could this smartphone colorimetry technique be applied in a real-world setting? Describe one practical application.
+                    <span class="points-badge">6 pts</span>
+                </h4>
+                <textarea id="postlab-q5" placeholder="Type your answer here..." onchange="saveProgress(); updateProgress();"></textarea>
+            </div>
+
+            <div class="question-block">
+                <h4>
+                    <span class="question-number">6</span>
+                    Compare your determined unknown concentration to the actual value provided by your instructor. Calculate your percent error and discuss possible reasons for any discrepancy.
+                    <span class="points-badge">8 pts</span>
+                </h4>
+                <div class="calc-row" style="margin: 10px 0;">
+                    <label>Actual concentration (from instructor):</label>
+                    <input type="number" id="actualConc" style="width: 80px;" oninput="calcPercentError(); saveProgress();">
+                    <span>%</span>
+                </div>
+                <div class="calc-row" style="margin: 10px 0;">
+                    <label>Your calculated percent error:</label>
+                    <span id="percentError">--%</span>
+                </div>
+                <textarea id="postlab-q6" placeholder="Discuss possible reasons for any discrepancy..." onchange="saveProgress(); updateProgress();"></textarea>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="showTab('analysis')">← Back: Analysis</button>
+                <button class="nav-btn next" onclick="showTab('submit')">Next: Submit →</button>
+            </div>
+        </div>
+
+        <!-- SUBMIT TAB -->
+        <div class="tab-content" id="submit">
+            <h2 class="section-title">📥 Review & Submit</h2>
+
+            <div class="info-box">
+                <h3>Submission Checklist</h3>
+                <p>Before downloading your completed lab, please verify:</p>
+            </div>
+
+            <div class="question-block" id="checklistBox">
+                <div style="margin: 10px 0;">
+                    <input type="checkbox" id="check1">
+                    <label for="check1">Student information is complete (name, partner, date, section)</label>
+                </div>
+                <div style="margin: 10px 0;">
+                    <input type="checkbox" id="check2">
+                    <label for="check2">All 5 pre-lab questions are answered</label>
+                </div>
+                <div style="margin: 10px 0;">
+                    <input type="checkbox" id="check3">
+                    <label for="check3">All data has been entered in the data table</label>
+                </div>
+                <div style="margin: 10px 0;">
+                    <input type="checkbox" id="check4">
+                    <label for="check4">Calibration curve has been generated</label>
+                </div>
+                <div style="margin: 10px 0;">
+                    <input type="checkbox" id="check5">
+                    <label for="check5">Sample calculations are shown</label>
+                </div>
+                <div style="margin: 10px 0;">
+                    <input type="checkbox" id="check6">
+                    <label for="check6">All 6 post-lab questions are answered</label>
+                </div>
+                <div style="margin: 10px 0;">
+                    <input type="checkbox" id="check7">
+                    <label for="check7">Unknown concentration has been calculated</label>
+                </div>
+            </div>
+
+            <div class="download-section">
+                <h3>📄 Download Your Completed Lab</h3>
+                <p style="margin-bottom: 20px;">Your completed lab will be saved as a PDF file that you can upload to Canvas.</p>
+                <button class="download-btn" onclick="downloadPDF()">
+                    📥 Download as PDF
+                </button>
+                <button class="download-btn" onclick="printLab()">
+                    🖨️ Print Lab
+                </button>
+            </div>
+
+            <div class="warning-box">
+                <h4>💾 Auto-Save Feature</h4>
+                <p>Your progress is automatically saved in your browser. If you close this page and return later (on the same device and browser), your work will be restored. However, we recommend downloading a PDF backup before closing.</p>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="nav-btn" style="background: #e74c3c;" onclick="clearAllData()">
+                    🗑️ Clear All Data & Start Over
+                </button>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="showTab('postlab')">← Back: Post-Lab</button>
+                <div></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Auto-save indicator -->
+    <div class="autosave-indicator" id="autosaveIndicator">
+        ✓ Progress saved
+    </div>
+
+    <script>
+        // ============== TAB NAVIGATION ==============
+        function showTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+
+            // Update chart if on analysis tab
+            if (tabId === 'analysis') {
+                updateChart();
+            }
+
+            saveProgress();
+        }
+
+        // ============== CALCULATIONS ==============
+        let chartInstance = null;
+        let calibrationData = { concentrations: [], absorbances: [] };
+        let regressionResult = { slope: 0, intercept: 0, r2: 0 };
+
+        function calculateAll() {
+            const blank = parseFloat(document.getElementById('blankRGB').value) || 0;
+
+            if (blank <= 0) return;
+
+            calibrationData = { concentrations: [20, 40, 60, 80, 100], absorbances: [] };
+
+            // Calculate for each standard
+            for (let i = 1; i <= 5; i++) {
+                const t1 = parseFloat(document.getElementById(`s${i}t1`).value) || 0;
+                const t2 = parseFloat(document.getElementById(`s${i}t2`).value) || 0;
+                const t3 = parseFloat(document.getElementById(`s${i}t3`).value) || 0;
+
+                const count = (t1 > 0 ? 1 : 0) + (t2 > 0 ? 1 : 0) + (t3 > 0 ? 1 : 0);
+                const sum = t1 + t2 + t3;
+
+                if (count > 0) {
+                    const avg = sum / count;
+                    const transmittance = avg / blank;
+                    const absorbance = transmittance > 0 ? -Math.log10(transmittance) : 0;
+
+                    document.getElementById(`s${i}avg`).textContent = avg.toFixed(1);
+                    document.getElementById(`s${i}t`).textContent = transmittance.toFixed(4);
+                    document.getElementById(`s${i}a`).textContent = absorbance.toFixed(4);
+
+                    calibrationData.absorbances.push(absorbance);
+                } else {
+                    document.getElementById(`s${i}avg`).textContent = '-';
+                    document.getElementById(`s${i}t`).textContent = '-';
+                    document.getElementById(`s${i}a`).textContent = '-';
+                    calibrationData.absorbances.push(null);
+                }
+            }
+
+            // Calculate unknown
+            const ut1 = parseFloat(document.getElementById('ut1').value) || 0;
+            const ut2 = parseFloat(document.getElementById('ut2').value) || 0;
+            const ut3 = parseFloat(document.getElementById('ut3').value) || 0;
+
+            const uCount = (ut1 > 0 ? 1 : 0) + (ut2 > 0 ? 1 : 0) + (ut3 > 0 ? 1 : 0);
+            const uSum = ut1 + ut2 + ut3;
+
+            if (uCount > 0) {
+                const uAvg = uSum / uCount;
+                const uTransmittance = uAvg / blank;
+                const uAbsorbance = uTransmittance > 0 ? -Math.log10(uTransmittance) : 0;
+
+                document.getElementById('uavg').textContent = uAvg.toFixed(1);
+                document.getElementById('ut').textContent = uTransmittance.toFixed(4);
+                document.getElementById('ua').textContent = uAbsorbance.toFixed(4);
+                document.getElementById('unknownAbsorbance').value = uAbsorbance.toFixed(4);
+            } else {
+                document.getElementById('uavg').textContent = '-';
+                document.getElementById('ut').textContent = '-';
+                document.getElementById('ua').textContent = '-';
+            }
+
+            // Perform linear regression and update chart
+            performRegression();
+            updateChart();
+            calculateUnknownConcentration();
+            updateProgress();
+        }
+
+        function performRegression() {
+            // Filter out null values
+            const validData = [];
+            for (let i = 0; i < calibrationData.concentrations.length; i++) {
+                if (calibrationData.absorbances[i] !== null) {
+                    validData.push({
+                        x: calibrationData.concentrations[i],
+                        y: calibrationData.absorbances[i]
+                    });
+                }
+            }
+
+            if (validData.length < 2) {
+                regressionResult = { slope: 0, intercept: 0, r2: 0 };
+                return;
+            }
+
+            // Calculate means
+            const n = validData.length;
+            const sumX = validData.reduce((a, b) => a + b.x, 0);
+            const sumY = validData.reduce((a, b) => a + b.y, 0);
+            const meanX = sumX / n;
+            const meanY = sumY / n;
+
+            // Calculate slope and intercept
+            let numerator = 0;
+            let denominator = 0;
+            for (const point of validData) {
+                numerator += (point.x - meanX) * (point.y - meanY);
+                denominator += (point.x - meanX) ** 2;
+            }
+
+            const slope = numerator / denominator;
+            const intercept = meanY - slope * meanX;
+
+            // Calculate R²
+            let ssRes = 0;
+            let ssTot = 0;
+            for (const point of validData) {
+                const predicted = slope * point.x + intercept;
+                ssRes += (point.y - predicted) ** 2;
+                ssTot += (point.y - meanY) ** 2;
+            }
+            const r2 = 1 - (ssRes / ssTot);
+
+            regressionResult = { slope, intercept, r2 };
+
+            // Update displays
+            document.getElementById('slopeDisplay').textContent = slope.toFixed(6);
+            document.getElementById('interceptDisplay').textContent = intercept.toFixed(4);
+            document.getElementById('calcM').textContent = slope.toFixed(6);
+            document.getElementById('calcB').textContent = intercept.toFixed(4);
+        }
+
+        function calculateUnknownConcentration() {
+            const unknownA = parseFloat(document.getElementById('unknownAbsorbance').value);
+
+            if (isNaN(unknownA) || regressionResult.slope === 0) {
+                document.getElementById('unknownResult').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('calcA').textContent = unknownA.toFixed(4);
+
+            const concentration = (unknownA - regressionResult.intercept) / regressionResult.slope;
+
+            document.getElementById('unknownResult').style.display = 'block';
+            document.getElementById('resultValue').textContent = concentration.toFixed(1) + '%';
+
+            if (concentration >= 0 && concentration <= 100) {
+                document.getElementById('resultInterpretation').textContent =
+                    `The unknown solution is approximately ${concentration.toFixed(1)}% grape juice.`;
+            } else {
+                document.getElementById('resultInterpretation').textContent =
+                    'Note: Result is outside the calibration range. Check your data and calculations.';
+            }
+        }
+
+        function calcPercentError() {
+            const actual = parseFloat(document.getElementById('actualConc').value);
+            const unknownA = parseFloat(document.getElementById('unknownAbsorbance').value);
+
+            if (isNaN(actual) || isNaN(unknownA) || regressionResult.slope === 0) {
+                document.getElementById('percentError').textContent = '--%';
+                return;
+            }
+
+            const calculated = (unknownA - regressionResult.intercept) / regressionResult.slope;
+            const percentError = Math.abs((calculated - actual) / actual * 100);
+
+            document.getElementById('percentError').textContent = percentError.toFixed(2) + '%';
+        }
+
+        // ============== CHART ==============
+        function updateChart() {
+            const ctx = document.getElementById('calibrationChart').getContext('2d');
+
+            // Prepare data points
+            const dataPoints = [];
+            for (let i = 0; i < calibrationData.concentrations.length; i++) {
+                if (calibrationData.absorbances[i] !== null) {
+                    dataPoints.push({
+                        x: calibrationData.concentrations[i],
+                        y: calibrationData.absorbances[i]
+                    });
+                }
+            }
+
+            // Prepare regression line
+            const regressionLine = [];
+            if (regressionResult.slope !== 0) {
+                regressionLine.push({
+                    x: 0,
+                    y: regressionResult.intercept
+                });
+                regressionLine.push({
+                    x: 100,
+                    y: regressionResult.slope * 100 + regressionResult.intercept
+                });
+            }
+
+            // Unknown point
+            const unknownA = parseFloat(document.getElementById('unknownAbsorbance').value);
+            const unknownConc = regressionResult.slope !== 0 ?
+                (unknownA - regressionResult.intercept) / regressionResult.slope : null;
+            const unknownPoint = (unknownConc !== null && !isNaN(unknownA)) ?
+                [{ x: unknownConc, y: unknownA }] : [];
+
+            // Destroy existing chart
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            // Create new chart
+            chartInstance = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [
+                        {
+                            label: 'Standards',
+                            data: dataPoints,
+                            backgroundColor: '#6b2d5c',
+                            borderColor: '#6b2d5c',
+                            pointRadius: 8,
+                            pointHoverRadius: 10
+                        },
+                        {
+                            label: 'Best Fit Line',
+                            data: regressionLine,
+                            type: 'line',
+                            borderColor: '#3498db',
+                            borderWidth: 2,
+                            fill: false,
+                            pointRadius: 0,
+                            tension: 0
+                        },
+                        {
+                            label: 'Unknown',
+                            data: unknownPoint,
+                            backgroundColor: '#e74c3c',
+                            borderColor: '#e74c3c',
+                            pointRadius: 10,
+                            pointStyle: 'triangle',
+                            pointHoverRadius: 12
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        title: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Concentration (%)',
+                                font: { size: 14, weight: 'bold' }
+                            },
+                            min: 0,
+                            max: 110
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Absorbance',
+                                font: { size: 14, weight: 'bold' }
+                            },
+                            min: 0
+                        }
+                    }
+                }
+            });
+
+            // Update equation display
+            if (dataPoints.length >= 2) {
+                document.getElementById('equationDisplay').innerHTML = `
+                    <p class="equation">y = ${regressionResult.slope.toFixed(6)}x + ${regressionResult.intercept.toFixed(4)}</p>
+                    <p class="r-squared">R² = ${regressionResult.r2.toFixed(4)}</p>
+                `;
+            }
+        }
+
+        // ============== PROGRESS TRACKING ==============
+        function updateProgress() {
+            let total = 0;
+            let completed = 0;
+
+            // Check student info
+            const studentFields = ['studentName', 'labPartner', 'labDate', 'labSection'];
+            total += studentFields.length;
+            studentFields.forEach(id => {
+                if (document.getElementById(id).value.trim()) completed++;
+            });
+
+            // Check pre-lab questions
+            for (let i = 1; i <= 5; i++) {
+                total++;
+                if (document.getElementById(`prelab-q${i}`).value.trim()) completed++;
+            }
+
+            // Check materials
+            for (let i = 1; i <= 12; i++) {
+                total++;
+                if (document.getElementById(`mat${i}`).checked) completed++;
+            }
+
+            // Check procedure steps
+            for (let i = 1; i <= 5; i++) {
+                total++;
+                if (document.getElementById(`step${i}`).checked) completed++;
+            }
+
+            // Check data entry
+            total += 16; // Blank + 15 standard inputs
+            if (document.getElementById('blankRGB').value) completed++;
+            for (let i = 1; i <= 5; i++) {
+                for (let j = 1; j <= 3; j++) {
+                    if (document.getElementById(`s${i}t${j}`).value) completed++;
+                }
+            }
+
+            // Check unknown data
+            total += 4;
+            if (document.getElementById('unknownID').value) completed++;
+            for (let i = 1; i <= 3; i++) {
+                if (document.getElementById(`ut${i}`).value) completed++;
+            }
+
+            // Check calculations
+            for (let i = 1; i <= 3; i++) {
+                total++;
+                if (document.getElementById(`calc-q${i}`).value.trim()) completed++;
+            }
+
+            // Check post-lab questions
+            for (let i = 1; i <= 6; i++) {
+                total++;
+                if (document.getElementById(`postlab-q${i}`).value.trim()) completed++;
+            }
+
+            const percentage = Math.round((completed / total) * 100);
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = percentage + '%';
+
+            // Update tab completion indicators
+            updateTabCompletion();
+        }
+
+        function updateTabCompletion() {
+            // Pre-lab tab
+            let prelabComplete = true;
+            for (let i = 1; i <= 5; i++) {
+                if (!document.getElementById(`prelab-q${i}`).value.trim()) prelabComplete = false;
+            }
+            document.querySelector('[data-tab="prelab"]').classList.toggle('completed', prelabComplete);
+
+            // Materials tab
+            let matsComplete = true;
+            for (let i = 1; i <= 12; i++) {
+                if (!document.getElementById(`mat${i}`).checked) matsComplete = false;
+            }
+            document.querySelector('[data-tab="materials"]').classList.toggle('completed', matsComplete);
+
+            // Procedure tab
+            let procComplete = true;
+            for (let i = 1; i <= 5; i++) {
+                if (!document.getElementById(`step${i}`).checked) procComplete = false;
+            }
+            document.querySelector('[data-tab="procedure"]').classList.toggle('completed', procComplete);
+
+            // Data tab
+            let dataComplete = document.getElementById('blankRGB').value &&
+                              document.getElementById('s1t1').value &&
+                              document.getElementById('s5t3').value &&
+                              document.getElementById('ut1').value;
+            document.querySelector('[data-tab="data"]').classList.toggle('completed', dataComplete);
+
+            // Analysis tab
+            let analysisComplete = true;
+            for (let i = 1; i <= 3; i++) {
+                if (!document.getElementById(`calc-q${i}`).value.trim()) analysisComplete = false;
+            }
+            document.querySelector('[data-tab="analysis"]').classList.toggle('completed', analysisComplete);
+
+            // Post-lab tab
+            let postlabComplete = true;
+            for (let i = 1; i <= 6; i++) {
+                if (!document.getElementById(`postlab-q${i}`).value.trim()) postlabComplete = false;
+            }
+            document.querySelector('[data-tab="postlab"]').classList.toggle('completed', postlabComplete);
+        }
+
+        // ============== LOCAL STORAGE ==============
+        function saveProgress() {
+            const data = {
+                // Student info
+                studentName: document.getElementById('studentName').value,
+                labPartner: document.getElementById('labPartner').value,
+                labDate: document.getElementById('labDate').value,
+                labSection: document.getElementById('labSection').value,
+
+                // Pre-lab
+                prelabQ1: document.getElementById('prelab-q1').value,
+                prelabQ2: document.getElementById('prelab-q2').value,
+                prelabQ3: document.getElementById('prelab-q3').value,
+                prelabQ4: document.getElementById('prelab-q4').value,
+                prelabQ5: document.getElementById('prelab-q5').value,
+
+                // Materials checkboxes
+                materials: [],
+
+                // Procedure checkboxes
+                steps: [],
+
+                // Data
+                blankRGB: document.getElementById('blankRGB').value,
+                standardData: {},
+                unknownID: document.getElementById('unknownID').value,
+                unknownData: {},
+
+                // Calculations
+                calcQ1: document.getElementById('calc-q1').value,
+                calcQ2: document.getElementById('calc-q2').value,
+                calcQ3: document.getElementById('calc-q3').value,
+
+                // Post-lab
+                postlabQ1: document.getElementById('postlab-q1').value,
+                postlabQ2: document.getElementById('postlab-q2').value,
+                postlabQ3: document.getElementById('postlab-q3').value,
+                postlabQ4: document.getElementById('postlab-q4').value,
+                postlabQ5: document.getElementById('postlab-q5').value,
+                postlabQ6: document.getElementById('postlab-q6').value,
+                actualConc: document.getElementById('actualConc').value
+            };
+
+            // Materials
+            for (let i = 1; i <= 12; i++) {
+                data.materials.push(document.getElementById(`mat${i}`).checked);
+            }
+
+            // Steps
+            for (let i = 1; i <= 5; i++) {
+                data.steps.push(document.getElementById(`step${i}`).checked);
+            }
+
+            // Standard data
+            for (let i = 1; i <= 5; i++) {
+                data.standardData[`s${i}`] = {
+                    t1: document.getElementById(`s${i}t1`).value,
+                    t2: document.getElementById(`s${i}t2`).value,
+                    t3: document.getElementById(`s${i}t3`).value
+                };
+            }
+
+            // Unknown data
+            data.unknownData = {
+                t1: document.getElementById('ut1').value,
+                t2: document.getElementById('ut2').value,
+                t3: document.getElementById('ut3').value
+            };
+
+            localStorage.setItem('colorimetryLabData', JSON.stringify(data));
+
+            // Show save indicator
+            const indicator = document.getElementById('autosaveIndicator');
+            indicator.classList.add('show');
+            setTimeout(() => indicator.classList.remove('show'), 2000);
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('colorimetryLabData');
+            if (!saved) return;
+
+            const data = JSON.parse(saved);
+
+            // Student info
+            document.getElementById('studentName').value = data.studentName || '';
+            document.getElementById('labPartner').value = data.labPartner || '';
+            document.getElementById('labDate').value = data.labDate || '';
+            document.getElementById('labSection').value = data.labSection || '';
+
+            // Pre-lab
+            document.getElementById('prelab-q1').value = data.prelabQ1 || '';
+            document.getElementById('prelab-q2').value = data.prelabQ2 || '';
+            document.getElementById('prelab-q3').value = data.prelabQ3 || '';
+            document.getElementById('prelab-q4').value = data.prelabQ4 || '';
+            document.getElementById('prelab-q5').value = data.prelabQ5 || '';
+
+            // Materials
+            if (data.materials) {
+                for (let i = 0; i < data.materials.length; i++) {
+                    document.getElementById(`mat${i + 1}`).checked = data.materials[i];
+                }
+            }
+
+            // Steps
+            if (data.steps) {
+                for (let i = 0; i < data.steps.length; i++) {
+                    document.getElementById(`step${i + 1}`).checked = data.steps[i];
+                }
+            }
+
+            // Data
+            document.getElementById('blankRGB').value = data.blankRGB || '';
+            document.getElementById('unknownID').value = data.unknownID || '';
+
+            if (data.standardData) {
+                for (let i = 1; i <= 5; i++) {
+                    const s = data.standardData[`s${i}`];
+                    if (s) {
+                        document.getElementById(`s${i}t1`).value = s.t1 || '';
+                        document.getElementById(`s${i}t2`).value = s.t2 || '';
+                        document.getElementById(`s${i}t3`).value = s.t3 || '';
+                    }
+                }
+            }
+
+            if (data.unknownData) {
+                document.getElementById('ut1').value = data.unknownData.t1 || '';
+                document.getElementById('ut2').value = data.unknownData.t2 || '';
+                document.getElementById('ut3').value = data.unknownData.t3 || '';
+            }
+
+            // Calculations
+            document.getElementById('calc-q1').value = data.calcQ1 || '';
+            document.getElementById('calc-q2').value = data.calcQ2 || '';
+            document.getElementById('calc-q3').value = data.calcQ3 || '';
+
+            // Post-lab
+            document.getElementById('postlab-q1').value = data.postlabQ1 || '';
+            document.getElementById('postlab-q2').value = data.postlabQ2 || '';
+            document.getElementById('postlab-q3').value = data.postlabQ3 || '';
+            document.getElementById('postlab-q4').value = data.postlabQ4 || '';
+            document.getElementById('postlab-q5').value = data.postlabQ5 || '';
+            document.getElementById('postlab-q6').value = data.postlabQ6 || '';
+            document.getElementById('actualConc').value = data.actualConc || '';
+
+            // Recalculate
+            calculateAll();
+            calcPercentError();
+            updateProgress();
+        }
+
+        function clearAllData() {
+            if (confirm('Are you sure you want to clear all data? This cannot be undone!')) {
+                localStorage.removeItem('colorimetryLabData');
+                location.reload();
+            }
+        }
+
+        // ============== PDF DOWNLOAD ==============
+        function downloadPDF() {
+            // Prepare content for PDF
+            const element = document.createElement('div');
+            element.innerHTML = generatePDFContent();
+            element.style.padding = '20px';
+            element.style.fontFamily = 'Arial, sans-serif';
+
+            const opt = {
+                margin: 10,
+                filename: `DIY_Colorimetry_Lab_${document.getElementById('studentName').value || 'Student'}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'letter', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save();
+        }
+
+        function generatePDFContent() {
+            const studentName = document.getElementById('studentName').value || '_______________';
+            const labPartner = document.getElementById('labPartner').value || '_______________';
+            const labDate = document.getElementById('labDate').value || '_______________';
+            const labSection = document.getElementById('labSection').value || '_______________';
+
+            let html = `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h1 style="color: #6b2d5c; margin-bottom: 5px;">DIY Colorimetry Lab</h1>
+                    <p>Exploring Beer's Law with Grape Juice and Smartphone Technology</p>
+                </div>
+
+                <div style="background: #f5f5f5; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
+                    <p><strong>Student Name:</strong> ${studentName}</p>
+                    <p><strong>Lab Partner:</strong> ${labPartner}</p>
+                    <p><strong>Date:</strong> ${labDate}</p>
+                    <p><strong>Section:</strong> ${labSection}</p>
+                </div>
+
+                <h2 style="color: #6b2d5c; border-bottom: 2px solid #6b2d5c; padding-bottom: 5px;">Pre-Lab Questions</h2>
+            `;
+
+            // Pre-lab questions
+            const prelabQuestions = [
+                'According to Beer\'s Law, if you double the concentration of a solution, what happens to the absorbance?',
+                'Why do we use green light (green paper) to measure the absorbance of purple grape juice?',
+                'If a solution has 80% transmittance, calculate its absorbance.',
+                'What is the purpose of creating a calibration curve in this experiment?',
+                'Why is it important to measure a blank (water) reference before measuring your samples?'
+            ];
+
+            for (let i = 1; i <= 5; i++) {
+                html += `
+                    <div style="margin: 15px 0; padding: 10px; background: #fafafa; border-left: 3px solid #6b2d5c;">
+                        <p><strong>Q${i}:</strong> ${prelabQuestions[i-1]}</p>
+                        <p style="margin-top: 10px;">${document.getElementById(`prelab-q${i}`).value || '<em>Not answered</em>'}</p>
+                    </div>
+                `;
+            }
+
+            // Data table
+            html += `
+                <h2 style="color: #6b2d5c; border-bottom: 2px solid #6b2d5c; padding-bottom: 5px; margin-top: 30px;">Data Collection</h2>
+                <p><strong>Blank Reference (I₀):</strong> ${document.getElementById('blankRGB').value || '___'}</p>
+
+                <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+                    <thead>
+                        <tr style="background: #6b2d5c; color: white;">
+                            <th style="padding: 8px; border: 1px solid #ddd;">Solution</th>
+                            <th style="padding: 8px; border: 1px solid #ddd;">% Conc.</th>
+                            <th style="padding: 8px; border: 1px solid #ddd;">Trial 1</th>
+                            <th style="padding: 8px; border: 1px solid #ddd;">Trial 2</th>
+                            <th style="padding: 8px; border: 1px solid #ddd;">Trial 3</th>
+                            <th style="padding: 8px; border: 1px solid #ddd;">Avg RGB</th>
+                            <th style="padding: 8px; border: 1px solid #ddd;">T</th>
+                            <th style="padding: 8px; border: 1px solid #ddd;">A</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            const concs = [20, 40, 60, 80, 100];
+            for (let i = 1; i <= 5; i++) {
+                html += `
+                    <tr>
+                        <td style="padding: 6px; border: 1px solid #ddd;">Standard ${i}</td>
+                        <td style="padding: 6px; border: 1px solid #ddd;">${concs[i-1]}%</td>
+                        <td style="padding: 6px; border: 1px solid #ddd;">${document.getElementById(`s${i}t1`).value || '-'}</td>
+                        <td style="padding: 6px; border: 1px solid #ddd;">${document.getElementById(`s${i}t2`).value || '-'}</td>
+                        <td style="padding: 6px; border: 1px solid #ddd;">${document.getElementById(`s${i}t3`).value || '-'}</td>
+                        <td style="padding: 6px; border: 1px solid #ddd;">${document.getElementById(`s${i}avg`).textContent}</td>
+                        <td style="padding: 6px; border: 1px solid #ddd;">${document.getElementById(`s${i}t`).textContent}</td>
+                        <td style="padding: 6px; border: 1px solid #ddd;">${document.getElementById(`s${i}a`).textContent}</td>
+                    </tr>
+                `;
+            }
+
+            html += `
+                    <tr style="background: #ffe6e6;">
+                        <td style="padding: 6px; border: 1px solid #ddd;">Unknown</td>
+                        <td style="padding: 6px; border: 1px solid #ddd;">${document.getElementById('unknownID').value || '?'}</td>
+                        <td style="padding: 6px; border: 1px solid #ddd;">${document.getElementById('ut1').value || '-'}</td>
+                        <td style="padding: 6px; border: 1px solid #ddd;">${document.getElementById('ut2').value || '-'}</td>
+                        <td style="padding: 6px; border: 1px solid #ddd;">${document.getElementById('ut3').value || '-'}</td>
+                        <td style="padding: 6px; border: 1px solid #ddd;">${document.getElementById('uavg').textContent}</td>
+                        <td style="padding: 6px; border: 1px solid #ddd;">${document.getElementById('ut').textContent}</td>
+                        <td style="padding: 6px; border: 1px solid #ddd;">${document.getElementById('ua').textContent}</td>
+                    </tr>
+                </tbody>
+                </table>
+            `;
+
+            // Calibration equation
+            html += `
+                <h2 style="color: #6b2d5c; border-bottom: 2px solid #6b2d5c; padding-bottom: 5px; margin-top: 30px;">Analysis</h2>
+                <div style="background: #e8f4fd; padding: 15px; border-radius: 5px; text-align: center;">
+                    <p><strong>Calibration Curve Equation:</strong></p>
+                    <p style="font-size: 1.2em; font-style: italic;">y = ${regressionResult.slope.toFixed(6)}x + ${regressionResult.intercept.toFixed(4)}</p>
+                    <p><strong>R² = ${regressionResult.r2.toFixed(4)}</strong></p>
+                </div>
+
+                <div style="background: #d4edda; padding: 15px; border-radius: 5px; margin-top: 15px; text-align: center;">
+                    <p><strong>Unknown Concentration Result:</strong></p>
+                    <p style="font-size: 1.5em; color: #155724;">${document.getElementById('resultValue').textContent}</p>
+                </div>
+            `;
+
+            // Sample calculations
+            html += `
+                <h3 style="margin-top: 20px;">Sample Calculations</h3>
+            `;
+            for (let i = 1; i <= 3; i++) {
+                html += `
+                    <div style="margin: 10px 0; padding: 10px; background: #fafafa;">
+                        <p><strong>Calculation ${i}:</strong></p>
+                        <p>${document.getElementById(`calc-q${i}`).value || '<em>Not provided</em>'}</p>
+                    </div>
+                `;
+            }
+
+            // Post-lab questions
+            html += `<h2 style="color: #6b2d5c; border-bottom: 2px solid #6b2d5c; padding-bottom: 5px; margin-top: 30px;">Post-Lab Questions</h2>`;
+
+            const postlabQuestions = [
+                'Did your calibration curve show a linear relationship? What was your R² value?',
+                'Would using red paper instead of green be a good choice? Explain.',
+                'List three possible sources of experimental error.',
+                'What color paper would you use for orange juice? Explain.',
+                'Describe one practical application of smartphone colorimetry.',
+                'Compare your unknown concentration to the actual value. Calculate percent error.'
+            ];
+
+            for (let i = 1; i <= 6; i++) {
+                html += `
+                    <div style="margin: 15px 0; padding: 10px; background: #fafafa; border-left: 3px solid #6b2d5c;">
+                        <p><strong>Q${i}:</strong> ${postlabQuestions[i-1]}</p>
+                        <p style="margin-top: 10px;">${document.getElementById(`postlab-q${i}`).value || '<em>Not answered</em>'}</p>
+                    </div>
+                `;
+            }
+
+            if (document.getElementById('actualConc').value) {
+                html += `
+                    <p><strong>Actual Concentration:</strong> ${document.getElementById('actualConc').value}%</p>
+                    <p><strong>Percent Error:</strong> ${document.getElementById('percentError').textContent}</p>
+                `;
+            }
+
+            return html;
+        }
+
+        function printLab() {
+            window.print();
+        }
+
+        // ============== INITIALIZE ==============
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set today's date
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('labDate').value = today;
+
+            // Load saved progress
+            loadProgress();
+
+            // Initialize chart
+            updateChart();
+        });
+    </script>
+</body>
+</html>
