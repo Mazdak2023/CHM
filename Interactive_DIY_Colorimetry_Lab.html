@@ -7,6 +7,10 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- KaTeX for mathematical formula rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -310,6 +314,20 @@
             font-weight: 600;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .formula-box .katex {
+            color: #fbbf24;
+            font-size: 1.4em;
+        }
+
+        /* KaTeX styling overrides */
+        .katex {
+            font-size: 1.1em;
+        }
+
+        .info-box .katex, p .katex {
+            color: #5b21b6;
         }
 
         /* Procedure Steps */
@@ -747,8 +765,8 @@
                 <ul>
                     <li>Construct a simple DIY colorimeter to measure light transmission through colored solutions</li>
                     <li>Prepare standard solutions via serial dilution (100%, 80%, 60%, 40%, 20%, 0%)</li>
-                    <li>Apply Beer's Law (A = epsilon * l * c) by plotting absorbance against concentration</li>
-                    <li>Calculate transmittance (T = I/I0) and absorbance (A = -log10 T) from measured data</li>
+                    <li>Apply Beer's Law (\(A = \varepsilon \cdot l \cdot c\)) by plotting absorbance against concentration</li>
+                    <li>Calculate transmittance (\(T = I/I_0\)) and absorbance (\(A = -\log_{10} T\)) from measured data</li>
                     <li>Determine an unknown concentration from a calibration curve</li>
                     <li>Understand the relationship between color, light absorption, and concentration</li>
                 </ul>
@@ -763,16 +781,16 @@
             <p>Beer's Law describes the relationship between the concentration of a solution and the amount of light it absorbs:</p>
 
             <div class="formula-box">
-                A = epsilon * l * c
+                $$A = \varepsilon \cdot l \cdot c$$
             </div>
 
             <div class="info-box">
                 <div class="info-box-title">VARIABLE DEFINITIONS</div>
                 <ul>
-                    <li><strong>A</strong> = Absorbance (unitless) - how much light is absorbed</li>
-                    <li><strong>epsilon</strong> = Molar absorptivity (L/mol*cm) - how strongly the substance absorbs</li>
-                    <li><strong>l</strong> = Path length (cm) - distance light travels through solution</li>
-                    <li><strong>c</strong> = Concentration (mol/L or %) - amount of absorbing species</li>
+                    <li>\(A\) = Absorbance (unitless) — how much light is absorbed</li>
+                    <li>\(\varepsilon\) = Molar absorptivity (L·mol⁻¹·cm⁻¹) — how strongly the substance absorbs</li>
+                    <li>\(l\) = Path length (cm) — distance light travels through solution</li>
+                    <li>\(c\) = Concentration (mol/L or %) — amount of absorbing species</li>
                 </ul>
             </div>
 
@@ -780,16 +798,16 @@
             <p>When light enters a sample, we measure what comes out the other side:</p>
 
             <div class="formula-box">
-                Transmittance: T = I / I0 &nbsp;&nbsp;|&nbsp;&nbsp; Absorbance: A = -log10(T)
+                $$\text{Transmittance: } T = \frac{I}{I_0} \quad | \quad \text{Absorbance: } A = -\log_{10}(T)$$
             </div>
 
             <div class="info-box">
                 <div class="info-box-title">WHERE:</div>
                 <ul>
-                    <li><strong>I0</strong> = Initial light intensity (measured with blank/water)</li>
-                    <li><strong>I</strong> = Light intensity after passing through sample</li>
-                    <li><strong>T</strong> = Transmittance (fraction of light that passes through, 0 to 1)</li>
-                    <li><strong>A</strong> = Absorbance (typically 0 to 2 for measurable samples)</li>
+                    <li>\(I_0\) = Initial light intensity (measured with blank/water)</li>
+                    <li>\(I\) = Light intensity after passing through sample</li>
+                    <li>\(T\) = Transmittance (fraction of light that passes through, 0 to 1)</li>
+                    <li>\(A\) = Absorbance (typically 0 to 2 for measurable samples)</li>
                 </ul>
             </div>
 
@@ -814,9 +832,9 @@
 
             <div class="question">
                 <div class="question-num">QUESTION 2:</div>
-                <p>If light intensity through a blank (I0) is 200 and through a sample (I) is 100, calculate:</p>
-                <p>a) Transmittance (T = I/I0)</p>
-                <p>b) Absorbance (A = -log10 T)</p>
+                <p>If light intensity through a blank (\(I_0\)) is 200 and through a sample (\(I\)) is 100, calculate:</p>
+                <p>a) Transmittance (\(T = I/I_0\))</p>
+                <p>b) Absorbance (\(A = -\log_{10} T\))</p>
                 <p>Show your calculations:</p>
                 <textarea id="prelab-q2" placeholder="Enter your calculations here..."></textarea>
             </div>
@@ -1077,13 +1095,13 @@ sample, exits front hole to phone camera.
 
             <h3>Dilution Verification</h3>
             <div class="info-box">
-                <div class="info-box-title">DILUTION FORMULA: C1*V1 = C2*V2</div>
+                <div class="info-box-title">DILUTION FORMULA: \(C_1V_1 = C_2V_2\)</div>
                 <p>Verify Standard 2 (40% grape juice):</p>
                 <div style="margin: 15px 0;">
-                    <p>C1 (stock concentration) = <input type="text" id="dilution-c1" style="width: 80px; background: #f8fafc; border: 2px solid #667eea; color: #1e293b; padding: 8px; text-align: center; border-radius: 6px;"> %</p>
-                    <p>V1 (volume of stock) = <input type="text" id="dilution-v1" style="width: 80px; background: #f8fafc; border: 2px solid #667eea; color: #1e293b; padding: 8px; text-align: center; border-radius: 6px;"> mL</p>
-                    <p>C2 (desired concentration) = <input type="text" id="dilution-c2" style="width: 80px; background: #f8fafc; border: 2px solid #667eea; color: #1e293b; padding: 8px; text-align: center; border-radius: 6px;"> %</p>
-                    <p>V2 (total final volume) = <input type="text" id="dilution-v2" style="width: 80px; background: #f8fafc; border: 2px solid #667eea; color: #1e293b; padding: 8px; text-align: center; border-radius: 6px;"> mL</p>
+                    <p>\(C_1\) (stock concentration) = <input type="text" id="dilution-c1" style="width: 80px; background: #f8fafc; border: 2px solid #667eea; color: #1e293b; padding: 8px; text-align: center; border-radius: 6px;"> %</p>
+                    <p>\(V_1\) (volume of stock) = <input type="text" id="dilution-v1" style="width: 80px; background: #f8fafc; border: 2px solid #667eea; color: #1e293b; padding: 8px; text-align: center; border-radius: 6px;"> mL</p>
+                    <p>\(C_2\) (desired concentration) = <input type="text" id="dilution-c2" style="width: 80px; background: #f8fafc; border: 2px solid #667eea; color: #1e293b; padding: 8px; text-align: center; border-radius: 6px;"> %</p>
+                    <p>\(V_2\) (total final volume) = <input type="text" id="dilution-v2" style="width: 80px; background: #f8fafc; border: 2px solid #667eea; color: #1e293b; padding: 8px; text-align: center; border-radius: 6px;"> mL</p>
                 </div>
             </div>
         </div>
@@ -1102,26 +1120,26 @@ sample, exits front hole to phone camera.
             <div class="procedure-step">
                 <div class="step-number">2</div>
                 <div class="step-content">
-                    <strong>Measure the blank (I0):</strong> Place your blank solution (0% grape juice = water) in the colorimeter box. Record the GREEN channel intensity. This is your I0 value.
+                    <strong>Measure the blank (\(I_0\)):</strong> Place your blank solution (0% grape juice = water) in the colorimeter box. Record the GREEN channel intensity. This is your \(I_0\) value.
                 </div>
             </div>
 
             <div class="procedure-step">
                 <div class="step-number">3</div>
                 <div class="step-content">
-                    <strong>Measure from LOW to HIGH:</strong> Starting with 20%, measure each standard. Take 2 readings per sample and record the average intensity (I).
+                    <strong>Measure from LOW to HIGH:</strong> Starting with 20%, measure each standard. Take 2 readings per sample and record the average intensity (\(I\)).
                 </div>
             </div>
 
             <div class="formula-box">
-                T = I / I0 &nbsp;&nbsp;|&nbsp;&nbsp; A = -log10(T)
+                $$T = \frac{I}{I_0} \quad | \quad A = -\log_{10}(T)$$
             </div>
 
             <div class="info-box highlight">
-                <div class="info-box-title">BLANK (I0) INTENSITY</div>
+                <div class="info-box-title">BLANK (\(I_0\)) INTENSITY</div>
                 <p>Channel: GREEN</p>
                 <p style="margin-top: 10px;">
-                    I0 = <input type="number" id="blank-intensity" style="width: 130px; background: #fff; border: 2px solid #667eea; color: #5b21b6; padding: 12px; font-size: 1.2em; text-align: center; border-radius: 8px; font-weight: 600;" placeholder="Enter I0">
+                    \(I_0\) = <input type="number" id="blank-intensity" style="width: 130px; background: #fff; border: 2px solid #667eea; color: #5b21b6; padding: 12px; font-size: 1.2em; text-align: center; border-radius: 8px; font-weight: 600;" placeholder="Enter I₀">
                 </p>
             </div>
 
@@ -1133,18 +1151,18 @@ sample, exits front hole to phone camera.
                     <tr>
                         <th>Sample</th>
                         <th>Conc. (%)</th>
-                        <th>I (Reading 1)</th>
-                        <th>I (Reading 2)</th>
-                        <th>I (Average)</th>
-                        <th>T = I/I0</th>
-                        <th>A = -log(T)</th>
+                        <th>\(I\) (Reading 1)</th>
+                        <th>\(I\) (Reading 2)</th>
+                        <th>\(I\) (Average)</th>
+                        <th>\(T = I/I_0\)</th>
+                        <th>\(A = -\log(T)\)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>Blank</td>
                         <td>0</td>
-                        <td colspan="3" class="calculated">I0 (entered above)</td>
+                        <td colspan="3" class="calculated">\(I_0\) (entered above)</td>
                         <td class="calculated">1.000</td>
                         <td class="calculated">0.000</td>
                     </tr>
@@ -1212,12 +1230,12 @@ sample, exits front hole to phone camera.
             <h3>Sample Calculation for Standard 3 (60%)</h3>
             <div class="question">
                 <div class="question-num">SHOW YOUR WORK:</div>
-                <p>Calculate T and A for Standard 3 using your recorded values:</p>
-                <textarea id="sample-calc" placeholder="Given: I0 = _____ , I = _____
+                <p>Calculate \(T\) and \(A\) for Standard 3 using your recorded values:</p>
+                <textarea id="sample-calc" placeholder="Given: I₀ = _____ , I = _____
 
-Transmittance: T = I / I0 = _____ / _____ = _____
+Transmittance: T = I / I₀ = _____ / _____ = _____
 
-Absorbance: A = -log10(T) = -log10(_____) = _____"></textarea>
+Absorbance: A = -log₁₀(T) = -log₁₀(_____) = _____"></textarea>
             </div>
         </div>
 
@@ -1231,15 +1249,15 @@ Absorbance: A = -log10(T) = -log10(_____) = _____"></textarea>
                 <canvas id="calibration-chart" height="400"></canvas>
                 <div class="graph-stats">
                     <div class="stat-box">
-                        <div class="stat-label">SLOPE (m)</div>
+                        <div class="stat-label">SLOPE (\(m\))</div>
                         <div class="stat-value" id="slope-value">--</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-label">Y-INTERCEPT (b)</div>
+                        <div class="stat-label">Y-INTERCEPT (\(b\))</div>
                         <div class="stat-value" id="intercept-value">--</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-label">R-SQUARED</div>
+                        <div class="stat-label">\(R^2\)</div>
                         <div class="stat-value" id="r2-value">--</div>
                     </div>
                 </div>
@@ -1248,7 +1266,7 @@ Absorbance: A = -log10(T) = -log10(_____) = _____"></textarea>
             <div class="info-box">
                 <div class="info-box-title">LINE EQUATION</div>
                 <p style="font-size: 1.3em; text-align: center; margin: 15px 0;">
-                    A = <span id="eq-slope">m</span> * C + <span id="eq-intercept">b</span>
+                    \(A =\) <span id="eq-slope">m</span> \(\cdot C +\) <span id="eq-intercept">b</span>
                 </p>
             </div>
 
@@ -1266,9 +1284,9 @@ Absorbance: A = -log10(T) = -log10(_____) = _____"></textarea>
 
             <div class="info-box highlight">
                 <div class="info-box-title">METHOD 2: MATHEMATICAL</div>
-                <p>Using the equation A = m*C + b, solve for C:</p>
+                <p>Using the equation \(A = m \cdot C + b\), solve for \(C\):</p>
                 <div class="formula-box">
-                    C = (A - b) / m
+                    $$C = \frac{A - b}{m}$$
                 </div>
                 <p>Your unknown absorbance: <span id="unknown-a-display">--</span></p>
                 <p style="margin-top: 10px;"><strong>Calculated unknown concentration:</strong></p>
@@ -1412,8 +1430,8 @@ Absorbance: A = -log10(T) = -log10(_____) = _____"></textarea>
                 <p><strong>Student:</strong> <span id="summary-name">--</span></p>
                 <p><strong>Date:</strong> <span id="summary-date">--</span></p>
                 <p><strong>Section:</strong> <span id="summary-section">--</span></p>
-                <p><strong>I0 (Blank):</strong> <span id="summary-i0">--</span></p>
-                <p><strong>R-squared:</strong> <span id="summary-r2">--</span></p>
+                <p><strong>\(I_0\) (Blank):</strong> <span id="summary-i0">--</span></p>
+                <p><strong>\(R^2\):</strong> <span id="summary-r2">--</span></p>
                 <p><strong>Unknown Concentration:</strong> <span id="summary-unknown">--</span> %</p>
             </div>
 
@@ -1433,7 +1451,7 @@ Absorbance: A = -log10(T) = -log10(_____) = _____"></textarea>
             <h3>Pre-Lab Discussion Points</h3>
             <div class="info-box">
                 <ul>
-                    <li><strong>Beer's Law foundations:</strong> Review the relationship between absorbance, concentration, and path length. Emphasize that A = epsilon*l*c only holds under certain conditions (dilute solutions, monochromatic light, no chemical reactions).</li>
+                    <li><strong>Beer's Law foundations:</strong> Review the relationship between absorbance, concentration, and path length. Emphasize that \(A = \varepsilon \cdot l \cdot c\) only holds under certain conditions (dilute solutions, monochromatic light, no chemical reactions).</li>
                     <li><strong>Color theory:</strong> Discuss complementary colors. Purple absorbs green/yellow; using green paper maximizes the signal.</li>
                     <li><strong>Smartphone colorimetry:</strong> The Carolina RGB app reads RGB values from the camera sensor. Each channel (R, G, B) represents intensity of that color component (0-255 scale).</li>
                     <li><strong>Error sources:</strong> Auto-exposure, ambient light changes, inconsistent sample positioning, fingerprints on cuvettes, bubbles in solutions.</li>
@@ -1445,10 +1463,10 @@ Absorbance: A = -log10(T) = -log10(_____) = _____"></textarea>
                 <ol>
                     <li><strong>Forgetting to lock exposure:</strong> Auto-exposure adjusts between measurements, ruining the calibration. Have students test with blank before and after to verify consistency.</li>
                     <li><strong>Inconsistent sample positioning:</strong> Emphasize marking the exact cuvette position and orientation.</li>
-                    <li><strong>Not measuring blank first:</strong> I0 must be measured before any samples.</li>
-                    <li><strong>Mixing up transmittance and absorbance:</strong> T = I/I0 (fraction), A = -log(T). Absorbance increases with concentration; transmittance decreases.</li>
-                    <li><strong>Calculation errors:</strong> Check that students are using log base 10, not natural log.</li>
-                    <li><strong>Negative absorbance values:</strong> Indicates I > I0, usually due to light changes or measurement error.</li>
+                    <li><strong>Not measuring blank first:</strong> \(I_0\) must be measured before any samples.</li>
+                    <li><strong>Mixing up transmittance and absorbance:</strong> \(T = I/I_0\) (fraction), \(A = -\log(T)\). Absorbance increases with concentration; transmittance decreases.</li>
+                    <li><strong>Calculation errors:</strong> Check that students are using \(\log_{10}\), not natural log (\(\ln\)).</li>
+                    <li><strong>Negative absorbance values:</strong> Indicates \(I > I_0\), usually due to light changes or measurement error.</li>
                 </ol>
             </div>
 
@@ -1502,7 +1520,7 @@ Absorbance: A = -log10(T) = -log10(_____) = _____"></textarea>
                     <tr>
                         <td>Calibration Curve</td>
                         <td>20</td>
-                        <td>Correct axes, linear trend, R-squared > 0.95</td>
+                        <td>Correct axes, linear trend, \(R^2 > 0.95\)</td>
                     </tr>
                     <tr>
                         <td>Unknown Determination</td>
@@ -1548,15 +1566,15 @@ Absorbance: A = -log10(T) = -log10(_____) = _____"></textarea>
 
             <h3>Hypothetical Data Set</h3>
             <div class="info-box">
-                <div class="info-box-title">SAMPLE DATA (Using I0 = 185)</div>
+                <div class="info-box-title">SAMPLE DATA (Using \(I_0 = 185\))</div>
                 <table>
                     <thead>
                         <tr>
                             <th>Sample</th>
                             <th>Conc. (%)</th>
-                            <th>I (Avg)</th>
-                            <th>T</th>
-                            <th>A</th>
+                            <th>\(I\) (Avg)</th>
+                            <th>\(T\)</th>
+                            <th>\(A\)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1615,37 +1633,37 @@ Absorbance: A = -log10(T) = -log10(_____) = _____"></textarea>
 
             <div class="info-box highlight">
                 <div class="info-box-title">CALIBRATION CURVE STATISTICS</div>
-                <p><strong>Slope (m):</strong> 0.00497 A/% (approximately 0.005)</p>
-                <p><strong>Y-intercept (b):</strong> 0.0032 (approximately 0)</p>
-                <p><strong>Equation:</strong> A = 0.00497 * C + 0.0032</p>
-                <p><strong>R-squared:</strong> 0.998</p>
+                <p><strong>Slope (\(m\)):</strong> 0.00497 A/% (approximately 0.005)</p>
+                <p><strong>Y-intercept (\(b\)):</strong> 0.0032 (approximately 0)</p>
+                <p><strong>Equation:</strong> \(A = 0.00497 \cdot C + 0.0032\)</p>
+                <p><strong>R-squared (\(R^2\)):</strong> 0.998</p>
             </div>
 
             <div class="info-box">
                 <div class="info-box-title">UNKNOWN CALCULATION</div>
-                <p>Given: A(unknown) = 0.246</p>
-                <p>Using: C = (A - b) / m</p>
-                <p>C = (0.246 - 0.0032) / 0.00497</p>
-                <p>C = 0.2428 / 0.00497</p>
-                <p><strong>C = 48.9% (approximately 49%)</strong></p>
-                <p style="margin-top: 10px;">If actual unknown was 55%: percent error = |49-55|/55 * 100 = 10.9%</p>
+                <p>Given: \(A_{\text{unknown}} = 0.246\)</p>
+                <p>Using: \(C = \frac{A - b}{m}\)</p>
+                <p>\(C = \frac{0.246 - 0.0032}{0.00497}\)</p>
+                <p>\(C = \frac{0.2428}{0.00497}\)</p>
+                <p><strong>\(C = 48.9\%\) (approximately 49%)</strong></p>
+                <p style="margin-top: 10px;">If actual unknown was 55%: percent error = \(\frac{|49-55|}{55} \times 100 = 10.9\%\)</p>
             </div>
 
             <h3>Pre-Lab Question Answers</h3>
 
             <div class="info-box">
                 <div class="info-box-title">Q1: Beer's Law</div>
-                <p class="answer-key-value">A = epsilon * l * c</p>
-                <p class="answer-key-value">A = absorbance (unitless)</p>
-                <p class="answer-key-value">epsilon = molar absorptivity (L/mol*cm)</p>
-                <p class="answer-key-value">l = path length (cm)</p>
-                <p class="answer-key-value">c = concentration (mol/L or %)</p>
+                <p class="answer-key-value">\(A = \varepsilon \cdot l \cdot c\)</p>
+                <p class="answer-key-value">\(A\) = absorbance (unitless)</p>
+                <p class="answer-key-value">\(\varepsilon\) = molar absorptivity (L·mol⁻¹·cm⁻¹)</p>
+                <p class="answer-key-value">\(l\) = path length (cm)</p>
+                <p class="answer-key-value">\(c\) = concentration (mol/L or %)</p>
             </div>
 
             <div class="info-box">
                 <div class="info-box-title">Q2: Calculation</div>
-                <p class="answer-key-value">a) T = I/I0 = 100/200 = 0.50</p>
-                <p class="answer-key-value">b) A = -log10(0.50) = -(-0.301) = 0.301</p>
+                <p class="answer-key-value">a) \(T = I/I_0 = 100/200 = 0.50\)</p>
+                <p class="answer-key-value">b) \(A = -\log_{10}(0.50) = -(-0.301) = 0.301\)</p>
             </div>
 
             <div class="info-box">
@@ -1710,13 +1728,13 @@ Absorbance: A = -log10(T) = -log10(_____) = _____"></textarea>
 
             <div class="info-box">
                 <div class="info-box-title">Q6: Negative Absorbance</div>
-                <p class="answer-key-value">Negative absorbance means I > I0 (sample reading higher than blank). Possible causes: (1) blank was measured incorrectly or at a different time when lighting was different, (2) auto-exposure adjusted between measurements, (3) sample cuvette was cleaner than blank cuvette, (4) sample position was different (closer to light source), (5) blank solution was accidentally contaminated. To troubleshoot: re-measure blank and sample immediately after each other, verify exposure is locked, check cuvette cleanliness, mark exact sample position.</p>
+                <p class="answer-key-value">Negative absorbance means \(I > I_0\) (sample reading higher than blank). Possible causes: (1) blank was measured incorrectly or at a different time when lighting was different, (2) auto-exposure adjusted between measurements, (3) sample cuvette was cleaner than blank cuvette, (4) sample position was different (closer to light source), (5) blank solution was accidentally contaminated. To troubleshoot: re-measure blank and sample immediately after each other, verify exposure is locked, check cuvette cleanliness, mark exact sample position.</p>
             </div>
 
             <div class="info-box">
                 <div class="info-box-title">DILUTION VERIFICATION ANSWERS</div>
-                <p class="answer-key-value">C1 = 100%, V1 = 4 mL, C2 = 40%, V2 = 10 mL</p>
-                <p class="answer-key-value">Verification: 100 * 4 = 40 * 10 = 400</p>
+                <p class="answer-key-value">\(C_1 = 100\%\), \(V_1 = 4\) mL, \(C_2 = 40\%\), \(V_2 = 10\) mL</p>
+                <p class="answer-key-value">Verification: \(100 \times 4 = 40 \times 10 = 400\)</p>
             </div>
         </div>
     </div>
@@ -1736,7 +1754,29 @@ Absorbance: A = -log10(T) = -log10(_____) = _____"></textarea>
             updateTime();
             setInterval(updateTime, 1000);
             generateSessionId();
+
+            // Initialize KaTeX auto-render for mathematical formulas (with delay for deferred scripts)
+            setTimeout(renderMath, 100);
         });
+
+        // Render KaTeX math formulas
+        function renderMath() {
+            if (typeof renderMathInElement !== 'undefined') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\[', right: '\\]', display: true},
+                        {left: '\\(', right: '\\)', display: false},
+                        {left: '$', right: '$', display: false}
+                    ],
+                    throwOnError: false,
+                    ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'input']
+                });
+            } else {
+                // Retry if KaTeX hasn't loaded yet
+                setTimeout(renderMath, 100);
+            }
+        }
 
         // Session ID
         function generateSessionId() {
@@ -1827,7 +1867,7 @@ Absorbance: A = -log10(T) = -log10(_____) = _____"></textarea>
                             title: {
                                 display: true,
                                 text: 'Absorbance (A)',
-                                font: { family: 'IBM Plex Mono', size: 14, weight: 'bold' },
+                                font: { family: 'KaTeX_Main, IBM Plex Mono', size: 14, weight: 'bold' },
                                 color: '#5b21b6'
                             },
                             min: 0,
