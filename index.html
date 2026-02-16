@@ -1,1386 +1,328 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lab 3: Stoichiometry - Interactive Learning</title>
-    <style>
-        :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --secondary: #e74c3c;
-            --success: #16a34a;
-            --warning: #f59e0b;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text: #1e293b;
-            --text-light: #64748b;
-            --border: #e2e8f0;
-            --accent-gradient: linear-gradient(135deg, #2563eb, #7c3aed);
-        }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CHM Resources</title>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --surface: #ffffff;
+      --ink: #16243a;
+      --muted: #526079;
+      --line: #dce3ef;
+      --brand: #0f766e;
+      --brand-2: #0b5f59;
+      --hero-a: #0f766e;
+      --hero-b: #164e63;
+      --shadow: 0 10px 25px rgba(22, 36, 58, 0.08);
+    }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; }
 
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.7;
-        }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 10% -10%, #d9f4f1 0%, #f6f8fb 38%), var(--bg);
+      color: var(--ink);
+      font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+      line-height: 1.45;
+    }
 
-        /* Hero Section */
-        .hero {
-            background: var(--accent-gradient);
-            color: white;
-            padding: 3rem 2rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .hero::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 40px;
-            background: var(--bg);
-            clip-path: ellipse(55% 100% at 50% 100%);
-        }
-        .hero h1 { font-size: 2.4rem; margin-bottom: 0.5rem; font-weight: 800; }
-        .hero p { font-size: 1.1rem; opacity: 0.9; max-width: 600px; margin: 0 auto; }
+    .hero {
+      background: linear-gradient(140deg, var(--hero-a), var(--hero-b));
+      color: #f4fffd;
+      padding: 48px 20px 56px;
+    }
 
-        /* Navigation */
-        .nav-bar {
-            background: var(--card-bg);
-            border-bottom: 1px solid var(--border);
-            padding: 0.75rem 1rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-        .nav-bar ul {
-            list-style: none;
-            display: flex;
-            gap: 0.25rem;
-            overflow-x: auto;
-            max-width: 1100px;
-            margin: 0 auto;
-            padding-bottom: 2px;
-        }
-        .nav-bar a {
-            text-decoration: none;
-            color: var(--text-light);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
-        .nav-bar a:hover, .nav-bar a.active {
-            background: var(--primary);
-            color: white;
-        }
+    .hero-inner,
+    .content {
+      max-width: 1050px;
+      margin: 0 auto;
+    }
 
-        /* Main Content */
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
-        }
+    h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+      letter-spacing: 0.3px;
+    }
 
-        /* Section Cards */
-        .section {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            border: 1px solid var(--border);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-            scroll-margin-top: 80px;
-        }
-        .section h2 {
-            font-size: 1.6rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .section h2 .icon {
-            width: 36px;
-            height: 36px;
-            background: var(--accent-gradient);
-            color: white;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            flex-shrink: 0;
-        }
-        .section h3 {
-            font-size: 1.15rem;
-            margin: 1.5rem 0 0.75rem;
-            color: var(--text);
-        }
+    .subtitle {
+      margin: 10px 0 0;
+      max-width: 760px;
+      color: #d2f0ec;
+      font-size: 1.03rem;
+    }
 
-        /* Chemical Equation Display */
-        .equation-box {
-            background: #f0f4ff;
-            border: 2px solid #c7d2fe;
-            border-radius: 12px;
-            padding: 1.25rem;
-            text-align: center;
-            font-size: 1.15rem;
-            margin: 1rem 0;
-            font-weight: 600;
-        }
-        .equation-box .label {
-            font-size: 0.8rem;
-            color: var(--text-light);
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
+    .meta {
+      margin-top: 14px;
+      font-size: 0.93rem;
+      color: #bce7e2;
+    }
 
-        /* Interactive Balancing */
-        .balance-activity {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            border: 2px solid #f59e0b;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-        }
-        .balance-activity h3 {
-            color: #92400e;
-            margin-top: 0;
-        }
-        .balance-row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin: 1rem 0;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-        .coeff-input {
-            width: 48px;
-            height: 40px;
-            text-align: center;
-            font-size: 1.1rem;
-            font-weight: 700;
-            border: 2px solid #d97706;
-            border-radius: 8px;
-            background: white;
-            color: var(--text);
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        .coeff-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.2); }
-        .coeff-input.correct { border-color: var(--success); background: #dcfce7; }
-        .coeff-input.incorrect { border-color: var(--secondary); background: #fee2e2; }
+    .content {
+      padding: 26px 20px 56px;
+    }
 
-        /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.65rem 1.5rem;
-            border: none;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
-        .btn-success { background: var(--success); color: white; }
-        .btn-success:hover { background: #15803d; }
-        .btn-outline {
-            background: transparent;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-        }
-        .btn-outline:hover { background: var(--primary); color: white; }
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
 
-        /* Feedback Messages */
-        .feedback {
-            padding: 0.75rem 1rem;
-            border-radius: 10px;
-            margin-top: 1rem;
-            font-weight: 600;
-            display: none;
-        }
-        .feedback.correct {
-            background: #dcfce7;
-            color: #166534;
-            border: 1px solid #86efac;
-            display: block;
-        }
-        .feedback.incorrect {
-            background: #fee2e2;
-            color: #991b1b;
-            border: 1px solid #fca5a5;
-            display: block;
-        }
-        .feedback.hint {
-            background: #fff7ed;
-            color: #9a3412;
-            border: 1px solid #fed7aa;
-            display: block;
-        }
+    .status {
+      margin-bottom: 14px;
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
 
-        /* Info Cards */
-        .info-card {
-            display: flex;
-            gap: 1rem;
-            background: #f0f9ff;
-            border-left: 4px solid var(--primary);
-            border-radius: 0 12px 12px 0;
-            padding: 1rem 1.25rem;
-            margin: 1rem 0;
-        }
-        .info-card.warning {
-            background: #fff7ed;
-            border-left-color: var(--warning);
-        }
-        .info-card.error-increase {
-            background: #fef2f2;
-            border-left-color: var(--secondary);
-        }
-        .info-card.error-decrease {
-            background: #eff6ff;
-            border-left-color: #3b82f6;
-        }
-        .info-card .info-icon {
-            font-size: 1.5rem;
-            flex-shrink: 0;
-        }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 0 0 16px;
+    }
 
-        /* Procedure Steps */
-        .step {
-            position: relative;
-            padding-left: 3.5rem;
-            margin-bottom: 2rem;
-        }
-        .step-number {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 2.5rem;
-            height: 2.5rem;
-            background: var(--accent-gradient);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 1rem;
-        }
-        .step h3 { margin-top: 0.2rem; }
-        .step-content {
-            background: #f8fafc;
-            border-radius: 12px;
-            padding: 1rem 1.25rem;
-            margin-top: 0.75rem;
-            border: 1px solid var(--border);
-        }
-        .step-content ul { padding-left: 1.25rem; }
-        .step-content li { margin-bottom: 0.4rem; }
+    .btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 9px 13px;
+      cursor: pointer;
+    }
 
-        /* Image placeholders */
-        .img-container {
-            border-radius: 12px;
-            overflow: hidden;
-            margin: 1rem 0;
-            border: 1px solid var(--border);
-        }
-        .img-container img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-        .img-placeholder {
-            background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
-            padding: 3rem 2rem;
-            text-align: center;
-            border-radius: 12px;
-            color: var(--text-light);
-            margin: 1rem 0;
-        }
+    .btn:hover {
+      border-color: var(--brand);
+      color: var(--brand);
+    }
 
-        /* Calculator Section */
-        .calculator {
-            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
-            border: 2px solid #6ee7b7;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-        }
-        .calc-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-        .calc-field label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-light);
-            margin-bottom: 0.3rem;
-        }
-        .calc-field input {
-            width: 100%;
-            padding: 0.6rem 0.75rem;
-            border: 2px solid #a7f3d0;
-            border-radius: 8px;
-            font-size: 1rem;
-            background: white;
-            outline: none;
-        }
-        .calc-field input:focus { border-color: var(--success); }
-        .calc-result {
-            background: white;
-            border-radius: 10px;
-            padding: 1rem;
-            margin-top: 1rem;
-            border: 1px solid #a7f3d0;
-            font-weight: 600;
-        }
+    .btn-primary {
+      background: var(--brand);
+      border-color: var(--brand);
+      color: #fff;
+    }
 
-        /* Practice Problems */
-        .practice-problem {
-            background: #faf5ff;
-            border: 2px solid #d8b4fe;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-        }
-        .practice-problem h4 {
-            color: #7c3aed;
-            margin-bottom: 0.75rem;
-        }
-        .practice-problem .answer-input {
-            width: 80px;
-            height: 36px;
-            text-align: center;
-            font-size: 1rem;
-            font-weight: 600;
-            border: 2px solid #d8b4fe;
-            border-radius: 8px;
-            outline: none;
-            margin: 0 0.25rem;
-        }
-        .practice-problem .answer-input:focus { border-color: #7c3aed; }
-        .practice-problem .answer-input.correct { border-color: var(--success); background: #dcfce7; }
-        .practice-problem .answer-input.incorrect { border-color: var(--secondary); background: #fee2e2; }
+    .btn-primary:hover {
+      background: var(--brand-2);
+      border-color: var(--brand-2);
+      color: #fff;
+    }
 
-        /* Data Table */
-        .data-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            margin: 1rem 0;
-        }
-        .data-table th {
-            background: var(--primary);
-            color: white;
-            padding: 0.75rem 1rem;
-            font-size: 0.85rem;
-            text-align: left;
-        }
-        .data-table td {
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid var(--border);
-        }
-        .data-table tr:nth-child(even) td { background: #f8fafc; }
-        .data-table .formula { color: var(--primary); font-weight: 600; }
+    .section-title {
+      margin: 2px 0 12px;
+      font-size: 1.15rem;
+      color: var(--ink);
+    }
 
-        /* Key Concept Boxes */
-        .key-concept {
-            background: linear-gradient(135deg, #fdf4ff, #fae8ff);
-            border: 2px solid #e879f9;
-            border-radius: 12px;
-            padding: 1.25rem;
-            margin: 1.5rem 0;
-        }
-        .key-concept h4 {
-            color: #a21caf;
-            margin-bottom: 0.5rem;
-            font-size: 1rem;
-        }
+    .grid {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 12px;
+    }
 
-        /* Observation Checklist */
-        .checklist { list-style: none; padding: 0; }
-        .checklist li {
-            padding: 0.5rem 0 0.5rem 2rem;
-            position: relative;
-            cursor: pointer;
-        }
-        .checklist li::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0.65rem;
-            width: 18px;
-            height: 18px;
-            border: 2px solid var(--border);
-            border-radius: 5px;
-            transition: all 0.2s;
-        }
-        .checklist li.checked::before {
-            background: var(--success);
-            border-color: var(--success);
-        }
-        .checklist li.checked::after {
-            content: '\2713';
-            position: absolute;
-            left: 3px;
-            top: 0.45rem;
-            color: white;
-            font-size: 0.85rem;
-            font-weight: 800;
-        }
+    .card a {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+      min-height: 90px;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
 
-        /* Yield Comparison */
-        .yield-bar-container { margin: 1rem 0; }
-        .yield-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 0.3rem;
-        }
-        .yield-bar {
-            height: 28px;
-            background: #e2e8f0;
-            border-radius: 14px;
-            overflow: hidden;
-            margin-bottom: 0.75rem;
-        }
-        .yield-fill {
-            height: 100%;
-            border-radius: 14px;
-            transition: width 0.8s ease;
-            display: flex;
-            align-items: center;
-            padding-left: 12px;
-            color: white;
-            font-size: 0.8rem;
-            font-weight: 700;
-        }
-        .yield-fill.theoretical { background: var(--primary); }
-        .yield-fill.actual { background: var(--success); }
+    .card a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(22, 36, 58, 0.08);
+      border-color: #9dd2cc;
+    }
 
-        /* Error Analysis Cards */
-        .error-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-        .error-card {
-            border-radius: 12px;
-            padding: 1.25rem;
-            border: 1px solid var(--border);
-        }
-        .error-card.increase {
-            background: #fef2f2;
-            border-color: #fca5a5;
-        }
-        .error-card.decrease {
-            background: #eff6ff;
-            border-color: #93c5fd;
-        }
-        .error-card h4 {
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-        .error-card.increase h4 { color: #dc2626; }
-        .error-card.decrease h4 { color: #2563eb; }
-        .error-card ul {
-            font-size: 0.9rem;
-            padding-left: 1.1rem;
-        }
-        .error-card li { margin-bottom: 0.3rem; }
+    .label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      color: var(--ink);
+      word-break: break-word;
+    }
 
-        /* Progress Tracker */
-        .progress-bar {
-            background: #e2e8f0;
-            height: 8px;
-            border-radius: 4px;
-            margin: 1rem 0;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            background: var(--accent-gradient);
-            border-radius: 4px;
-            transition: width 0.5s ease;
-            width: 0%;
-        }
-        .progress-text {
-            text-align: center;
-            font-size: 0.85rem;
-            color: var(--text-light);
-            font-weight: 600;
-        }
+    .label small {
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.76rem;
+      padding: 2px 6px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+    }
 
-        /* Tabs */
-        .tab-container { margin: 1rem 0; }
-        .tab-buttons {
-            display: flex;
-            gap: 0.25rem;
-            border-bottom: 2px solid var(--border);
-            margin-bottom: 1rem;
-        }
-        .tab-btn {
-            padding: 0.6rem 1.25rem;
-            border: none;
-            background: none;
-            color: var(--text-light);
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-            margin-bottom: -2px;
-            transition: all 0.2s;
-        }
-        .tab-btn.active {
-            color: var(--primary);
-            border-bottom-color: var(--primary);
-        }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+    .path {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 0.85rem;
+      word-break: break-all;
+    }
 
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-light);
-            font-size: 0.85rem;
-            border-top: 1px solid var(--border);
-            margin-top: 2rem;
-        }
+    .empty {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 1.8rem; }
-            .calc-grid { grid-template-columns: 1fr; }
-            .error-grid { grid-template-columns: 1fr; }
-            .section { padding: 1.25rem; }
-            .nav-bar ul { gap: 0; }
-            .nav-bar a { padding: 0.5rem 0.75rem; font-size: 0.8rem; }
-        }
+    .split {
+      margin-top: 20px;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+    }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .section { animation: fadeIn 0.4s ease; }
-
-        /* Subscript/Superscript styling in equations */
-        sub { font-size: 0.75em; }
-    </style>
+    @media (max-width: 640px) {
+      .hero { padding: 36px 16px 42px; }
+      .content { padding: 20px 14px 34px; }
+      .panel { padding: 14px; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-
-<!-- Hero -->
-<header class="hero" style="background: linear-gradient(135deg, rgba(37,99,235,0.85), rgba(124,58,237,0.85)), url('images/hero-flasks.jpg') center/cover; min-height: 220px;">
-    <h1>Lab 3: Stoichiometry</h1>
-    <p>Determining the Mole Ratio in the Reaction of Sodium Carbonate &amp; Hydrochloric Acid</p>
-</header>
-
-<!-- Navigation -->
-<nav class="nav-bar" id="navbar">
-    <ul>
-        <li><a href="#purpose">Purpose</a></li>
-        <li><a href="#reactions">Reactions</a></li>
-        <li><a href="#balance">Balance It</a></li>
-        <li><a href="#procedure">Procedure</a></li>
-        <li><a href="#calculator">Calculator</a></li>
-        <li><a href="#analysis">Analysis</a></li>
-        <li><a href="#yield">Yield</a></li>
-        <li><a href="#practice">Practice</a></li>
-    </ul>
-</nav>
-
-<main class="container">
-
-    <!-- Learning Progress -->
-    <div style="margin-bottom: 1.5rem;">
-        <div class="progress-text">Learning Progress: <span id="progressPercent">0%</span></div>
-        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <header class="hero">
+    <div class="hero-inner">
+      <h1>CHM Resource Hub</h1>
+      <p class="subtitle">This page auto-loads all top-level folders from this CHM repository so students can quickly find each lab or module.</p>
+      <p class="meta" id="repo-meta">Loading repository details...</p>
     </div>
+  </header>
 
-    <!-- Section 1: Purpose -->
-    <section class="section" id="purpose">
-        <h2><span class="icon">1</span> Purpose</h2>
-        <p>To determine the <strong>experimental mole ratio</strong> between <strong>sodium carbonate (Na<sub>2</sub>CO<sub>3</sub>)</strong> and <strong>sodium chloride (NaCl)</strong> in a chemical reaction, and compare it to the theoretical prediction from the balanced equation.</p>
+  <main class="content">
+    <section class="panel" aria-live="polite">
+      <p class="status" id="status">Reading repository contents...</p>
 
-        <div class="info-card">
-            <span class="info-icon">&#128161;</span>
-            <div>
-                <strong>Why does this matter?</strong><br>
-                Stoichiometry is how chemists predict quantities in reactions. By comparing your experimental ratio to theory, you verify whether the reaction went to completion and identify sources of error.
-            </div>
-        </div>
+      <div class="toolbar">
+        <button class="btn btn-primary" id="refresh-btn" type="button">Refresh List</button>
+        <button class="btn" id="open-repo-btn" type="button">Open GitHub Repo</button>
+      </div>
 
-        <div class="img-container">
-            <img src="images/hero-flasks.jpg" alt="Colorful laboratory flasks">
-        </div>
+      <h2 class="section-title">Folders</h2>
+      <ul class="grid" id="folders-list"></ul>
+      <p class="empty" id="folders-empty" hidden>No top-level folders are currently published in this repository.</p>
+
+      <div class="split">
+        <h2 class="section-title">Top-Level Files</h2>
+        <ul class="grid" id="files-list"></ul>
+        <p class="empty" id="files-empty" hidden>No top-level files found.</p>
+      </div>
     </section>
+  </main>
 
-    <!-- Section 2: Chemical Reactions -->
-    <section class="section" id="reactions">
-        <h2><span class="icon">2</span> Chemical Reactions</h2>
+  <script>
+    (function () {
+      const statusEl = document.getElementById("status");
+      const metaEl = document.getElementById("repo-meta");
+      const foldersList = document.getElementById("folders-list");
+      const filesList = document.getElementById("files-list");
+      const foldersEmpty = document.getElementById("folders-empty");
+      const filesEmpty = document.getElementById("files-empty");
+      const refreshBtn = document.getElementById("refresh-btn");
+      const openRepoBtn = document.getElementById("open-repo-btn");
 
-        <h3>Primary Reaction</h3>
-        <div class="equation-box">
-            <div class="label">Sodium carbonate + Hydrochloric acid</div>
-            Na<sub>2</sub>CO<sub>3</sub>(s) + 2 HCl(aq) &rarr; 2 NaCl(aq) + H<sub>2</sub>CO<sub>3</sub>(aq)
-        </div>
+      const host = window.location.hostname;
+      const owner = host.split(".")[0];
+      const pathParts = window.location.pathname.split("/").filter(Boolean);
+      const repo = pathParts[0] || "CHM";
+      const repoUrl = "https://github.com/" + owner + "/" + repo;
+      const apiUrl = "https://api.github.com/repos/" + owner + "/" + repo + "/contents";
 
-        <h3>Decomposition of Carbonic Acid</h3>
-        <p>Carbonic acid is unstable and quickly breaks down:</p>
-        <div class="equation-box">
-            H<sub>2</sub>CO<sub>3</sub>(aq) &rarr; CO<sub>2</sub>(g) &uarr; + H<sub>2</sub>O(l)
-        </div>
-        <p style="margin-top:0.5rem; color: var(--text-light);">This decomposition is why you see <strong>fizzing and bubbling</strong> during the reaction &mdash; that's CO<sub>2</sub> gas escaping!</p>
+      openRepoBtn.addEventListener("click", function () {
+        window.open(repoUrl, "_blank", "noopener");
+      });
 
-        <div class="img-container">
-            <img src="images/mixing-chemicals.jpg" alt="Chemicals being mixed in a flask">
-        </div>
+      refreshBtn.addEventListener("click", function () {
+        loadContents(true);
+      });
 
-        <div class="key-concept">
-            <h4>Key Concept: What Remains?</h4>
-            <p>After the reaction and evaporation, only <strong>NaCl (table salt)</strong> remains in the beaker. The CO<sub>2</sub> escapes as gas, the H<sub>2</sub>O evaporates, and excess HCl evaporates during heating.</p>
-        </div>
-    </section>
+      metaEl.textContent = owner + "/" + repo;
 
-    <!-- Section 3: Balance the Equation -->
-    <section class="section" id="balance">
-        <h2><span class="icon">3</span> Balance the Overall Equation</h2>
-        <p>Combine both reactions into one overall balanced equation by filling in the coefficients:</p>
+      function clearLists() {
+        foldersList.innerHTML = "";
+        filesList.innerHTML = "";
+      }
 
-        <div class="balance-activity" id="mainBalance">
-            <h3>Fill in the Coefficients</h3>
-            <div class="balance-row">
-                <input type="number" class="coeff-input" id="c1" min="1" max="9" placeholder="?">
-                Na<sub>2</sub>CO<sub>3</sub>(s) +
-                <input type="number" class="coeff-input" id="c2" min="1" max="9" placeholder="?">
-                HCl(aq) &rarr;
-                <input type="number" class="coeff-input" id="c3" min="1" max="9" placeholder="?">
-                NaCl(aq) +
-                <input type="number" class="coeff-input" id="c4" min="1" max="9" placeholder="?">
-                CO<sub>2</sub>(g) +
-                <input type="number" class="coeff-input" id="c5" min="1" max="9" placeholder="?">
-                H<sub>2</sub>O(l)
-            </div>
-            <div style="text-align:center; margin-top:1rem;">
-                <button class="btn btn-primary" onclick="checkMainBalance()">Check My Answer</button>
-                <button class="btn btn-outline" onclick="showHintBalance()" style="margin-left:0.5rem;">Hint</button>
-            </div>
-            <div id="mainBalanceFeedback" class="feedback"></div>
-            <div id="mainBalanceHint" class="feedback hint" style="display:none;">
-                Count atoms on each side. Start with Na: there are 2 Na atoms in Na<sub>2</sub>CO<sub>3</sub>, so you need 2 NaCl. Then balance Cl: 2 NaCl needs 2 HCl. C and O will fall into place.
-            </div>
-        </div>
+      function createCard(item, type) {
+        const li = document.createElement("li");
+        li.className = "card";
 
-        <h3>Theoretical Mole Ratio</h3>
-        <div class="info-card">
-            <span class="info-icon">&#9878;</span>
-            <div>
-                <strong>NaCl : Na<sub>2</sub>CO<sub>3</sub></strong> =
-                <input type="number" class="coeff-input" id="ratioNaCl" min="1" max="9" placeholder="?" style="width:48px; margin:0 4px;">
-                :
-                <input type="number" class="coeff-input" id="ratioNa2CO3" min="1" max="9" placeholder="?" style="width:48px; margin:0 4px;">
-                <button class="btn btn-primary" onclick="checkRatio()" style="margin-left:0.75rem; padding:0.4rem 1rem; font-size:0.85rem;">Check</button>
-                <span id="ratioFeedback" style="margin-left:0.5rem; font-weight:600;"></span>
-            </div>
-        </div>
+        const a = document.createElement("a");
+        a.href = type === "dir" ? ("./" + item.name + "/") : ("./" + item.name);
+        a.target = "_self";
 
-        <div class="img-container" style="max-width:300px; margin:1rem auto;">
-            <img src="images/beaker-heating.jpg" alt="Beaker being heated">
-        </div>
+        const label = document.createElement("div");
+        label.className = "label";
+        label.textContent = type === "dir" ? "Folder: " + item.name : item.name;
 
-        <h3>Important Reference Data</h3>
-        <table class="data-table">
-            <tr><th>Substance</th><th>Molar Mass</th></tr>
-            <tr><td>Na<sub>2</sub>CO<sub>3</sub> (sodium carbonate)</td><td><strong>105.99 g/mol</strong></td></tr>
-            <tr><td>NaCl (sodium chloride)</td><td><strong>58.44 g/mol</strong></td></tr>
-        </table>
-    </section>
+        const tag = document.createElement("small");
+        tag.textContent = type;
+        label.appendChild(tag);
 
-    <!-- Section 4: Experimental Procedure -->
-    <section class="section" id="procedure">
-        <h2><span class="icon">4</span> Experimental Procedure</h2>
+        const path = document.createElement("div");
+        path.className = "path";
+        path.textContent = item.path;
 
-        <div class="step">
-            <div class="step-number">1</div>
-            <h3>Initial Setup &amp; Weighing</h3>
-            <div class="step-content">
-                <ul>
-                    <li>Weigh a clean, empty beaker to <strong>0.01 g</strong> precision</li>
-                    <li>Record: Mass of empty beaker</li>
-                </ul>
-                <div class="equation-box" style="font-size:0.95rem;">
-                    Example: Mass of empty beaker = <strong>45.23 g</strong>
-                </div>
-            </div>
-        </div>
+        a.appendChild(label);
+        a.appendChild(path);
+        li.appendChild(a);
+        return li;
+      }
 
-        <div class="step">
-            <div class="step-number">2</div>
-            <h3>Adding the Reactant</h3>
-            <div class="step-content">
-                <ul>
-                    <li>Add between <strong>0.40 &ndash; 0.70 g</strong> of Na<sub>2</sub>CO<sub>3</sub> to the beaker</li>
-                    <li>Weigh the beaker + Na<sub>2</sub>CO<sub>3</sub></li>
-                    <li>Calculate the mass of Na<sub>2</sub>CO<sub>3</sub> by subtraction</li>
-                </ul>
-                <div class="equation-box" style="font-size:0.95rem;">
-                    Mass of Na<sub>2</sub>CO<sub>3</sub> = (beaker + Na<sub>2</sub>CO<sub>3</sub>) &minus; (empty beaker)<br>
-                    Example: 45.93 g &minus; 45.23 g = <strong>0.70 g</strong>
-                </div>
-            </div>
-        </div>
+      async function loadContents(force) {
+        try {
+          statusEl.textContent = force ? "Refreshing..." : "Reading repository contents...";
+          clearLists();
+          foldersEmpty.hidden = true;
+          filesEmpty.hidden = true;
 
-        <div class="step">
-            <div class="step-number">3</div>
-            <h3>The Chemical Reaction</h3>
-            <div class="step-content">
-                <ul>
-                    <li>Using a disposable pipet, slowly add <strong>10% HCl solution</strong> dropwise</li>
-                    <li>Gently swirl the beaker between additions</li>
-                    <li>Continue adding HCl until all fizzing stops and the solution is clear</li>
-                </ul>
-                <h4 style="margin-top:1rem;">Expected Observations (click to check off):</h4>
-                <ul class="checklist" id="obsChecklist">
-                    <li onclick="toggleCheck(this)">Immediate vigorous fizzing/bubbling when HCl is added</li>
-                    <li onclick="toggleCheck(this)">Solution becomes warm (exothermic reaction)</li>
-                    <li onclick="toggleCheck(this)">White solid gradually dissolves</li>
-                    <li onclick="toggleCheck(this)">Fizzing stops after ~10&ndash;15 mL HCl added</li>
-                    <li onclick="toggleCheck(this)">Clear, colorless solution remains</li>
-                </ul>
-            </div>
-        </div>
+          const url = force ? (apiUrl + "?t=" + Date.now()) : apiUrl;
+          const res = await fetch(url, { headers: { "Accept": "application/vnd.github+json" } });
 
-        <div class="step">
-            <div class="step-number">4</div>
-            <h3>Evaporation Process</h3>
-            <div class="step-content">
-                <ul>
-                    <li>Place beaker on hot plate set to <strong>low&ndash;medium heat</strong></li>
-                    <li>Heat <em>gently</em> to evaporate water and excess HCl</li>
-                    <li>Continue until white NaCl crystals remain</li>
-                </ul>
+          if (!res.ok) {
+            throw new Error("GitHub API returned " + res.status);
+          }
 
-                <div class="img-container">
-                    <img src="images/evaporation.jpg" alt="Evaporation process in beaker">
-                </div>
+          const items = await res.json();
+          const visibleItems = items.filter(function (item) {
+            return !item.name.startsWith(".");
+          });
 
-                <div class="info-card warning">
-                    <span class="info-icon">&#9888;&#65039;</span>
-                    <div>
-                        <strong>Caution: Spattering!</strong><br>
-                        If you heat too quickly, the solution will spatter and you'll <strong>lose product</strong> &mdash; this is the #2 most common error and <em>decreases</em> your final mass.
-                    </div>
-                </div>
-                <div class="info-card error-increase">
-                    <span class="info-icon">&#128167;</span>
-                    <div>
-                        <strong>#1 Error Source: Incomplete Drying</strong><br>
-                        Residual water left in the beaker <em>increases</em> the measured mass of your product, making your mole ratio too high.
-                    </div>
-                </div>
-            </div>
-        </div>
+          const dirs = visibleItems.filter(function (item) { return item.type === "dir"; });
+          const files = visibleItems.filter(function (item) { return item.type === "file"; });
 
-        <div class="step">
-            <div class="step-number">5</div>
-            <h3>Final Weighing</h3>
-            <div class="step-content">
-                <ul>
-                    <li>Allow beaker to cool to room temperature (~5 minutes)</li>
-                    <li>Weigh the beaker + NaCl to <strong>0.01 g</strong> precision</li>
-                    <li>Calculate mass of NaCl produced by subtraction</li>
-                </ul>
-                <div class="equation-box" style="font-size:0.95rem;">
-                    Mass of NaCl = (beaker + NaCl) &minus; (empty beaker)<br>
-                    Example: 46.00 g &minus; 45.23 g = <strong>0.77 g</strong>
-                </div>
-            </div>
-        </div>
-    </section>
+          dirs.sort(function (a, b) { return a.name.localeCompare(b.name); });
+          files.sort(function (a, b) { return a.name.localeCompare(b.name); });
 
-    <!-- Section 5: Interactive Calculator -->
-    <section class="section" id="calculator">
-        <h2><span class="icon">5</span> Mole Ratio Calculator</h2>
-        <p>Enter your experimental data below to calculate your mole ratio:</p>
+          dirs.forEach(function (dir) { foldersList.appendChild(createCard(dir, "dir")); });
+          files.forEach(function (file) { filesList.appendChild(createCard(file, "file")); });
 
-        <div class="calculator">
-            <h3 style="color:#166534; margin-top:0;">Enter Your Data</h3>
-            <div class="calc-grid">
-                <div class="calc-field">
-                    <label>Mass of empty beaker (g)</label>
-                    <input type="number" id="calcEmptyBeaker" step="0.01" placeholder="e.g. 45.23">
-                </div>
-                <div class="calc-field">
-                    <label>Mass of beaker + Na<sub>2</sub>CO<sub>3</sub> (g)</label>
-                    <input type="number" id="calcBeakerNa2CO3" step="0.01" placeholder="e.g. 45.93">
-                </div>
-                <div class="calc-field">
-                    <label>Mass of beaker + NaCl (g)</label>
-                    <input type="number" id="calcBeakerNaCl" step="0.01" placeholder="e.g. 46.00">
-                </div>
-            </div>
-            <div style="text-align:center;">
-                <button class="btn btn-success" onclick="calculateMoles()">Calculate</button>
-                <button class="btn btn-outline" onclick="loadExample()" style="margin-left:0.5rem;">Load Example</button>
-            </div>
+          foldersEmpty.hidden = dirs.length !== 0;
+          filesEmpty.hidden = files.length !== 0;
 
-            <div class="calc-result" id="calcResults" style="display:none;">
-                <table class="data-table" style="margin:0;">
-                    <tr><th style="width:55%;">Quantity</th><th>Value</th></tr>
-                    <tr><td>Mass of Na<sub>2</sub>CO<sub>3</sub></td><td id="rMassNa2CO3">-</td></tr>
-                    <tr><td>Moles of Na<sub>2</sub>CO<sub>3</sub> <span class="formula">(mass &div; 105.99)</span></td><td id="rMolesNa2CO3">-</td></tr>
-                    <tr><td>Mass of NaCl</td><td id="rMassNaCl">-</td></tr>
-                    <tr><td>Moles of NaCl <span class="formula">(mass &div; 58.44)</span></td><td id="rMolesNaCl">-</td></tr>
-                    <tr style="background:#ecfdf5;"><td><strong>Experimental Mole Ratio (NaCl : Na<sub>2</sub>CO<sub>3</sub>)</strong></td><td id="rRatio" style="font-size:1.2rem;"><strong>-</strong></td></tr>
-                    <tr><td>Theoretical Yield of NaCl</td><td id="rTheoYield">-</td></tr>
-                    <tr><td>Percent Yield</td><td id="rPercentYield">-</td></tr>
-                </table>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section 6: Results Analysis -->
-    <section class="section" id="analysis">
-        <h2><span class="icon">6</span> Results Analysis &amp; Discussion</h2>
-
-        <div class="img-container">
-            <img src="images/lab-analysis.jpg" alt="Lab analysis setup">
-        </div>
-
-        <h3>Comparing Experimental to Theoretical Ratio</h3>
-        <p>The <strong>theoretical mole ratio</strong> of NaCl : Na<sub>2</sub>CO<sub>3</sub> is <strong>2 : 1</strong> from the balanced equation. If your experimental ratio matches closely, it confirms the stoichiometry and that the reaction went to completion.</p>
-
-        <h3>Factors Influencing Final Mass</h3>
-        <div class="error-grid">
-            <div class="error-card increase">
-                <h4>&#9650; Could INCREASE Mass</h4>
-                <ul>
-                    <li><strong>Incomplete evaporation</strong> &mdash; residual water or HCl remains in the beaker</li>
-                </ul>
-            </div>
-            <div class="error-card decrease">
-                <h4>&#9660; Could DECREASE Mass</h4>
-                <ul>
-                    <li><strong>Spattering</strong> during heating &mdash; physical loss of product</li>
-                    <li><strong>Incomplete reaction</strong> &mdash; not enough HCl added</li>
-                    <li><strong>Transfer losses</strong> &mdash; product stuck to stirring rod or walls</li>
-                    <li><strong>Over-heating</strong> &mdash; decomposition (unlikely for NaCl)</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="img-container">
-            <img src="images/error-factors.jpg" alt="Factors influencing measurements">
-        </div>
-    </section>
-
-    <!-- Section 7: Theoretical & Actual Yield -->
-    <section class="section" id="yield">
-        <h2><span class="icon">7</span> Theoretical &amp; Actual Yield</h2>
-
-        <div class="key-concept">
-            <h4>What is Theoretical Yield?</h4>
-            <p>The chemistry equivalent of the <strong>best-case scenario</strong>. It's the maximum amount of product you could obtain if the reaction were perfect. In reality, heat splatters, water clings to crystals, and CO<sub>2</sub> escapes. Stoichiometry lets us measure <em>how close we got to perfect</em>.</p>
-        </div>
-
-        <h3>Calculating Theoretical Yield of NaCl</h3>
-        <p>Starting with <strong>0.70 g Na<sub>2</sub>CO<sub>3</sub></strong>:</p>
-
-        <div class="tab-container">
-            <div class="tab-buttons">
-                <button class="tab-btn active" onclick="switchTab(event, 'step-a')">Step 1: Mass &rarr; Moles</button>
-                <button class="tab-btn" onclick="switchTab(event, 'step-b')">Step 2: Mole Ratio</button>
-                <button class="tab-btn" onclick="switchTab(event, 'step-c')">Step 3: Moles &rarr; Mass</button>
-            </div>
-            <div class="tab-content active" id="step-a">
-                <div class="equation-box">
-                    <div class="label">Convert mass to moles</div>
-                    Moles = Mass &div; Molar Mass<br>
-                    0.70 g &div; 105.99 g/mol = <strong>0.0066 mol Na<sub>2</sub>CO<sub>3</sub></strong>
-                </div>
-            </div>
-            <div class="tab-content" id="step-b">
-                <div class="equation-box">
-                    <div class="label">Apply the mole ratio (1 mol Na<sub>2</sub>CO<sub>3</sub> &rarr; 2 mol NaCl)</div>
-                    0.0066 mol &times; 2 = <strong>0.0132 mol NaCl</strong>
-                </div>
-            </div>
-            <div class="tab-content" id="step-c">
-                <div class="equation-box">
-                    <div class="label">Convert moles to grams</div>
-                    Mass = Moles &times; Molar Mass<br>
-                    0.0132 mol &times; 58.44 g/mol = <strong>0.77 g NaCl</strong>
-                </div>
-            </div>
-        </div>
-
-        <h3>Visual: Theoretical vs. Actual Yield</h3>
-        <div class="yield-bar-container">
-            <div class="yield-label"><span>Theoretical Yield</span><span>0.77 g</span></div>
-            <div class="yield-bar"><div class="yield-fill theoretical" style="width:100%;">100%</div></div>
-            <div class="yield-label"><span>Actual Yield (example)</span><span>0.73 g</span></div>
-            <div class="yield-bar"><div class="yield-fill actual" style="width:94.8%;">94.8%</div></div>
-        </div>
-        <div class="equation-box">
-            <div class="label">Percent Yield</div>
-            % Yield = (Actual &div; Theoretical) &times; 100 = (0.73 &div; 0.77) &times; 100 = <strong>94.8%</strong>
-        </div>
-
-        <div class="img-container">
-            <img src="images/theoretical-yield.jpg" alt="Theoretical yield concept - chalkboard with chemical equations">
-        </div>
-
-        <div class="img-container" style="max-width:400px; margin: 1rem auto;">
-            <img src="images/progress-motivation.jpg" alt="Strive for progress not perfection">
-        </div>
-    </section>
-
-    <!-- Section 8: Practice Problems -->
-    <section class="section" id="practice">
-        <h2><span class="icon">8</span> Practice Problems</h2>
-
-        <div class="img-container">
-            <img src="images/balance-flasks.jpg" alt="Colorful chemistry flasks">
-        </div>
-
-        <!-- Problem 1a -->
-        <div class="practice-problem">
-            <h4>Problem 1a: Balance the Equation</h4>
-            <div class="balance-row" style="font-size:1rem;">
-                <input type="number" class="answer-input" id="p1a_1" min="1" max="9" placeholder="?">
-                KI +
-                <input type="number" class="answer-input" id="p1a_2" min="1" max="9" placeholder="?">
-                Pb(NO<sub>3</sub>)<sub>2</sub> &rarr;
-                <input type="number" class="answer-input" id="p1a_3" min="1" max="9" placeholder="?">
-                KNO<sub>3</sub> +
-                <input type="number" class="answer-input" id="p1a_4" min="1" max="9" placeholder="?">
-                PbI<sub>2</sub>
-            </div>
-            <button class="btn btn-primary" onclick="checkP1a()" style="margin-top:0.75rem;">Check</button>
-            <div id="p1aFeedback" class="feedback"></div>
-        </div>
-
-        <!-- Problem 1b -->
-        <div class="practice-problem">
-            <h4>Problem 1b: Balance the Equation</h4>
-            <div class="balance-row" style="font-size:1rem;">
-                <input type="number" class="answer-input" id="p1b_1" min="1" max="9" placeholder="?">
-                H<sub>2</sub>SO<sub>4</sub> +
-                <input type="number" class="answer-input" id="p1b_2" min="1" max="9" placeholder="?">
-                NaOH &rarr;
-                <input type="number" class="answer-input" id="p1b_3" min="1" max="9" placeholder="?">
-                Na<sub>2</sub>SO<sub>4</sub> +
-                <input type="number" class="answer-input" id="p1b_4" min="1" max="9" placeholder="?">
-                H<sub>2</sub>O
-            </div>
-            <button class="btn btn-primary" onclick="checkP1b()" style="margin-top:0.75rem;">Check</button>
-            <div id="p1bFeedback" class="feedback"></div>
-        </div>
-
-        <!-- Problem 2: Jebb's Sample -->
-        <div class="practice-problem">
-            <h4>Problem 2: Jebb's Sample Problem</h4>
-            <p><strong>Given:</strong> 0.45 g Na<sub>2</sub>CO<sub>3</sub>, obtained 0.48 g NaCl</p>
-
-            <div style="margin: 1rem 0;">
-                <label><strong>a) Moles of Na<sub>2</sub>CO<sub>3</sub> used:</strong></label><br>
-                <span style="font-size:0.9rem; color:var(--text-light);">0.45 g &div; 105.99 g/mol = </span>
-                <input type="text" class="answer-input" id="jebb_a" style="width:110px;" placeholder="mol">
-                <button class="btn btn-primary" onclick="checkJebbA()" style="padding:0.3rem 0.75rem; font-size:0.8rem;">Check</button>
-                <span id="jebbAFeedback" style="font-weight:600;"></span>
-            </div>
-            <div style="margin: 1rem 0;">
-                <label><strong>b) Moles of NaCl produced:</strong></label><br>
-                <span style="font-size:0.9rem; color:var(--text-light);">0.48 g &div; 58.44 g/mol = </span>
-                <input type="text" class="answer-input" id="jebb_b" style="width:110px;" placeholder="mol">
-                <button class="btn btn-primary" onclick="checkJebbB()" style="padding:0.3rem 0.75rem; font-size:0.8rem;">Check</button>
-                <span id="jebbBFeedback" style="font-weight:600;"></span>
-            </div>
-            <div style="margin: 1rem 0;">
-                <label><strong>c) Experimental mole ratio (NaCl : Na<sub>2</sub>CO<sub>3</sub>):</strong></label><br>
-                <input type="text" class="answer-input" id="jebb_c" style="width:110px;" placeholder="e.g. 1.93">
-                <span> : 1</span>
-                <button class="btn btn-primary" onclick="checkJebbC()" style="padding:0.3rem 0.75rem; font-size:0.8rem;">Check</button>
-                <span id="jebbCFeedback" style="font-weight:600;"></span>
-            </div>
-            <div style="margin: 1rem 0;">
-                <label><strong>d) Analysis:</strong> Is Jebb's result close to theoretical?</label><br>
-                <div id="jebbAnalysis" style="display:none; margin-top:0.5rem;" class="info-card">
-                    <span class="info-icon">&#128269;</span>
-                    <div>
-                        <strong>Theoretical ratio: 2:1 | Experimental: 1.93:1</strong><br>
-                        Jebb's result is slightly below theoretical (3.5% low), suggesting minor product loss &mdash; likely from spattering during evaporation or small transfer losses. This is a good result!
-                    </div>
-                </div>
-                <button class="btn btn-outline" onclick="document.getElementById('jebbAnalysis').style.display='flex';" style="margin-top:0.5rem;">Reveal Analysis</button>
-            </div>
-        </div>
-
-        <!-- Problem 3: Theoretical Yield Calculation -->
-        <div class="practice-problem">
-            <h4>Problem 3: Theoretical Yield</h4>
-            <p>If you start with <strong>2.60 g of Na<sub>2</sub>CO<sub>3</sub></strong> and react it with excess HCl, what mass of NaCl would you expect to produce?</p>
-            <div style="margin:1rem 0;">
-                <label>Step 1: Moles of Na<sub>2</sub>CO<sub>3</sub> = 2.60 &div; 105.99 = </label>
-                <input type="text" class="answer-input" id="p3_moles" style="width:110px;" placeholder="mol">
-            </div>
-            <div style="margin:1rem 0;">
-                <label>Step 2: Moles of NaCl (use 2:1 ratio) = </label>
-                <input type="text" class="answer-input" id="p3_nacl_moles" style="width:110px;" placeholder="mol">
-            </div>
-            <div style="margin:1rem 0;">
-                <label>Step 3: Mass of NaCl = moles &times; 58.44 = </label>
-                <input type="text" class="answer-input" id="p3_mass" style="width:110px;" placeholder="g">
-            </div>
-            <button class="btn btn-primary" onclick="checkP3()">Check All Steps</button>
-            <div id="p3Feedback" class="feedback"></div>
-        </div>
-    </section>
-
-</main>
-
-<footer>
-    <p>Lab 3: Stoichiometry &mdash; Interactive Learning Resource</p>
-    <p style="margin-top:0.25rem;">Na<sub>2</sub>CO<sub>3</sub> + 2 HCl &rarr; 2 NaCl + CO<sub>2</sub> + H<sub>2</sub>O</p>
-</footer>
-
-<script>
-    // Track completed sections for progress
-    let completedActivities = new Set();
-    const totalActivities = 7; // main balance, ratio, p1a, p1b, jebb, p3, calculator
-
-    function updateProgress() {
-        const pct = Math.round((completedActivities.size / totalActivities) * 100);
-        document.getElementById('progressPercent').textContent = pct + '%';
-        document.getElementById('progressFill').style.width = pct + '%';
-    }
-
-    // Main Balance Check
-    function checkMainBalance() {
-        const c = [
-            parseInt(document.getElementById('c1').value),
-            parseInt(document.getElementById('c2').value),
-            parseInt(document.getElementById('c3').value),
-            parseInt(document.getElementById('c4').value),
-            parseInt(document.getElementById('c5').value)
-        ];
-        const correct = [1, 2, 2, 1, 1];
-        const fb = document.getElementById('mainBalanceFeedback');
-
-        let allCorrect = true;
-        for (let i = 0; i < 5; i++) {
-            const el = document.getElementById('c' + (i + 1));
-            if (c[i] === correct[i]) {
-                el.classList.add('correct');
-                el.classList.remove('incorrect');
-            } else {
-                el.classList.add('incorrect');
-                el.classList.remove('correct');
-                allCorrect = false;
-            }
+          statusEl.textContent = "Loaded " + dirs.length + " folder" + (dirs.length === 1 ? "" : "s") +
+            " and " + files.length + " file" + (files.length === 1 ? "" : "s") + ".";
+        } catch (err) {
+          statusEl.textContent = "Could not load repository contents automatically.";
+          foldersEmpty.hidden = false;
+          filesEmpty.hidden = false;
+          foldersEmpty.textContent = "Automatic loading failed. Open the GitHub repo to verify folder names.";
+          filesEmpty.textContent = "Error details: " + (err && err.message ? err.message : "unknown error");
         }
+      }
 
-        if (allCorrect) {
-            fb.className = 'feedback correct';
-            fb.textContent = 'Correct! 1 Na\u2082CO\u2083 + 2 HCl \u2192 2 NaCl + 1 CO\u2082 + 1 H\u2082O';
-            completedActivities.add('mainBalance');
-            updateProgress();
-        } else {
-            fb.className = 'feedback incorrect';
-            fb.textContent = 'Not quite \u2014 check the red boxes and count atoms on each side.';
-        }
-    }
-
-    function showHintBalance() {
-        const hint = document.getElementById('mainBalanceHint');
-        hint.style.display = hint.style.display === 'none' ? 'block' : 'none';
-    }
-
-    // Ratio Check
-    function checkRatio() {
-        const nacl = parseInt(document.getElementById('ratioNaCl').value);
-        const na2co3 = parseInt(document.getElementById('ratioNa2CO3').value);
-        const fb = document.getElementById('ratioFeedback');
-
-        if (nacl === 2 && na2co3 === 1) {
-            fb.textContent = '\u2705 Correct!';
-            fb.style.color = '#166534';
-            completedActivities.add('ratio');
-            updateProgress();
-        } else {
-            fb.textContent = '\u274C Try again';
-            fb.style.color = '#dc2626';
-        }
-    }
-
-    // Observation Checklist
-    function toggleCheck(el) {
-        el.classList.toggle('checked');
-    }
-
-    // Calculator
-    function calculateMoles() {
-        const empty = parseFloat(document.getElementById('calcEmptyBeaker').value);
-        const withNa = parseFloat(document.getElementById('calcBeakerNa2CO3').value);
-        const withNaCl = parseFloat(document.getElementById('calcBeakerNaCl').value);
-
-        if (isNaN(empty) || isNaN(withNa) || isNaN(withNaCl)) {
-            alert('Please fill in all three fields.');
-            return;
-        }
-
-        const massNa2CO3 = withNa - empty;
-        const molesNa2CO3 = massNa2CO3 / 105.99;
-        const massNaCl = withNaCl - empty;
-        const molesNaCl = massNaCl / 58.44;
-        const ratio = molesNaCl / molesNa2CO3;
-        const theoYield = molesNa2CO3 * 2 * 58.44;
-        const pctYield = (massNaCl / theoYield) * 100;
-
-        document.getElementById('rMassNa2CO3').textContent = massNa2CO3.toFixed(2) + ' g';
-        document.getElementById('rMolesNa2CO3').textContent = molesNa2CO3.toFixed(5) + ' mol';
-        document.getElementById('rMassNaCl').textContent = massNaCl.toFixed(2) + ' g';
-        document.getElementById('rMolesNaCl').textContent = molesNaCl.toFixed(5) + ' mol';
-        document.getElementById('rRatio').innerHTML = '<strong>' + ratio.toFixed(2) + ' : 1</strong>';
-        document.getElementById('rTheoYield').textContent = theoYield.toFixed(2) + ' g';
-        document.getElementById('rPercentYield').textContent = pctYield.toFixed(1) + '%';
-
-        document.getElementById('calcResults').style.display = 'block';
-        completedActivities.add('calculator');
-        updateProgress();
-    }
-
-    function loadExample() {
-        document.getElementById('calcEmptyBeaker').value = '45.23';
-        document.getElementById('calcBeakerNa2CO3').value = '45.93';
-        document.getElementById('calcBeakerNaCl').value = '46.00';
-    }
-
-    // Practice Problem 1a: 2 KI + 1 Pb(NO3)2 -> 2 KNO3 + 1 PbI2
-    function checkP1a() {
-        const ans = [
-            parseInt(document.getElementById('p1a_1').value),
-            parseInt(document.getElementById('p1a_2').value),
-            parseInt(document.getElementById('p1a_3').value),
-            parseInt(document.getElementById('p1a_4').value)
-        ];
-        const correct = [2, 1, 2, 1];
-        const fb = document.getElementById('p1aFeedback');
-        let allCorrect = true;
-
-        for (let i = 0; i < 4; i++) {
-            const el = document.getElementById('p1a_' + (i + 1));
-            if (ans[i] === correct[i]) {
-                el.classList.add('correct');
-                el.classList.remove('incorrect');
-            } else {
-                el.classList.add('incorrect');
-                el.classList.remove('correct');
-                allCorrect = false;
-            }
-        }
-
-        if (allCorrect) {
-            fb.className = 'feedback correct';
-            fb.innerHTML = 'Correct! 2 KI + 1 Pb(NO<sub>3</sub>)<sub>2</sub> \u2192 2 KNO<sub>3</sub> + 1 PbI<sub>2</sub><br><small>K: 2=2, I: 2=2, Pb: 1=1, N: 2=2, O: 6=6</small>';
-            completedActivities.add('p1a');
-            updateProgress();
-        } else {
-            fb.className = 'feedback incorrect';
-            fb.textContent = 'Not quite \u2014 count each element on both sides.';
-        }
-    }
-
-    // Practice Problem 1b: 1 H2SO4 + 2 NaOH -> 1 Na2SO4 + 2 H2O
-    function checkP1b() {
-        const ans = [
-            parseInt(document.getElementById('p1b_1').value),
-            parseInt(document.getElementById('p1b_2').value),
-            parseInt(document.getElementById('p1b_3').value),
-            parseInt(document.getElementById('p1b_4').value)
-        ];
-        const correct = [1, 2, 1, 2];
-        const fb = document.getElementById('p1bFeedback');
-        let allCorrect = true;
-
-        for (let i = 0; i < 4; i++) {
-            const el = document.getElementById('p1b_' + (i + 1));
-            if (ans[i] === correct[i]) {
-                el.classList.add('correct');
-                el.classList.remove('incorrect');
-            } else {
-                el.classList.add('incorrect');
-                el.classList.remove('correct');
-                allCorrect = false;
-            }
-        }
-
-        if (allCorrect) {
-            fb.className = 'feedback correct';
-            fb.innerHTML = 'Correct! 1 H<sub>2</sub>SO<sub>4</sub> + 2 NaOH \u2192 1 Na<sub>2</sub>SO<sub>4</sub> + 2 H<sub>2</sub>O<br><small>H: 4=4, S: 1=1, O: 6=6, Na: 2=2</small>';
-            completedActivities.add('p1b');
-            updateProgress();
-        } else {
-            fb.className = 'feedback incorrect';
-            fb.textContent = 'Not quite \u2014 count each element on both sides.';
-        }
-    }
-
-    // Jebb's problem
-    function closeEnough(val, target, tolerance) {
-        return Math.abs(val - target) <= tolerance;
-    }
-
-    function checkJebbA() {
-        const val = parseFloat(document.getElementById('jebb_a').value);
-        const fb = document.getElementById('jebbAFeedback');
-        if (closeEnough(val, 0.00425, 0.0001)) {
-            fb.textContent = '\u2705 Correct! (0.00425 mol)';
-            fb.style.color = '#166534';
-        } else {
-            fb.textContent = '\u274C Try: 0.45 \u00f7 105.99';
-            fb.style.color = '#dc2626';
-        }
-    }
-
-    function checkJebbB() {
-        const val = parseFloat(document.getElementById('jebb_b').value);
-        const fb = document.getElementById('jebbBFeedback');
-        if (closeEnough(val, 0.00821, 0.0001)) {
-            fb.textContent = '\u2705 Correct! (0.00821 mol)';
-            fb.style.color = '#166534';
-        } else {
-            fb.textContent = '\u274C Try: 0.48 \u00f7 58.44';
-            fb.style.color = '#dc2626';
-        }
-    }
-
-    function checkJebbC() {
-        const val = parseFloat(document.getElementById('jebb_c').value);
-        const fb = document.getElementById('jebbCFeedback');
-        if (closeEnough(val, 1.93, 0.05)) {
-            fb.textContent = '\u2705 Correct! (1.93:1)';
-            fb.style.color = '#166534';
-            completedActivities.add('jebb');
-            updateProgress();
-        } else {
-            fb.textContent = '\u274C Try: 0.00821 \u00f7 0.00425';
-            fb.style.color = '#dc2626';
-        }
-    }
-
-    // Problem 3: Theoretical yield from 2.60 g
-    function checkP3() {
-        const moles = parseFloat(document.getElementById('p3_moles').value);
-        const naclMoles = parseFloat(document.getElementById('p3_nacl_moles').value);
-        const mass = parseFloat(document.getElementById('p3_mass').value);
-        const fb = document.getElementById('p3Feedback');
-
-        // 2.60 / 105.99 = 0.02453
-        // 0.02453 * 2 = 0.04906
-        // 0.04906 * 58.44 = 2.868 g
-        let results = [];
-        let allCorrect = true;
-
-        if (closeEnough(moles, 0.02453, 0.001)) {
-            results.push('Step 1: \u2705 0.02453 mol');
-            document.getElementById('p3_moles').classList.add('correct');
-            document.getElementById('p3_moles').classList.remove('incorrect');
-        } else {
-            results.push('Step 1: \u274C Expected ~0.0245 mol');
-            document.getElementById('p3_moles').classList.add('incorrect');
-            document.getElementById('p3_moles').classList.remove('correct');
-            allCorrect = false;
-        }
-
-        if (closeEnough(naclMoles, 0.04906, 0.002)) {
-            results.push('Step 2: \u2705 0.04906 mol');
-            document.getElementById('p3_nacl_moles').classList.add('correct');
-            document.getElementById('p3_nacl_moles').classList.remove('incorrect');
-        } else {
-            results.push('Step 2: \u274C Expected ~0.0491 mol');
-            document.getElementById('p3_nacl_moles').classList.add('incorrect');
-            document.getElementById('p3_nacl_moles').classList.remove('correct');
-            allCorrect = false;
-        }
-
-        if (closeEnough(mass, 2.868, 0.05)) {
-            results.push('Step 3: \u2705 2.87 g NaCl');
-            document.getElementById('p3_mass').classList.add('correct');
-            document.getElementById('p3_mass').classList.remove('incorrect');
-        } else {
-            results.push('Step 3: \u274C Expected ~2.87 g');
-            document.getElementById('p3_mass').classList.add('incorrect');
-            document.getElementById('p3_mass').classList.remove('correct');
-            allCorrect = false;
-        }
-
-        fb.className = allCorrect ? 'feedback correct' : 'feedback incorrect';
-        fb.innerHTML = results.join('<br>');
-
-        if (allCorrect) {
-            completedActivities.add('p3');
-            updateProgress();
-        }
-    }
-
-    // Tab switching
-    function switchTab(event, tabId) {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        event.target.classList.add('active');
-        document.getElementById(tabId).classList.add('active');
-    }
-
-    // Navbar active state on scroll
-    const sections = document.querySelectorAll('.section');
-    const navLinks = document.querySelectorAll('.nav-bar a');
-
-    window.addEventListener('scroll', () => {
-        let current = '';
-        sections.forEach(section => {
-            const top = section.offsetTop - 100;
-            if (window.scrollY >= top) {
-                current = section.getAttribute('id');
-            }
-        });
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === '#' + current) {
-                link.classList.add('active');
-            }
-        });
-    });
-</script>
-
+      loadContents(false);
+    })();
+  </script>
 </body>
 </html>
