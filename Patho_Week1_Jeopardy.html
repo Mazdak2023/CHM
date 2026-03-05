@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patho Week 1 Jeopardy!</title>
+    <style>
+        :root {
+            --jeopardy-blue: #060CE9;
+            --jeopardy-dark: #000088;
+            --gold: #FFCC00;
+            --correct: #27ae60;
+            --incorrect: #e74c3c;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+            background: #0a0a2e;
+            color: white;
+            min-height: 100vh;
+        }
+        .game-header {
+            text-align: center;
+            padding: 1.5rem;
+            background: linear-gradient(180deg, #000055, #000088);
+            border-bottom: 4px solid var(--gold);
+        }
+        .game-header h1 {
+            font-size: 2.5rem;
+            color: var(--gold);
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            font-style: italic;
+            letter-spacing: 2px;
+        }
+        .game-header .subtitle {
+            color: white;
+            font-size: 1rem;
+            margin-top: 0.3rem;
+            opacity: 0.8;
+        }
+        .scoreboard {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding: 1rem;
+            flex-wrap: wrap;
+        }
+        .player-score {
+            background: linear-gradient(180deg, #000066, #000044);
+            border: 2px solid var(--gold);
+            border-radius: 10px;
+            padding: 0.8rem 2rem;
+            text-align: center;
+            min-width: 200px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .player-score.active-player { border-color: #00ff88; box-shadow: 0 0 15px rgba(0,255,136,0.3); }
+        .player-score .name {
+            font-size: 1.1rem;
+            color: var(--gold);
+            font-weight: bold;
+        }
+        .player-score .score {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-top: 0.3rem;
+        }
+        .player-score .score.negative { color: var(--incorrect); }
+        .board-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        .jeopardy-board {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            background: #000;
+            border: 4px solid var(--gold);
+            border-radius: 8px;
+            padding: 6px;
+        }
+        .category-header {
+            background: linear-gradient(180deg, var(--jeopardy-blue), var(--jeopardy-dark));
+            padding: 1rem 0.5rem;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: white;
+            border-radius: 4px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .clue-cell {
+            background: linear-gradient(180deg, var(--jeopardy-blue), #0004cc);
+            padding: 1rem;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--gold);
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            min-height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .clue-cell:hover {
+            background: linear-gradient(180deg, #1010ff, #0808dd);
+            transform: scale(1.03);
+        }
+        .clue-cell.used {
+            background: #111;
+            color: #333;
+            cursor: default;
+            pointer-events: none;
+        }
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal {
+            background: linear-gradient(180deg, var(--jeopardy-blue), #000066);
+            border: 4px solid var(--gold);
+            border-radius: 16px;
+            max-width: 700px;
+            width: 100%;
+            padding: 2rem;
+            text-align: center;
+            animation: popIn 0.3s ease;
+        }
+        @keyframes popIn {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .modal .category-label {
+            color: var(--gold);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .modal .value-label {
+            color: var(--gold);
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+        .modal .clue-text {
+            font-size: 1.3rem;
+            line-height: 1.5;
+            margin: 1.5rem 0;
+            color: white;
+        }
+        .modal .answer-section { margin-top: 1.5rem; }
+        .reveal-btn {
+            padding: 0.8rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--gold);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .reveal-btn:hover { background: var(--gold); color: var(--jeopardy-dark); }
+        .answer-text {
+            display: none;
+            font-size: 1.4rem;
+            color: var(--gold);
+            font-weight: bold;
+            margin: 1rem 0;
+            padding: 1rem;
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            background: rgba(255,204,0,0.1);
+        }
+        .answer-text.show { display: block; }
+        .scoring-btns {
+            display: none;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        .scoring-btns.show { display: flex; }
+        .score-btn {
+            padding: 0.6rem 1.5rem;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .score-btn:hover { transform: scale(1.05); }
+        .score-btn.correct-btn { background: var(--correct); color: white; }
+        .score-btn.wrong-btn { background: var(--incorrect); color: white; }
+        .score-btn.skip-btn { background: #555; color: white; }
+        .close-modal {
+            padding: 0.6rem 2rem;
+            font-size: 1rem;
+            border: 1px solid #888;
+            border-radius: 8px;
+            background: #333;
+            color: white;
+            cursor: pointer;
+            margin-top: 1rem;
+            display: none;
+        }
+        .close-modal.show { display: inline-block; }
+        .close-modal:hover { background: #555; }
+        /* Setup screen */
+        .setup-screen {
+            max-width: 500px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: linear-gradient(180deg, #000066, #000044);
+            border: 3px solid var(--gold);
+            border-radius: 16px;
+            text-align: center;
+        }
+        .setup-screen h2 { color: var(--gold); margin-bottom: 1rem; }
+        .setup-screen label { display: block; margin: 1rem 0 0.3rem; text-align: left; font-size: 0.9rem; }
+        .setup-screen input, .setup-screen select {
+            width: 100%;
+            padding: 0.6rem;
+            border-radius: 6px;
+            border: 2px solid var(--gold);
+            background: #000044;
+            color: white;
+            font-size: 1rem;
+        }
+        .setup-screen .start-btn {
+            margin-top: 1.5rem;
+            padding: 0.8rem 3rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: var(--gold);
+            color: var(--jeopardy-dark);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .setup-screen .start-btn:hover { opacity: 0.9; }
+        .game-area { display: none; }
+        .game-area.show { display: block; }
+        .controls {
+            text-align: center;
+            padding: 1rem;
+        }
+        .controls button {
+            padding: 0.5rem 1.5rem;
+            margin: 0 0.3rem;
+            border: 1px solid #555;
+            border-radius: 6px;
+            background: #222;
+            color: #ccc;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        .controls button:hover { background: #444; }
+        .winner-banner {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            margin: 1rem auto;
+            max-width: 600px;
+            background: linear-gradient(180deg, #000066, #000044);
+            border: 3px solid var(--gold);
+            border-radius: 16px;
+        }
+        .winner-banner.show { display: block; }
+        .winner-banner h2 { color: var(--gold); font-size: 2rem; }
+        .winner-banner p { font-size: 1.2rem; margin-top: 0.5rem; }
+        .timer {
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin: 0.5rem 0;
+            font-weight: bold;
+        }
+        .timer.warning { color: var(--incorrect); }
+        @media (max-width: 700px) {
+            .category-header { font-size: 0.65rem; padding: 0.5rem 0.2rem; min-height: 55px; }
+            .clue-cell { font-size: 1rem; padding: 0.5rem; min-height: 45px; }
+            .modal .clue-text { font-size: 1rem; }
+            .game-header h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- SETUP SCREEN -->
+<div class="setup-screen" id="setupScreen">
+    <h2>🏆 PATHO JEOPARDY!</h2>
+    <p style="color: var(--gold); margin-bottom: 1rem;">Week 1 Study Guide — HCR-240</p>
+    <label>Number of Players / Teams:</label>
+    <select id="numPlayers">
+        <option value="1">1 Player (Solo Practice)</option>
+        <option value="2" selected>2 Players / Teams</option>
+        <option value="3">3 Players / Teams</option>
+        <option value="4">4 Players / Teams</option>
+    </select>
+    <div id="playerNameInputs">
+        <label>Player / Team 1:</label>
+        <input type="text" id="p1name" value="Team 1" maxlength="20">
+        <label>Player / Team 2:</label>
+        <input type="text" id="p2name" value="Team 2" maxlength="20">
+    </div>
+    <label>Timer per question (seconds):</label>
+    <select id="timerSelect">
+        <option value="0">No Timer</option>
+        <option value="15">15 seconds</option>
+        <option value="30" selected>30 seconds</option>
+        <option value="45">45 seconds</option>
+        <option value="60">60 seconds</option>
+    </select>
+    <br>
+    <button class="start-btn" onclick="startGame()">START GAME</button>
+</div>
+
+<!-- GAME AREA -->
+<div class="game-area" id="gameArea">
+    <div class="game-header">
+        <h1>PATHO JEOPARDY!</h1>
+        <div class="subtitle">Week 1 — HCR-240 // Tehrani</div>
+    </div>
+
+    <div class="scoreboard" id="scoreboard"></div>
+
+    <div class="board-container">
+        <div class="jeopardy-board" id="jeopardyBoard"></div>
+    </div>
+
+    <div class="controls">
+        <button onclick="resetGame()">🔄 New Game</button>
+        <button onclick="checkWinner()">🏆 Final Scores</button>
+    </div>
+
+    <div class="winner-banner" id="winnerBanner">
+        <h2 id="winnerText">🏆 Winner!</h2>
+        <p id="winnerScore"></p>
+        <button class="start-btn" style="margin-top:1rem; font-size:1rem;" onclick="resetGame()">Play Again</button>
+    </div>
+</div>
+
+<!-- CLUE MODAL -->
+<div class="modal-overlay" id="clueModal">
+    <div class="modal">
+        <div class="category-label" id="modalCategory"></div>
+        <div class="value-label" id="modalValue"></div>
+        <div class="timer" id="timer"></div>
+        <div class="clue-text" id="modalClue"></div>
+        <div class="answer-section">
+            <button class="reveal-btn" id="revealBtn" onclick="revealAnswer()">Reveal Answer</button>
+            <div class="answer-text" id="modalAnswer"></div>
+            <div class="scoring-btns" id="scoringBtns"></div>
+            <button class="close-modal" id="closeBtn" onclick="closeModal()">Continue</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ============ GAME DATA ============
+const categories = [
+    {
+        name: "Cellular Adaptation",
+        clues: [
+            {value: 200, clue: "This cellular adaptation involves a decrease in cell size and function.", answer: "What is Atrophy?"},
+            {value: 400, clue: "This type of cellular adaptation is an increase in cell SIZE (not number).", answer: "What is Hypertrophy?"},
+            {value: 600, clue: "This is a reversible change where one cell type changes to another as a protective response.", answer: "What is Metaplasia?"},
+            {value: 800, clue: "Active range of motion exercises help prevent this adaptation in bedridden patients.", answer: "What is Atrophy?"},
+            {value: 1000, clue: "Chronic GERD leading to squamous epithelium being replaced by columnar epithelium is called this.", answer: "What is Barrett's Esophagus?"},
+        ]
+    },
+    {
+        name: "Dysplasia, Apoptosis & Inflammation",
+        clues: [
+            {value: 200, clue: "Programmed cell death is known as this.", answer: "What is Apoptosis?"},
+            {value: 400, clue: "Failure of apoptosis can lead to this uncontrolled cell growth.", answer: "What is Neoplasia (Cancer)?"},
+            {value: 600, clue: "These are the 5 cardinal signs of inflammation: redness, heat, swelling, pain, and this.", answer: "What is Loss of Function?"},
+            {value: 800, clue: "This process promotes leukocyte migration to the injury site to begin cleanup.", answer: "What is Chemotaxis?"},
+            {value: 1000, clue: "The correct progression from chronic irritation to cancer follows this sequence: Chronic Inflammation → Metaplasia → this → Carcinoma.", answer: "What is Dysplasia?"},
+        ]
+    },
+    {
+        name: "Wound Healing",
+        clues: [
+            {value: 200, clue: "This is the first stage of wound healing where clotting occurs.", answer: "What is Hemostasis?"},
+            {value: 400, clue: "Healing where wound edges are clean and brought together with minimal scarring.", answer: "What is Primary Intention?"},
+            {value: 600, clue: "The disruption or separation of a surgical incision is called this.", answer: "What is Wound Dehiscence?"},
+            {value: 800, clue: "The protrusion of wound contents through a surgical incision — a serious complication.", answer: "What is Wound Evisceration?"},
+            {value: 1000, clue: "Removing dead tissue (eschar) from a wound to promote healing is called this.", answer: "What is Debridement?"},
+        ]
+    },
+    {
+        name: "Genetic Disorders",
+        clues: [
+            {value: 200, clue: "This genetic disorder is characterized by thick, sticky mucus and most commonly affects Caucasians/Ashkenazi Jews.", answer: "What is Cystic Fibrosis?"},
+            {value: 400, clue: "The missing enzyme in Tay-Sachs disease.", answer: "What is Hex-A?"},
+            {value: 600, clue: "Down Syndrome is caused by an extra copy of this chromosome.", answer: "What is Chromosome 21 (Trisomy 21)?"},
+            {value: 800, clue: "Jerky, random, uncontrollable movements seen as an early sign of Huntington's disease.", answer: "What is Chorea?"},
+            {value: 1000, clue: "This diagnostic test analyzes chromosomes and is used to confirm Down Syndrome.", answer: "What is Karyotyping?"},
+        ]
+    },
+    {
+        name: "Infectious Disease & Key Terms",
+        clues: [
+            {value: 200, clue: "Mast cells are the primary source of this substance that increases blood flow and vessel permeability.", answer: "What is Histamine?"},
+            {value: 400, clue: "C. tetani affects these muscles causing 'lockjaw'.", answer: "What are the Masseter muscles?"},
+            {value: 600, clue: "The gold standard diagnostic test for bacterial meningitis.", answer: "What is a Lumbar Puncture?"},
+            {value: 800, clue: "Epstein-Barr Virus causes this disease commonly seen in young adults with fatigue and sore throat.", answer: "What is Infectious Mononucleosis (Mono)?"},
+            {value: 1000, clue: "Substances produced by bacteria or our immune system that signal the brain to increase body temperature.", answer: "What are Pyrogens?"},
+        ]
+    }
+];
+
+// ============ GAME STATE ============
+let players = [];
+let activePlayer = 0;
+let cluesRemaining = 25;
+let timerDuration = 30;
+let timerInterval = null;
+let currentClueValue = 0;
+
+// ============ SETUP ============
+document.getElementById('numPlayers').addEventListener('change', function() {
+    const n = parseInt(this.value);
+    const div = document.getElementById('playerNameInputs');
+    div.innerHTML = '';
+    for (let i = 1; i <= n; i++) {
+        div.innerHTML += '<label>Player / Team ' + i + ':</label><input type="text" id="p' + i + 'name" value="Team ' + i + '" maxlength="20">';
+    }
+});
+
+function startGame() {
+    const n = parseInt(document.getElementById('numPlayers').value);
+    players = [];
+    for (let i = 1; i <= n; i++) {
+        const nameInput = document.getElementById('p' + i + 'name');
+        players.push({
+            name: nameInput ? nameInput.value.trim() || ('Team ' + i) : ('Team ' + i),
+            score: 0
+        });
+    }
+    timerDuration = parseInt(document.getElementById('timerSelect').value);
+    activePlayer = 0;
+    cluesRemaining = 25;
+
+    document.getElementById('setupScreen').style.display = 'none';
+    document.getElementById('gameArea').classList.add('show');
+    document.getElementById('winnerBanner').classList.remove('show');
+
+    buildScoreboard();
+    buildBoard();
+}
+
+function buildScoreboard() {
+    const sb = document.getElementById('scoreboard');
+    sb.innerHTML = '';
+    players.forEach((p, i) => {
+        const div = document.createElement('div');
+        div.className = 'player-score' + (i === activePlayer ? ' active-player' : '');
+        div.id = 'player' + i;
+        div.innerHTML = '<div class="name">' + escapeHtml(p.name) + '</div><div class="score" id="score' + i + '">$0</div>';
+        div.onclick = () => { activePlayer = i; highlightActivePlayer(); };
+        sb.appendChild(div);
+    });
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function highlightActivePlayer() {
+    document.querySelectorAll('.player-score').forEach((el, i) => {
+        el.classList.toggle('active-player', i === activePlayer);
+    });
+}
+
+function updateScores() {
+    players.forEach((p, i) => {
+        const el = document.getElementById('score' + i);
+        el.textContent = '$' + p.score;
+        el.classList.toggle('negative', p.score < 0);
+    });
+}
+
+// ============ BOARD ============
+function buildBoard() {
+    const board = document.getElementById('jeopardyBoard');
+    board.innerHTML = '';
+
+    categories.forEach((cat, ci) => {
+        const header = document.createElement('div');
+        header.className = 'category-header';
+        header.textContent = cat.name;
+        board.appendChild(header);
+    });
+
+    for (let row = 0; row < 5; row++) {
+        categories.forEach((cat, ci) => {
+            const cell = document.createElement('div');
+            cell.className = 'clue-cell';
+            cell.id = 'cell_' + ci + '_' + row;
+            cell.textContent = '$' + cat.clues[row].value;
+            cell.onclick = () => openClue(ci, row);
+            board.appendChild(cell);
+        });
+    }
+}
+
+// ============ CLUE MODAL ============
+function openClue(catIdx, clueIdx) {
+    const cat = categories[catIdx];
+    const clue = cat.clues[clueIdx];
+    currentClueValue = clue.value;
+
+    document.getElementById('modalCategory').textContent = cat.name;
+    document.getElementById('modalValue').textContent = '$' + clue.value;
+    document.getElementById('modalClue').textContent = clue.clue;
+    document.getElementById('modalAnswer').textContent = clue.answer;
+    document.getElementById('modalAnswer').classList.remove('show');
+    document.getElementById('revealBtn').style.display = 'inline-block';
+    document.getElementById('scoringBtns').classList.remove('show');
+    document.getElementById('closeBtn').classList.remove('show');
+
+    // Mark cell as used
+    document.getElementById('cell_' + catIdx + '_' + clueIdx).classList.add('used');
+    document.getElementById('cell_' + catIdx + '_' + clueIdx).textContent = '';
+    cluesRemaining--;
+
+    document.getElementById('clueModal').classList.add('show');
+
+    // Start timer
+    if (timerDuration > 0) {
+        startTimer();
+    } else {
+        document.getElementById('timer').textContent = '';
+    }
+}
+
+function startTimer() {
+    let remaining = timerDuration;
+    const timerEl = document.getElementById('timer');
+    timerEl.textContent = remaining;
+    timerEl.classList.remove('warning');
+
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        remaining--;
+        timerEl.textContent = remaining;
+        if (remaining <= 5) timerEl.classList.add('warning');
+        if (remaining <= 0) {
+            clearInterval(timerInterval);
+            timerEl.textContent = "⏰ Time's Up!";
+            revealAnswer();
+        }
+    }, 1000);
+}
+
+function revealAnswer() {
+    clearInterval(timerInterval);
+    document.getElementById('modalAnswer').classList.add('show');
+    document.getElementById('revealBtn').style.display = 'none';
+    document.getElementById('timer').textContent = '';
+
+    // Build scoring buttons for each player
+    const scoringDiv = document.getElementById('scoringBtns');
+    scoringDiv.innerHTML = '';
+
+    if (players.length === 1) {
+        const correctBtn = document.createElement('button');
+        correctBtn.className = 'score-btn correct-btn';
+        correctBtn.textContent = '✓ Got it right (+$' + currentClueValue + ')';
+        correctBtn.onclick = () => { awardPoints(0, currentClueValue); showClose(); };
+        scoringDiv.appendChild(correctBtn);
+
+        const wrongBtn = document.createElement('button');
+        wrongBtn.className = 'score-btn wrong-btn';
+        wrongBtn.textContent = '✗ Got it wrong (-$' + currentClueValue + ')';
+        wrongBtn.onclick = () => { awardPoints(0, -currentClueValue); showClose(); };
+        scoringDiv.appendChild(wrongBtn);
+
+        const skipBtn = document.createElement('button');
+        skipBtn.className = 'score-btn skip-btn';
+        skipBtn.textContent = 'Skip (no change)';
+        skipBtn.onclick = () => { showClose(); };
+        scoringDiv.appendChild(skipBtn);
+    } else {
+        players.forEach((p, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'score-btn correct-btn';
+            btn.textContent = '✓ ' + escapeHtml(p.name) + ' (+$' + currentClueValue + ')';
+            btn.onclick = () => {
+                awardPoints(i, currentClueValue);
+                activePlayer = (i + 1) % players.length;
+                highlightActivePlayer();
+                showClose();
+            };
+            scoringDiv.appendChild(btn);
+        });
+        const noOneBtn = document.createElement('button');
+        noOneBtn.className = 'score-btn skip-btn';
+        noOneBtn.textContent = 'No one got it';
+        noOneBtn.onclick = () => { showClose(); };
+        scoringDiv.appendChild(noOneBtn);
+    }
+
+    scoringDiv.classList.add('show');
+}
+
+function awardPoints(playerIdx, points) {
+    players[playerIdx].score += points;
+    updateScores();
+    document.getElementById('scoringBtns').classList.remove('show');
+}
+
+function showClose() {
+    document.getElementById('scoringBtns').classList.remove('show');
+    document.getElementById('closeBtn').classList.add('show');
+}
+
+function closeModal() {
+    clearInterval(timerInterval);
+    document.getElementById('clueModal').classList.remove('show');
+    if (cluesRemaining <= 0) {
+        checkWinner();
+    }
+}
+
+// ============ WINNER ============
+function checkWinner() {
+    const banner = document.getElementById('winnerBanner');
+    const sorted = [...players].sort((a, b) => b.score - a.score);
+
+    if (players.length === 1) {
+        document.getElementById('winnerText').textContent = '🏆 Final Score!';
+        document.getElementById('winnerScore').textContent = escapeHtml(sorted[0].name) + ': $' + sorted[0].score;
+    } else {
+        const winner = sorted[0];
+        document.getElementById('winnerText').textContent = '🏆 ' + escapeHtml(winner.name) + ' Wins!';
+        let scoreText = sorted.map(p => escapeHtml(p.name) + ': $' + p.score).join(' | ');
+        document.getElementById('winnerScore').textContent = scoreText;
+    }
+    banner.classList.add('show');
+}
+
+function resetGame() {
+    document.getElementById('gameArea').classList.remove('show');
+    document.getElementById('setupScreen').style.display = 'block';
+    document.getElementById('winnerBanner').classList.remove('show');
+    clearInterval(timerInterval);
+}
+
+// Close modal on escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+});
+</script>
+</body>
+</html>
