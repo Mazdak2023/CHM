@@ -97,6 +97,7 @@
   .topic.teal { border-left-color: var(--teal); }
   .topic.orange { border-left-color: var(--warning); }
   .topic.red { border-left-color: var(--danger); }
+  .topic.dark { border-left-color: #111827; }
 
   .topic h2 {
     font-size: 1.4rem;
@@ -272,6 +273,7 @@
   .q-text { font-weight: 600; font-size: 0.95rem; }
 
   .answer-section { padding: 0 20px; }
+  .answer-section--quiz { padding: 15px 20px 20px; }
 
   .reveal-btn {
     width: 100%;
@@ -348,6 +350,12 @@
     letter-spacing: 0.5px;
     font-weight: 700;
   }
+  .th-dark { background: var(--gray-800); color: white; }
+  .th-red  { background: #fecaca; color: #991b1b; }
+  .th-blue { background: #bfdbfe; color: #1e3a8a; }
+  .th-green { background: #bbf7d0; color: #166534; }
+  .th-amber { background: #fde68a; color: #92400e; }
+  .th-amber-dark { background: #fde68a; color: #78350f; }
   .compare-table td {
     padding: 12px 16px;
     font-size: 0.9rem;
@@ -494,10 +502,10 @@
   <h3>The 3 Subatomic Particles</h3>
   <table class="compare-table">
     <tr>
-      <th style="background:var(--gray-800);color:white">Particle</th>
-      <th style="background:var(--gray-800);color:white">Charge</th>
-      <th style="background:var(--gray-800);color:white">Location</th>
-      <th style="background:var(--gray-800);color:white">How to Find It</th>
+      <th class="th-dark">Particle</th>
+      <th class="th-dark">Charge</th>
+      <th class="th-dark">Location</th>
+      <th class="th-dark">How to Find It</th>
     </tr>
     <tr>
       <td><strong>Protons (p<span class="sup">+</span>)</strong></td>
@@ -819,8 +827,8 @@
 
   <table class="compare-table">
     <tr>
-      <th style="background:#fecaca;color:#991b1b">Oxidation</th>
-      <th style="background:#bfdbfe;color:#1e3a8a">Reduction</th>
+      <th class="th-red">Oxidation</th>
+      <th class="th-blue">Reduction</th>
     </tr>
     <tr><td>LOSES electrons</td><td>GAINS electrons</td></tr>
     <tr><td>Charge becomes more positive</td><td>Charge becomes more negative</td></tr>
@@ -887,9 +895,9 @@
   <h3>Exam Quick Reference</h3>
   <table class="compare-table">
     <tr>
-      <th style="background:var(--gray-800);color:white">Reaction</th>
-      <th style="background:var(--gray-800);color:white">Type</th>
-      <th style="background:var(--gray-800);color:white">Why</th>
+      <th class="th-dark">Reaction</th>
+      <th class="th-dark">Type</th>
+      <th class="th-dark">Why</th>
     </tr>
     <tr>
       <td>SO<span class="sub">2</span> + H<span class="sub">2</span>O &rarr; H<span class="sub">2</span>SO<span class="sub">3</span></td>
@@ -925,8 +933,8 @@
 
   <table class="compare-table">
     <tr>
-      <th style="background:#fecaca;color:#991b1b">Exothermic</th>
-      <th style="background:#bfdbfe;color:#1e3a8a">Endothermic</th>
+      <th class="th-red">Exothermic</th>
+      <th class="th-blue">Endothermic</th>
     </tr>
     <tr><td>Energy is <strong>released</strong></td><td>Energy is <strong>absorbed</strong></td></tr>
     <tr><td>Surroundings get <strong>warmer</strong></td><td>Surroundings get <strong>cooler</strong></td></tr>
@@ -1004,10 +1012,10 @@
 
   <table class="compare-table">
     <tr>
-      <th style="background:var(--gray-800);color:white">Property</th>
-      <th style="background:#bfdbfe;color:#1e3a8a">Solid (s)</th>
-      <th style="background:#bbf7d0;color:#166534">Liquid (l)</th>
-      <th style="background:#fde68a;color:#92400e">Gas (g)</th>
+      <th class="th-dark">Property</th>
+      <th class="th-blue">Solid (s)</th>
+      <th class="th-green">Liquid (l)</th>
+      <th class="th-amber">Gas (g)</th>
     </tr>
     <tr><td><strong>Shape</strong></td><td>Definite/Fixed</td><td>Takes container</td><td>Fills container</td></tr>
     <tr><td><strong>Volume</strong></td><td>Definite/Fixed</td><td>Definite/Fixed</td><td>Expands to fill</td></tr>
@@ -1305,7 +1313,7 @@
       <div class="q-number exam-q">E1</div>
       <div class="q-text">Based on the information given, choose the best answer for Neon-21.</div>
     </div>
-    <div class="answer-section" style="padding: 15px 20px 20px;">
+    <div class="answer-section answer-section--quiz">
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e1')">A) Neon has 10 protons and 11 neutrons</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e1')">B) Neon has 11 neutrons and 11 protons</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e1')">C) Neon has 21 protons and 10 neutrons</button>
@@ -1332,7 +1340,7 @@
       <div class="q-number exam-q">E2</div>
       <div class="q-text">Determine the molecular weight of Magnesium Chloride (MgCl<span class="sub">2</span>) in grams.</div>
     </div>
-    <div class="answer-section" style="padding: 15px 20px 20px;">
+    <div class="answer-section answer-section--quiz">
       <button class="quiz-option" onclick="checkQuiz(this,'correct','e2')">A) 95.211</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e2')">B) 290.124</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e2')">C) 59.758</button>
@@ -1348,7 +1356,7 @@
       <div class="q-number exam-q">E3</div>
       <div class="q-text">A student needs 0.70 moles of Hydrogen Peroxide (H<span class="sub">2</span>O<span class="sub">2</span>). Calculate how many grams are needed.</div>
     </div>
-    <div class="answer-section" style="padding: 15px 20px 20px;">
+    <div class="answer-section answer-section--quiz">
       <button class="quiz-option" onclick="checkQuiz(this,'correct','e3')">A) 23.8g</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e3')">B) 0.0206g</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e3')">C) 4.21 x 10<span class="sup">23</span> g</button>
@@ -1363,7 +1371,7 @@
       <div class="q-number exam-q">E4</div>
       <div class="q-text">A student has 2 mol of fructose (C<span class="sub">6</span>H<span class="sub">12</span>O<span class="sub">6</span>). How many moles of hydrogen are in their sample?</div>
     </div>
-    <div class="answer-section" style="padding: 15px 20px 20px;">
+    <div class="answer-section answer-section--quiz">
       <button class="quiz-option" onclick="checkQuiz(this,'correct','e4')">A) 24 mol</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e4')">B) 12 mol</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e4')">C) 6 mol</button>
@@ -1378,7 +1386,7 @@
       <div class="q-number exam-q">E5</div>
       <div class="q-text">A sample of methane (CH<span class="sub">4</span>) contains 2.4 x 10<span class="sup">24</span> molecules. How many moles of CH<span class="sub">4</span>?</div>
     </div>
-    <div class="answer-section" style="padding: 15px 20px 20px;">
+    <div class="answer-section answer-section--quiz">
       <button class="quiz-option" onclick="checkQuiz(this,'correct','e5')">A) 4.0 mol</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e5')">B) 1.4 x 10<span class="sup">48</span> mol</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e5')">C) 16 mol</button>
@@ -1394,7 +1402,7 @@
       <div class="q-number exam-q">E6</div>
       <div class="q-text">Reduction is characterized by:</div>
     </div>
-    <div class="answer-section" style="padding: 15px 20px 20px;">
+    <div class="answer-section answer-section--quiz">
       <button class="quiz-option" onclick="checkQuiz(this,'correct','e6')">A) Gain of an electron</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e6')">B) Loss of a hydrogen</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e6')">C) Gain of an oxygen</button>
@@ -1409,7 +1417,7 @@
       <div class="q-number exam-q">E7</div>
       <div class="q-text">Which of the following is a combination (synthesis) reaction?</div>
     </div>
-    <div class="answer-section" style="padding: 15px 20px 20px;">
+    <div class="answer-section answer-section--quiz">
       <button class="quiz-option" onclick="checkQuiz(this,'correct','e7')">A) SO<span class="sub">2</span> + H<span class="sub">2</span>O &rarr; H<span class="sub">2</span>SO<span class="sub">3</span></button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e7')">B) 2HI &rarr; I<span class="sub">2</span> + H<span class="sub">2</span></button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e7')">C) CuO + H<span class="sub">2</span> &rarr; Cu + H<span class="sub">2</span>O</button>
@@ -1425,7 +1433,7 @@
       <div class="q-number exam-q">E8</div>
       <div class="q-text">Heat is produced during respiration. What type of reaction best describes this energy release?</div>
     </div>
-    <div class="answer-section" style="padding: 15px 20px 20px;">
+    <div class="answer-section answer-section--quiz">
       <button class="quiz-option" onclick="checkQuiz(this,'correct','e8')">A) Exothermic</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e8')">B) Endothermic</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e8')">C) Combination</button>
@@ -1440,7 +1448,7 @@
       <div class="q-number exam-q">E9</div>
       <div class="q-text">Which of these is an example of an endothermic reaction?</div>
     </div>
-    <div class="answer-section" style="padding: 15px 20px 20px;">
+    <div class="answer-section answer-section--quiz">
       <button class="quiz-option" onclick="checkQuiz(this,'correct','e9')">A) A glass of water turns cold when glucose is added and stirred</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e9')">B) Lighting a match</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e9')">C) A hot (heating) pad used for back pain</button>
@@ -1456,7 +1464,7 @@
       <div class="q-number exam-q">E10</div>
       <div class="q-text">What are the substances produced on the right side of a chemical equation?</div>
     </div>
-    <div class="answer-section" style="padding: 15px 20px 20px;">
+    <div class="answer-section answer-section--quiz">
       <button class="quiz-option" onclick="checkQuiz(this,'correct','e10')">A) Products</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e10')">B) Reactants</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e10')">C) Equilibrium</button>
@@ -1471,7 +1479,7 @@
       <div class="q-number exam-q">E11</div>
       <div class="q-text">Balance: S<span class="sub">2</span> + O<span class="sub">2</span> &rarr; SO<span class="sub">2</span>. What should the coefficients be?</div>
     </div>
-    <div class="answer-section" style="padding: 15px 20px 20px;">
+    <div class="answer-section answer-section--quiz">
       <button class="quiz-option" onclick="checkQuiz(this,'correct','e11')">A) 1, 2, 2</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e11')">B) This equation is balanced correctly</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e11')">C) 1, 2, 1</button>
@@ -1486,7 +1494,7 @@
       <div class="q-number exam-q">E12</div>
       <div class="q-text">In C<span class="sub">6</span>H<span class="sub">12</span>O<span class="sub">6</span> + 6O<span class="sub">2</span> &rarr; 6CO<span class="sub">2</span> + 6H<span class="sub">2</span>O, is O<span class="sub">2</span> a reactant?</div>
     </div>
-    <div class="answer-section" style="padding: 15px 20px 20px;">
+    <div class="answer-section answer-section--quiz">
       <button class="quiz-option" onclick="checkQuiz(this,'correct','e12')">True</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e12')">False</button>
       <div class="quiz-feedback" id="e12-fb"></div>
@@ -1500,7 +1508,7 @@
       <div class="q-number exam-q">E13</div>
       <div class="q-text">3CH<span class="sub">4</span> &rarr; C<span class="sub">3</span>H<span class="sub">8</span> + 2H<span class="sub">2</span>. If 0.75 mol C<span class="sub">3</span>H<span class="sub">8</span> is produced, how many mol H<span class="sub">2</span>?</div>
     </div>
-    <div class="answer-section" style="padding: 15px 20px 20px;">
+    <div class="answer-section answer-section--quiz">
       <button class="quiz-option" onclick="checkQuiz(this,'correct','e13')">A) 1.5 mol H<span class="sub">2</span></button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e13')">B) 0.38 mol H<span class="sub">2</span></button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e13')">C) 0.75 mol H<span class="sub">2</span></button>
@@ -1515,7 +1523,7 @@
       <div class="q-number exam-q">E14</div>
       <div class="q-text">3CH<span class="sub">4</span> &rarr; C<span class="sub">3</span>H<span class="sub">8</span> + 2H<span class="sub">2</span>. How many grams of C<span class="sub">3</span>H<span class="sub">8</span> from 3 mol CH<span class="sub">4</span>?</div>
     </div>
-    <div class="answer-section" style="padding: 15px 20px 20px;">
+    <div class="answer-section answer-section--quiz">
       <button class="quiz-option" onclick="checkQuiz(this,'correct','e14')">A) 44.097g</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e14')">B) 132.29g</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e14')">C) 14.699g</button>
@@ -1531,7 +1539,7 @@
       <div class="q-number exam-q">E15</div>
       <div class="q-text">Definite shape is a characteristic of which state of matter?</div>
     </div>
-    <div class="answer-section" style="padding: 15px 20px 20px;">
+    <div class="answer-section answer-section--quiz">
       <button class="quiz-option" onclick="checkQuiz(this,'correct','e15')">A) Solid</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e15')">B) Liquid</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e15')">C) Gaseous</button>
@@ -1546,7 +1554,7 @@
       <div class="q-number exam-q">E16</div>
       <div class="q-text">A client's blood pressure is 100 mmHg. Express in atm.</div>
     </div>
-    <div class="answer-section" style="padding: 15px 20px 20px;">
+    <div class="answer-section answer-section--quiz">
       <button class="quiz-option" onclick="checkQuiz(this,'correct','e16')">A) 0.132 atm</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e16')">B) 10.32 atm</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e16')">C) 3.2 atm</button>
@@ -1561,7 +1569,7 @@
       <div class="q-number exam-q">E17</div>
       <div class="q-text">2.67 mol gas in 5.00 L tank at 25.0&deg;C. What is the pressure?</div>
     </div>
-    <div class="answer-section" style="padding: 15px 20px 20px;">
+    <div class="answer-section answer-section--quiz">
       <button class="quiz-option" onclick="checkQuiz(this,'correct','e17')">A) 13.1 atm</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e17')">B) 1.10 atm</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e17')">C) 327 atm</button>
@@ -1576,7 +1584,7 @@
       <div class="q-number exam-q">E18</div>
       <div class="q-text">Neon + Argon: P<span class="sub">T</span> = 0.900 atm, P<span class="sub">Ne</span> = 0.799 atm. Find P<span class="sub">Ar</span>.</div>
     </div>
-    <div class="answer-section" style="padding: 15px 20px 20px;">
+    <div class="answer-section answer-section--quiz">
       <button class="quiz-option" onclick="checkQuiz(this,'correct','e18')">A) 0.101 atm</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e18')">B) -0.101 atm</button>
       <button class="quiz-option" onclick="checkQuiz(this,'wrong','e18')">C) 0.719 atm</button>
@@ -1587,14 +1595,14 @@
 </section>
 
 <!-- ===== CHEAT SHEET ===== -->
-<section class="topic" style="border-left-color: #111827;">
+<section class="topic dark">
   <h2>Quick Reference Cheat Sheet</h2>
 
   <h3>Key Formulas</h3>
   <table class="compare-table">
     <tr>
-      <th style="background:var(--gray-800);color:white">What</th>
-      <th style="background:var(--gray-800);color:white">Formula</th>
+      <th class="th-dark">What</th>
+      <th class="th-dark">Formula</th>
     </tr>
     <tr><td>Grams from moles</td><td><strong>g = mol x molar mass</strong></td></tr>
     <tr><td>Moles from grams</td><td><strong>mol = g / molar mass</strong></td></tr>
@@ -1609,8 +1617,8 @@
   <h3>All Mnemonics at a Glance</h3>
   <table class="compare-table">
     <tr>
-      <th style="background:#fde68a;color:#78350f">Topic</th>
-      <th style="background:#fde68a;color:#78350f">Mnemonic</th>
+      <th class="th-amber-dark">Topic</th>
+      <th class="th-amber-dark">Mnemonic</th>
     </tr>
     <tr><td>Subatomic Particles</td><td><strong>PEN</strong> (Protons=Positive, Electrons=Negative, Neutrons=Neutral)</td></tr>
     <tr><td>Oxidation / Reduction</td><td><strong>OIL RIG</strong> or <strong>LEO says GER</strong></td></tr>
