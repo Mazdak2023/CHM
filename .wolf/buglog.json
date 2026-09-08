@@ -1,4 +1,17 @@
 {
   "version": 1,
-  "bugs": []
+  "bugs": [
+    {
+      "id": "bug-001",
+      "timestamp": "2026-09-08T05:03:00Z",
+      "error_message": "apply_patch failed to find the expected cerebrum.md context",
+      "file": ".wolf/cerebrum.md",
+      "root_cause": "The patch used wording that did not exactly match the existing Decision Log comment.",
+      "fix": "Read the current context and applied an exact localized patch.",
+      "tags": ["openwolf", "patch-context"],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-09-08T05:03:00Z"
+    }
+  ]
 }

@@ -3,6 +3,13 @@
 > Auto-maintained by OpenWolf. Last scanned: 2026-04-20T23:38:01.860Z
 > Files: 28 tracked | Anatomy hits: 0 | Misses: 0
 
+## .wolf/
+
+- `anatomy.md` — Project file inventory and summaries (~500 tok)
+- `buglog.json` — Structured record of encountered errors and fixes (~25 tok)
+- `cerebrum.md` — Durable project conventions and decisions (~200 tok)
+- `memory.md` — Chronological OpenWolf action log (~100 tok)
+
 ## ./
 
 - `.DS_Store` (~1640 tok)

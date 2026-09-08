@@ -20,3 +20,4 @@
 ## Decision Log
 
 <!-- Significant technical decisions with rationale. Why X was chosen over Y. -->
+- [2026-09-08] The Week 2 conversion triangle is embedded from the user-provided GitHub attachment immediately before the Atomic Structure topic.
