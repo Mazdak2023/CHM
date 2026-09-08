@@ -43,7 +43,7 @@
     padding: 20px;
   }
 
-  .container { max-width: 900px; margin: 0 auto; }
+  .container { max-width: 900px; margin: 0 auto; margin-left: 220px; }
 
   .header {
     text-align: center;
@@ -59,28 +59,31 @@
   .header .prof { font-size: 0.9rem; opacity: 0.7; margin-top: 8px; }
 
   .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 100vh;
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: center;
-    margin-bottom: 30px;
-    padding: 20px;
+    flex-direction: column;
+    gap: 2px;
+    padding: 20px 12px;
     background: white;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    position: sticky;
-    top: 10px;
+    border-right: 1px solid var(--gray-200);
+    box-shadow: 2px 0 12px rgba(0,0,0,0.06);
     z-index: 100;
+    overflow-y: auto;
   }
   .nav a {
-    padding: 6px 14px;
-    background: var(--gray-100);
-    border-radius: 20px;
+    padding: 8px 12px;
+    background: transparent;
+    border-radius: 8px;
     text-decoration: none;
     color: var(--gray-700);
     font-size: 0.8rem;
     font-weight: 500;
     transition: all 0.2s;
+    white-space: nowrap;
   }
   .nav a:hover { background: var(--primary); color: white; }
 
@@ -443,16 +446,29 @@
   ::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 4px; }
 
   @media print {
-    .nav, .reveal-btn, .score-bar, .quiz-option { display: none; }
+    .nav, .reveal-btn { display: none; }
     .answer-content { display: block !important; }
     .topic { break-inside: avoid; }
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
+    .nav {
+      position: static;
+      width: auto;
+      height: auto;
+      flex-direction: row;
+      flex-wrap: wrap;
+      border-right: none;
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+    .nav a { white-space: normal; }
+    .container { margin-left: auto; }
     .header h1 { font-size: 1.5rem; }
     .topic { padding: 20px; }
     .reaction-grid { grid-template-columns: 1fr; }
-    .nav { position: static; }
   }
 
   .sub { vertical-align: sub; font-size: 0.75em; }
@@ -485,15 +501,8 @@
   <a href="#states">States of Matter</a>
   <a href="#gaslaws">Gas Laws</a>
   <a href="#practice">Study Guide Qs</a>
-  <a href="#examquiz">Practice Quiz</a>
 </nav>
 
-<!-- Score Tracker -->
-<div class="score-bar">
-  <div class="score-label">Practice Quiz Score</div>
-  <div><span class="score-value" id="scoreDisplay">0 / 0</span></div>
-  <button class="reset-btn" onclick="resetQuiz()">Reset All</button>
-</div>
 
 <!-- ===== TOPIC: ATOMIC STRUCTURE ===== -->
 <section class="topic purple" id="atomic">
@@ -1301,297 +1310,6 @@
   </div>
 </section>
 
-<!-- ===== INTERACTIVE QUIZ ===== -->
-<section class="topic red" id="examquiz">
-  <h2>Practice Quiz</h2>
-  <p>These are modeled after actual midterm questions. Pick your answer &mdash; instant feedback!</p>
-
-  <!-- Q1: Neon-21 -->
-  <div class="exam-banner">Atomic Structure</div>
-  <div class="question-card">
-    <div class="question-header">
-      <div class="q-number exam-q">E1</div>
-      <div class="q-text">Based on the information given, choose the best answer for Neon-21.</div>
-    </div>
-    <div class="answer-section answer-section--quiz">
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e1')">A) Neon has 10 protons and 11 neutrons</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e1')">B) Neon has 11 neutrons and 11 protons</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e1')">C) Neon has 21 protons and 10 neutrons</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e1')">D) Neon has 11 electrons and 10 protons</button>
-      <div class="quiz-feedback" id="e1-fb"></div>
-    </div>
-  </div>
-
-  <script>
-    // Fix: re-do E1 with correct answer
-    document.querySelectorAll('#examquiz .question-card')[0].querySelector('.answer-section').innerHTML = `
-      <button class="quiz-option" onclick="checkQuiz(this,'correct','e1')">A) Neon has 10 protons and 11 neutrons</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e1')">B) Neon has 11 neutrons and 11 protons</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e1')">C) Neon has 21 protons and 10 neutrons</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e1')">D) Neon has 11 electrons and 10 protons</button>
-      <div class="quiz-feedback" id="e1-fb"></div>
-    `;
-  </script>
-
-  <!-- Q2: MgCl2 Molecular Weight -->
-  <div class="question-card">
-    <div class="question-header">
-      <div class="q-number exam-q">E2</div>
-      <div class="q-text">Determine the molecular weight of Magnesium Chloride (MgCl<span class="sub">2</span>) in grams.</div>
-    </div>
-    <div class="answer-section answer-section--quiz">
-      <button class="quiz-option" onclick="checkQuiz(this,'correct','e2')">A) 95.211</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e2')">B) 290.124</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e2')">C) 59.758</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e2')">D) 163.220</button>
-      <div class="quiz-feedback" id="e2-fb"></div>
-    </div>
-  </div>
-
-  <!-- Q3: H2O2 grams -->
-  <div class="exam-banner">Mole Concept & Molar Mass Conversion</div>
-  <div class="question-card">
-    <div class="question-header">
-      <div class="q-number exam-q">E3</div>
-      <div class="q-text">A student needs 0.70 moles of Hydrogen Peroxide (H<span class="sub">2</span>O<span class="sub">2</span>). Calculate how many grams are needed.</div>
-    </div>
-    <div class="answer-section answer-section--quiz">
-      <button class="quiz-option" onclick="checkQuiz(this,'correct','e3')">A) 23.8g</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e3')">B) 0.0206g</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e3')">C) 4.21 x 10<span class="sup">23</span> g</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e3')">D) 1.16 x 10<span class="sup">-24</span> g</button>
-      <div class="quiz-feedback" id="e3-fb"></div>
-    </div>
-  </div>
-
-  <!-- Q4: Fructose moles of H -->
-  <div class="question-card">
-    <div class="question-header">
-      <div class="q-number exam-q">E4</div>
-      <div class="q-text">A student has 2 mol of fructose (C<span class="sub">6</span>H<span class="sub">12</span>O<span class="sub">6</span>). How many moles of hydrogen are in their sample?</div>
-    </div>
-    <div class="answer-section answer-section--quiz">
-      <button class="quiz-option" onclick="checkQuiz(this,'correct','e4')">A) 24 mol</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e4')">B) 12 mol</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e4')">C) 6 mol</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e4')">D) 1.2 x 10<span class="sup">24</span> mol</button>
-      <div class="quiz-feedback" id="e4-fb"></div>
-    </div>
-  </div>
-
-  <!-- Q5: CH4 molecules to moles -->
-  <div class="question-card">
-    <div class="question-header">
-      <div class="q-number exam-q">E5</div>
-      <div class="q-text">A sample of methane (CH<span class="sub">4</span>) contains 2.4 x 10<span class="sup">24</span> molecules. How many moles of CH<span class="sub">4</span>?</div>
-    </div>
-    <div class="answer-section answer-section--quiz">
-      <button class="quiz-option" onclick="checkQuiz(this,'correct','e5')">A) 4.0 mol</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e5')">B) 1.4 x 10<span class="sup">48</span> mol</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e5')">C) 16 mol</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e5')">D) 9.7 x 10<span class="sup">24</span> mol</button>
-      <div class="quiz-feedback" id="e5-fb"></div>
-    </div>
-  </div>
-
-  <!-- Q6: Reduction -->
-  <div class="exam-banner">Reaction Types & Redox</div>
-  <div class="question-card">
-    <div class="question-header">
-      <div class="q-number exam-q">E6</div>
-      <div class="q-text">Reduction is characterized by:</div>
-    </div>
-    <div class="answer-section answer-section--quiz">
-      <button class="quiz-option" onclick="checkQuiz(this,'correct','e6')">A) Gain of an electron</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e6')">B) Loss of a hydrogen</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e6')">C) Gain of an oxygen</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e6')">D) Loss of an electron</button>
-      <div class="quiz-feedback" id="e6-fb"></div>
-    </div>
-  </div>
-
-  <!-- Q7: Combination reaction -->
-  <div class="question-card">
-    <div class="question-header">
-      <div class="q-number exam-q">E7</div>
-      <div class="q-text">Which of the following is a combination (synthesis) reaction?</div>
-    </div>
-    <div class="answer-section answer-section--quiz">
-      <button class="quiz-option" onclick="checkQuiz(this,'correct','e7')">A) SO<span class="sub">2</span> + H<span class="sub">2</span>O &rarr; H<span class="sub">2</span>SO<span class="sub">3</span></button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e7')">B) 2HI &rarr; I<span class="sub">2</span> + H<span class="sub">2</span></button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e7')">C) CuO + H<span class="sub">2</span> &rarr; Cu + H<span class="sub">2</span>O</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e7')">D) HBr + KOH &rarr; H<span class="sub">2</span>O + KBr</button>
-      <div class="quiz-feedback" id="e7-fb"></div>
-    </div>
-  </div>
-
-  <!-- Q8: Exothermic -->
-  <div class="exam-banner">Endothermic vs. Exothermic</div>
-  <div class="question-card">
-    <div class="question-header">
-      <div class="q-number exam-q">E8</div>
-      <div class="q-text">Heat is produced during respiration. What type of reaction best describes this energy release?</div>
-    </div>
-    <div class="answer-section answer-section--quiz">
-      <button class="quiz-option" onclick="checkQuiz(this,'correct','e8')">A) Exothermic</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e8')">B) Endothermic</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e8')">C) Combination</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e8')">D) Single-Replacement</button>
-      <div class="quiz-feedback" id="e8-fb"></div>
-    </div>
-  </div>
-
-  <!-- Q9: Endothermic example -->
-  <div class="question-card">
-    <div class="question-header">
-      <div class="q-number exam-q">E9</div>
-      <div class="q-text">Which of these is an example of an endothermic reaction?</div>
-    </div>
-    <div class="answer-section answer-section--quiz">
-      <button class="quiz-option" onclick="checkQuiz(this,'correct','e9')">A) A glass of water turns cold when glucose is added and stirred</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e9')">B) Lighting a match</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e9')">C) A hot (heating) pad used for back pain</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e9')">D) Burning a piece of paper</button>
-      <div class="quiz-feedback" id="e9-fb"></div>
-    </div>
-  </div>
-
-  <!-- Q10: Reactants vs Products -->
-  <div class="exam-banner">Reactants, Products & Balancing</div>
-  <div class="question-card">
-    <div class="question-header">
-      <div class="q-number exam-q">E10</div>
-      <div class="q-text">What are the substances produced on the right side of a chemical equation?</div>
-    </div>
-    <div class="answer-section answer-section--quiz">
-      <button class="quiz-option" onclick="checkQuiz(this,'correct','e10')">A) Products</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e10')">B) Reactants</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e10')">C) Equilibrium</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e10')">D) Balanced</button>
-      <div class="quiz-feedback" id="e10-fb"></div>
-    </div>
-  </div>
-
-  <!-- Q11: Balancing S2+O2 -->
-  <div class="question-card">
-    <div class="question-header">
-      <div class="q-number exam-q">E11</div>
-      <div class="q-text">Balance: S<span class="sub">2</span> + O<span class="sub">2</span> &rarr; SO<span class="sub">2</span>. What should the coefficients be?</div>
-    </div>
-    <div class="answer-section answer-section--quiz">
-      <button class="quiz-option" onclick="checkQuiz(this,'correct','e11')">A) 1, 2, 2</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e11')">B) This equation is balanced correctly</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e11')">C) 1, 2, 1</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e11')">D) 2, 2, 1</button>
-      <div class="quiz-feedback" id="e11-fb"></div>
-    </div>
-  </div>
-
-  <!-- Q12: O2 reactant -->
-  <div class="question-card">
-    <div class="question-header">
-      <div class="q-number exam-q">E12</div>
-      <div class="q-text">In C<span class="sub">6</span>H<span class="sub">12</span>O<span class="sub">6</span> + 6O<span class="sub">2</span> &rarr; 6CO<span class="sub">2</span> + 6H<span class="sub">2</span>O, is O<span class="sub">2</span> a reactant?</div>
-    </div>
-    <div class="answer-section answer-section--quiz">
-      <button class="quiz-option" onclick="checkQuiz(this,'correct','e12')">True</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e12')">False</button>
-      <div class="quiz-feedback" id="e12-fb"></div>
-    </div>
-  </div>
-
-  <!-- Q13: Stoich moles -->
-  <div class="exam-banner">Stoichiometry</div>
-  <div class="question-card">
-    <div class="question-header">
-      <div class="q-number exam-q">E13</div>
-      <div class="q-text">3CH<span class="sub">4</span> &rarr; C<span class="sub">3</span>H<span class="sub">8</span> + 2H<span class="sub">2</span>. If 0.75 mol C<span class="sub">3</span>H<span class="sub">8</span> is produced, how many mol H<span class="sub">2</span>?</div>
-    </div>
-    <div class="answer-section answer-section--quiz">
-      <button class="quiz-option" onclick="checkQuiz(this,'correct','e13')">A) 1.5 mol H<span class="sub">2</span></button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e13')">B) 0.38 mol H<span class="sub">2</span></button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e13')">C) 0.75 mol H<span class="sub">2</span></button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e13')">D) 2.25 mol H<span class="sub">2</span></button>
-      <div class="quiz-feedback" id="e13-fb"></div>
-    </div>
-  </div>
-
-  <!-- Q14: Stoich grams -->
-  <div class="question-card">
-    <div class="question-header">
-      <div class="q-number exam-q">E14</div>
-      <div class="q-text">3CH<span class="sub">4</span> &rarr; C<span class="sub">3</span>H<span class="sub">8</span> + 2H<span class="sub">2</span>. How many grams of C<span class="sub">3</span>H<span class="sub">8</span> from 3 mol CH<span class="sub">4</span>?</div>
-    </div>
-    <div class="answer-section answer-section--quiz">
-      <button class="quiz-option" onclick="checkQuiz(this,'correct','e14')">A) 44.097g</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e14')">B) 132.29g</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e14')">C) 14.699g</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e14')">D) 16.043g</button>
-      <div class="quiz-feedback" id="e14-fb"></div>
-    </div>
-  </div>
-
-  <!-- Q15: States of matter -->
-  <div class="exam-banner">States of Matter & Gas Laws</div>
-  <div class="question-card">
-    <div class="question-header">
-      <div class="q-number exam-q">E15</div>
-      <div class="q-text">Definite shape is a characteristic of which state of matter?</div>
-    </div>
-    <div class="answer-section answer-section--quiz">
-      <button class="quiz-option" onclick="checkQuiz(this,'correct','e15')">A) Solid</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e15')">B) Liquid</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e15')">C) Gaseous</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e15')">D) All of the above</button>
-      <div class="quiz-feedback" id="e15-fb"></div>
-    </div>
-  </div>
-
-  <!-- Q16: mmHg to atm -->
-  <div class="question-card">
-    <div class="question-header">
-      <div class="q-number exam-q">E16</div>
-      <div class="q-text">A client's blood pressure is 100 mmHg. Express in atm.</div>
-    </div>
-    <div class="answer-section answer-section--quiz">
-      <button class="quiz-option" onclick="checkQuiz(this,'correct','e16')">A) 0.132 atm</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e16')">B) 10.32 atm</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e16')">C) 3.2 atm</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e16')">D) 111.2 atm</button>
-      <div class="quiz-feedback" id="e16-fb"></div>
-    </div>
-  </div>
-
-  <!-- Q17: Ideal Gas Law -->
-  <div class="question-card">
-    <div class="question-header">
-      <div class="q-number exam-q">E17</div>
-      <div class="q-text">2.67 mol gas in 5.00 L tank at 25.0&deg;C. What is the pressure?</div>
-    </div>
-    <div class="answer-section answer-section--quiz">
-      <button class="quiz-option" onclick="checkQuiz(this,'correct','e17')">A) 13.1 atm</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e17')">B) 1.10 atm</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e17')">C) 327 atm</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e17')">D) 27.4 atm</button>
-      <div class="quiz-feedback" id="e17-fb"></div>
-    </div>
-  </div>
-
-  <!-- Q18: Dalton's Law -->
-  <div class="question-card">
-    <div class="question-header">
-      <div class="q-number exam-q">E18</div>
-      <div class="q-text">Neon + Argon: P<span class="sub">T</span> = 0.900 atm, P<span class="sub">Ne</span> = 0.799 atm. Find P<span class="sub">Ar</span>.</div>
-    </div>
-    <div class="answer-section answer-section--quiz">
-      <button class="quiz-option" onclick="checkQuiz(this,'correct','e18')">A) 0.101 atm</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e18')">B) -0.101 atm</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e18')">C) 0.719 atm</button>
-      <button class="quiz-option" onclick="checkQuiz(this,'wrong','e18')">D) 1.699 atm</button>
-      <div class="quiz-feedback" id="e18-fb"></div>
-    </div>
-  </div>
-</section>
 
 <!-- ===== CHEAT SHEET ===== -->
 <section class="topic dark">
@@ -1635,9 +1353,7 @@
 <div style="text-align:center; padding: 30px; color: var(--gray-600); font-size: 0.85rem;">
   CHM-130 | Pro: Tehrani | Week 2 Study Guide<br>
   <em>Try each question yourself before revealing the answer. You learn more by struggling first!</em>
-</div>
 
-</div>
 
 <script>
 let correctCount = 0;
@@ -1696,14 +1412,12 @@ function checkQuiz(btn, result, qid) {
     }
   });
 
-  document.getElementById('scoreDisplay').textContent = correctCount + ' / ' + totalAttempted;
 }
 
 function resetQuiz() {
   correctCount = 0;
   totalAttempted = 0;
   Object.keys(attempted).forEach(k => delete attempted[k]);
-  document.getElementById('scoreDisplay').textContent = '0 / 0';
 
   document.querySelectorAll('.quiz-option').forEach(btn => {
     btn.classList.remove('correct', 'wrong', 'dimmed');
