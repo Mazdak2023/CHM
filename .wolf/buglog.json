@@ -12,6 +12,18 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-09-08T05:03:00Z"
+    },
+    {
+      "id": "bug-002",
+      "timestamp": "2026-09-08T05:12:48Z",
+      "error_message": "The added image does not appear at the published Week 2 guide URL.",
+      "file": "CHM130_Week2_Interactive_Guide.html",
+      "root_cause": "The image commit is on copilot/add-image-before-atomic-structure, while the published site is deployed from main, which remains at commit 7bcddac0.",
+      "fix": "Merge the image branch into main so the Jekyll deployment publishes the updated HTML.",
+      "tags": ["deployment", "github-pages", "image"],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-09-08T05:12:48Z"
     }
   ]
 }
